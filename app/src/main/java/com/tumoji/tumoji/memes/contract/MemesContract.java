@@ -31,10 +31,17 @@ public interface MemesContract {
         void likeMeme(MemeModel memeModel);
 
         /**
+         * Called when user unlikes some meme.
+         * @param memeModel The meme data object user likes.
+         */
+        void unlikeMeme(MemeModel memeModel);
+
+        /**
          * Called when user reports some meme.
          * @param memeModel The meme data object user reports.
+         * @param reason The report reason.
          */
-        void reportMeme(MemeModel memeModel);
+        void reportMeme(MemeModel memeModel, String reason);
 
         /**
          * Update popular memes list
@@ -63,6 +70,11 @@ public interface MemesContract {
         void updateNewMemesListOfTag(int offset, TagModel tagModel);
 
         /**
+         * Update tags list.
+         */
+        void updateTagsList();
+
+        /**
          * Called when user click on the Upload Meme button
          */
         void requestUploadingMeme();
@@ -80,7 +92,7 @@ public interface MemesContract {
          * @param memeModels Popular memes list
          * @param offset Populate new memes with offset in the list
          */
-        void refershPopularMemesList(List<MemeModel> memeModels, int offset);
+        void refreshPopularMemesList(List<MemeModel> memeModels, int offset);
 
         /**
          * Refresh new memes list
@@ -90,15 +102,15 @@ public interface MemesContract {
         void refreshNewMemesList(List<MemeModel> memeModels, int offset);
 
         /**
-         * Refresh top tags list.
-         * @param tagModels Top tags list
+         * Refresh tags list.
+         * @param tagModels Tags list
          */
-        void refreshTopTagsList(List<TagModel> tagModels);
+        void refreshTagsList(List<TagModel> tagModels);
 
         /**
-         * Set selected tag.
-         * @param tagModel The tag to be selected.
+         * Refresh HD meme info with new model
+         * @param newMemeModel The new meme data object to be displayed
          */
-        void setSelectedTag(TagModel tagModel);
+        void refreshHdMeme(MemeModel newMemeModel);
     }
 }

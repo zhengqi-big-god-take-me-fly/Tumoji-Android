@@ -71,32 +71,37 @@ public class MemesFragment extends Fragment implements MemesContract.View {
     }
 
     @Override
-    public void refershPopularMemesList(List list, int offset) {
-        throw new UnsupportedOperationException("Method not implemented");
+    public void setPresenter(MemesContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
     public void showHdMeme(MemeModel memeModel) {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.showHdMeme
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public void setSelectedTag(TagModel tagModel) {
+    public void refreshPopularMemesList(List<MemeModel> memeModels, int offset) {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshPopularMemesList
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public void refreshTopTagsList(List list) {
+    public void refreshNewMemesList(List<MemeModel> memeModels, int offset) {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshNewMemesList
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public void refreshNewMemesList(List list, int offset) {
+    public void refreshTagsList(List<TagModel> tagModels) {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshTagsList
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public void setPresenter(MemesContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void refreshHdMeme(MemeModel newMemeModel) {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshHdMeme
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }
