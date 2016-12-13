@@ -1,8 +1,8 @@
 package com.tumoji.tumoji.memes.contract;
 
 import com.tumoji.tumoji.common.BaseView;
-import com.tumoji.tumoji.data.meme.bean.Meme;
-import com.tumoji.tumoji.data.tag.bean.Tag;
+import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.List;
 
@@ -20,21 +20,21 @@ public interface MemesContract {
 
         /**
          * Called when user click some meme in the memes list.
-         * @param meme Meme data object clicked by user
+         * @param memeModel Meme data object clicked by user
          */
-        void memeThumbnailItemClicked(Meme meme);
+        void memeThumbnailItemClicked(MemeModel memeModel);
 
         /**
          * Called when user likes some meme.
-         * @param meme The meme data object user likes.
+         * @param memeModel The meme data object user likes.
          */
-        void likeMeme(Meme meme);
+        void likeMeme(MemeModel memeModel);
 
         /**
          * Called when user reports some meme.
-         * @param meme The meme data object user reports.
+         * @param memeModel The meme data object user reports.
          */
-        void reportMeme(Meme meme);
+        void reportMeme(MemeModel memeModel);
 
         /**
          * Update popular memes list
@@ -45,9 +45,9 @@ public interface MemesContract {
         /**
          * Update popular memes list of specific tag.
          * @param offset Update memes from the offset
-         * @param tag The tag user selects
+         * @param tagModel The tag user selects
          */
-        void updatePopularMemesListOfTag(int offset, Tag tag);
+        void updatePopularMemesListOfTag(int offset, TagModel tagModel);
 
         /**
          * Update new memes list
@@ -58,9 +58,9 @@ public interface MemesContract {
         /**
          * Update new memes list of specific tag.
          * @param offset Update memes from the offset
-         * @param tag The tag user selects.
+         * @param tagModel The tag user selects.
          */
-        void updateNewMemesListOfTag(int offset, Tag tag);
+        void updateNewMemesListOfTag(int offset, TagModel tagModel);
 
         /**
          * Called when user click on the Upload Meme button
@@ -71,34 +71,34 @@ public interface MemesContract {
     interface View extends BaseView<Presenter> {
         /**
          * Popup a sheet to display HD meme image.
-         * @param meme The meme data object to be displayed
+         * @param memeModel The meme data object to be displayed
          */
-        void showHdMeme(Meme meme);
+        void showHdMeme(MemeModel memeModel);
 
         /**
          * Refresh popular memes list
-         * @param memes Popular memes list
+         * @param memeModels Popular memes list
          * @param offset Populate new memes with offset in the list
          */
-        void refershPopularMemesList(List<Meme> memes, int offset);
+        void refershPopularMemesList(List<MemeModel> memeModels, int offset);
 
         /**
          * Refresh new memes list
-         * @param memes New memes list
+         * @param memeModels New memes list
          * @param offset Populate new memes with offset in the list
          */
-        void refreshNewMemesList(List<Meme> memes, int offset);
+        void refreshNewMemesList(List<MemeModel> memeModels, int offset);
 
         /**
          * Refresh top tags list.
-         * @param tags Top tags list
+         * @param tagModels Top tags list
          */
-        void refreshTopTagsList(List<Tag> tags);
+        void refreshTopTagsList(List<TagModel> tagModels);
 
         /**
          * Set selected tag.
-         * @param tag The tag to be selected.
+         * @param tagModel The tag to be selected.
          */
-        void setSelectedTag(Tag tag);
+        void setSelectedTag(TagModel tagModel);
     }
 }

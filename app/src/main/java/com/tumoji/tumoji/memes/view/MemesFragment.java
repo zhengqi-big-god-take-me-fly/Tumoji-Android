@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tumoji.tumoji.R;
-import com.tumoji.tumoji.data.meme.bean.Meme;
-import com.tumoji.tumoji.data.tag.bean.Tag;
+import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 
 import java.util.List;
@@ -76,12 +76,12 @@ public class MemesFragment extends Fragment implements MemesContract.View {
     }
 
     @Override
-    public void showHdMeme(Meme meme) {
+    public void showHdMeme(MemeModel memeModel) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public void setSelectedTag(Tag tag) {
+    public void setSelectedTag(TagModel tagModel) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 

@@ -1,4 +1,4 @@
-package com.tumoji.tumoji.data.meme.bean;
+package com.tumoji.tumoji.data.meme.model;
 
 /**
  * Author   : perqin
@@ -8,5 +8,5 @@ package com.tumoji.tumoji.data.meme.bean;
 /**
  * Stand for a meme resource.
  */
-public class Meme {
+public class MemeModel {
 }
