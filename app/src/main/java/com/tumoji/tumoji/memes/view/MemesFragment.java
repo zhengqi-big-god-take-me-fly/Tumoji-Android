@@ -4,6 +4,7 @@ package com.tumoji.tumoji.memes.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -87,10 +88,12 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         mPresenter.init();
 
         // Nav Drawer
-        mAvatarImage = (CircleImageView) getActivity().findViewById(R.id.avatar_image);
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View navHeaderView = navigationView.getHeaderView(0);
+        mAvatarImage = (CircleImageView) navHeaderView.findViewById(R.id.avatar_image);
         mAvatarImage.setOnClickListener(this);
-        mUsernameText = (TextView) getActivity().findViewById(R.id.username_text);
-        mEmailText = (TextView) getActivity().findViewById(R.id.email_text);
+        mUsernameText = (TextView) navHeaderView.findViewById(R.id.username_text);
+        mEmailText = (TextView) navHeaderView.findViewById(R.id.email_text);
         // This fragment
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
