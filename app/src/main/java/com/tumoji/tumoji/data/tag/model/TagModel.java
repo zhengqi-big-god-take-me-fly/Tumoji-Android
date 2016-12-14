@@ -1,11 +1,13 @@
 package com.tumoji.tumoji.data.tag.model;
 
+import java.io.Serializable;
+
 /**
  * Author   : perqin
  * Date     : 16-12-5
  */
 
-public class TagModel {
+public class TagModel implements Serializable {
     private String tagName;
     private String description;
 

@@ -5,10 +5,12 @@ package com.tumoji.tumoji.data.meme.model;
  * Date     : 16-12-5
  */
 
+import java.io.Serializable;
+
 /**
  * Stand for a meme resource.
  */
-public class MemeModel {
+public class MemeModel implements Serializable {
     // Meme id (for API server)
     private String memeId;
     // Meme displayed title
