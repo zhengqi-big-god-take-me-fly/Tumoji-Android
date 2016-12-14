@@ -26,6 +26,7 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void init() {
+        mView.refreshTagsList(mTagRepository.getCachedTagsList());
         // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.init
     }
 

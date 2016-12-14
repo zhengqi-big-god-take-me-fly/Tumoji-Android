@@ -10,6 +10,7 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: perqin
@@ -27,14 +28,19 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
     private TagModel mSelectedTag = null;
     private int mSelectedTagIndex = TAG_INDEX_NONE;
 
-    public TagsRecyclerAdapter() {
-        mTagsList.add(new TagModel().withTagName("Hello"));
-        mTagsList.add(new TagModel().withTagName("Tom"));
-        mTagsList.add(new TagModel().withTagName("WANGnima"));
-        mTagsList.add(new TagModel().withTagName("Lihailewode"));
-
-        mSelectedTagIndex = 1;
-        mSelectedTag = mTagsList.get(mSelectedTagIndex);
+    public void refreshTags(List<TagModel> tagModels) {
+        mTagsList.clear();
+        if (mSelectedTagIndex != TAG_INDEX_NONE) {
+            mSelectedTagIndex = TAG_INDEX_OTHER;
+        }
+        for (int i = 0; i < tagModels.size(); ++i) {
+            mTagsList.add(tagModels.get(i));
+            if (mSelectedTagIndex != TAG_INDEX_NONE) {
+                if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {
+                    mSelectedTagIndex = i;
+                }
+            }
+        }
     }
 
     @Override

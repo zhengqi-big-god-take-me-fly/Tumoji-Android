@@ -68,6 +68,8 @@ public class MemesFragment extends Fragment implements MemesContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mPresenter.init();
+
         mTagsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.tags_recycler_view);
         mTagsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mTagsRecyclerView.setAdapter(mTagsRecyclerAdapter);
@@ -102,8 +104,7 @@ public class MemesFragment extends Fragment implements MemesContract.View {
 
     @Override
     public void refreshTagsList(List<TagModel> tagModels) {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshTagsList
-        throw new UnsupportedOperationException("Method not implemented");
+        mTagsRecyclerAdapter.refreshTags(tagModels);
     }
 
     @Override

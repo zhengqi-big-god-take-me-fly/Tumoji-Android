@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.tumoji.tumoji.R;
+import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.fragment.MemesListFragment;
 import com.tumoji.tumoji.memes.presenter.MemesPresenter;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(null, null, memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(null, MockTagRepository.getInstance(this), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 
