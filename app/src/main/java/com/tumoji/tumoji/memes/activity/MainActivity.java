@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(null, MockTagRepository.getInstance(this), memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(null, null, MockTagRepository.getInstance(this), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 

@@ -1,5 +1,6 @@
 package com.tumoji.tumoji.memes.presenter;
 
+import com.tumoji.tumoji.data.account.repository.IAccountRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
@@ -14,11 +15,13 @@ import java.util.List;
  */
 
 public class MemesPresenter implements MemesContract.Presenter {
+    private IAccountRepository mAccountRepository;
     private IMemeRepository mMemeRepository;
     private ITagRepository mTagRepository;
     private MemesContract.View mView;
 
-    public MemesPresenter(IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
+    public MemesPresenter(IAccountRepository accountRepository, IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
+        mAccountRepository = accountRepository;
         mMemeRepository = memeRepository;
         mTagRepository = tagRepository;
         mView = view;
