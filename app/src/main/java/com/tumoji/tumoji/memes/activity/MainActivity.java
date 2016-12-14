@@ -12,10 +12,11 @@ import android.view.MenuItem;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.memes.contract.MemesContract;
+import com.tumoji.tumoji.memes.fragment.MemesListFragment;
 import com.tumoji.tumoji.memes.presenter.MemesPresenter;
 import com.tumoji.tumoji.memes.view.MemesFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MemesListFragment.OnFragmentInteractionListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (memesFragment == null) {
-            memesFragment = MemesFragment.newInstance("", "");
+            memesFragment = MemesFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
