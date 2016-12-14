@@ -1,4 +1,4 @@
-package com.tumoji.tumoji.account.activity;
+package com.tumoji.tumoji.account.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,91 +26,91 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
 
     @Override
     public void pushSignInSignOutProgress() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.pushSignInSignOutProgress
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInSignOutProgress
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void pushSignInProgress() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.pushSignInProgress
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInProgress
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void pushSignUpProgress(String username, String email) {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.pushSignUpProgress
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignUpProgress
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void popProgress() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.popProgress
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.popProgress
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void progressStartLoading() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.progressStartLoading
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.progressStartLoading
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void progressStopLoading() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.progressStopLoading
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.progressStopLoading
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showUsernameBlankOrInvalidError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showUsernameBlankOrInvalidError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showUsernameBlankOrInvalidError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showEmailBlankOrInvalidError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showEmailBlankOrInvalidError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showEmailBlankOrInvalidError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showNetworkError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showNetworkError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showNetworkError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showPasswordBlankOrInvalidError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showPasswordBlankOrInvalidError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showPasswordBlankOrInvalidError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showPasswordWrongError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showPasswordWrongError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showPasswordWrongError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void showPasswordUnconfirmedError() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.showPasswordUnconfirmedError
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.showPasswordUnconfirmedError
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void finishSignIn() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.finishSignIn
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.finishSignIn
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void finishSignUp() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.finishSignUp
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.finishSignUp
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void cancelSignInSignUp() {
-        // TODO: Implement com.tumoji.tumoji.account.activity.SignInSignUpActivity.cancelSignInSignUp
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.cancelSignInSignUp
         throw new UnsupportedOperationException("Method not implemented");
     }
 

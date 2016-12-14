@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tumoji.tumoji.R;
-import com.tumoji.tumoji.account.activity.SignInSignUpActivity;
+import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
