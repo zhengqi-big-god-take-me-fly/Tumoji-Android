@@ -8,7 +8,20 @@ import com.tumoji.tumoji.data.account.model.AccountModel;
  */
 
 public class MockAccountRepository implements IAccountRepository {
+    private static MockAccountRepository sInstance;
+
     private AccountModel mAccountModel;
+
+    public static MockAccountRepository getInstance() {
+        if (sInstance == null) {
+            sInstance = new MockAccountRepository();
+        }
+        return sInstance;
+    }
+
+    private MockAccountRepository() {
+        mAccountModel = null;
+    }
 
     @Override
     public AccountModel getSignedInAccount() {

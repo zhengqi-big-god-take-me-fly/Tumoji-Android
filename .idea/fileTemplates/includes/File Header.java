@@ -1,4 +1,4 @@
 /**
- * Author   : ${USER}
- * Date     : ${DATE}
+ * Author: ${USER}
+ * Date  : ${DATE}
  */

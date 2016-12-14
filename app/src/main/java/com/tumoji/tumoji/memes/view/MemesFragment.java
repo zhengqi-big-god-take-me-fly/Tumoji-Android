@@ -1,6 +1,7 @@
 package com.tumoji.tumoji.memes.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tumoji.tumoji.R;
+import com.tumoji.tumoji.account.activity.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
@@ -150,6 +152,17 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
             mUsernameText.setText(R.string.not_signed_in);
             mEmailText.setText(R.string.click_the_avatar_to_sign_in_or_sign_up);
         }
+    }
+
+    @Override
+    public void gotoProfilePage() {
+        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.gotoProfilePage
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void gotoSignInSignUpPage() {
+        startActivity(new Intent(getActivity(), SignInSignUpActivity.class));
     }
 
     public void onNavigationItemSelected(MenuItem item) {
