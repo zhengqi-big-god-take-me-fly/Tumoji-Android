@@ -1,5 +1,6 @@
 package com.tumoji.tumoji.memes.presenter;
 
+import com.tumoji.tumoji.data.account.repository.IAccountRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
@@ -14,11 +15,13 @@ import java.util.List;
  */
 
 public class MemesPresenter implements MemesContract.Presenter {
+    private IAccountRepository mAccountRepository;
     private IMemeRepository mMemeRepository;
     private ITagRepository mTagRepository;
     private MemesContract.View mView;
 
-    public MemesPresenter(IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
+    public MemesPresenter(IAccountRepository accountRepository, IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
+        mAccountRepository = accountRepository;
         mMemeRepository = memeRepository;
         mTagRepository = tagRepository;
         mView = view;
@@ -26,7 +29,13 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void init() {
+        mView.refreshTagsList(mTagRepository.getCachedTagsList());
         // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.init
+    }
+
+    @Override
+    public void viewResume() {
+        mView.refreshUserInfo(mAccountRepository.getSignedInAccount());
     }
 
     @Override
@@ -166,5 +175,14 @@ public class MemesPresenter implements MemesContract.Presenter {
     public void requestUploadingMeme() {
         // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.requestUploadingMeme
         throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void requestOpenUserProfilePage() {
+        if (mAccountRepository.hasSignedInAccount()) {
+            mView.gotoProfilePage();
+        } else {
+            mView.gotoSignInSignUpPage();
+        }
     }
 }
