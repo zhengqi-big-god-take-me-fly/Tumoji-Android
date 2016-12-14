@@ -55,7 +55,10 @@ public class MemesFragment extends Fragment implements MemesContract.View {
         super.onCreate(savedInstanceState);
 
         mTagsRecyclerAdapter = new TagsRecyclerAdapter();
-        mPagerAdapter = new MemesPagerAdapter(getActivity().getSupportFragmentManager());
+        mPagerAdapter = new MemesPagerAdapter(getActivity().getSupportFragmentManager(), new String[]{
+                getString(R.string.popular),
+                getString(R.string._new)
+        });
     }
 
     @Override

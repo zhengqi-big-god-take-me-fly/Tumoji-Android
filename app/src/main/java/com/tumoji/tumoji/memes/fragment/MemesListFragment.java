@@ -26,6 +26,7 @@ public class MemesListFragment extends Fragment {
     private MemesRecyclerAdapter mMemesRecyclerAdapter;
 
     private RecyclerView mRecyclerView;
+    private int mTitleRes;
 
     public MemesListFragment() {
         // Required empty public constructor

@@ -17,30 +17,26 @@ import java.util.List;
 public class MemesPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT = 2;
 
-    private List<Fragment> mFragments = new ArrayList<>();
+    private List<MemesListFragment> mFragments = new ArrayList<>();
+    private String[] mTitles;
 
-    public MemesPagerAdapter(FragmentManager fm) {
+    public MemesPagerAdapter(FragmentManager fm, String[] titles) {
         super(fm);
 
-        for (int i = 0; i < PAGE_COUNT; ++i) {
-            mFragments.add(null);
-        }
+        mFragments.add(MemesListFragment.newInstance());
+        mFragments.add(MemesListFragment.newInstance());
+
+        mTitles = titles;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // TODO: Get page title
-        return super.getPageTitle(position);
+        return mTitles[position];
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = mFragments.get(position);
-        if (fragment == null) {
-            fragment = MemesListFragment.newInstance();
-            mFragments.set(position, fragment);
-        }
-        return fragment;
+        return mFragments.get(position);
     }
 
     @Override
