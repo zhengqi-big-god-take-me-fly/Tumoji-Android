@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tumoji.tumoji.R;
+import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
@@ -75,6 +76,7 @@ public class MemesFragment extends Fragment implements MemesContract.View {
 
         mTagsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.tags_recycler_view);
         mTagsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mTagsRecyclerView.addItemDecoration(new SpacingItemDecoration(24));
         mTagsRecyclerView.setAdapter(mTagsRecyclerAdapter);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
