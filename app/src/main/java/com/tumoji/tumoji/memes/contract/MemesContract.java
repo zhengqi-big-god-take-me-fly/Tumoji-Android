@@ -1,6 +1,7 @@
 package com.tumoji.tumoji.memes.contract;
 
 import com.tumoji.tumoji.common.BaseView;
+import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
@@ -17,6 +18,11 @@ public interface MemesContract {
          * Setup initial data presenting. Called when the view is created.
          */
         void init();
+
+        /**
+         * Sync or update something here. Called when the view is resumed.
+         */
+        void viewResume();
 
         /**
          * Called when user click some meme in the memes list.
@@ -78,6 +84,11 @@ public interface MemesContract {
          * Called when user click on the Upload Meme button
          */
         void requestUploadingMeme();
+
+        /**
+         * Called when user click the avatar to see profile or sign in/sign up.
+         */
+        void requestOpenUserProfilePage();
     }
 
     interface View extends BaseView<Presenter> {
@@ -112,5 +123,21 @@ public interface MemesContract {
          * @param newMemeModel The new meme data object to be displayed
          */
         void refreshHdMeme(MemeModel newMemeModel);
+
+        /**
+         * Refresh user's information shown in navigation drawer.
+         * @param accountModel The model where user's information stored.
+         */
+        void refreshUserInfo(AccountModel accountModel);
+
+        /**
+         * Go to user profile page
+         */
+        void gotoProfilePage();
+
+        /**
+         * Go to sign in/sign up page
+         */
+        void gotoSignInSignUpPage();
     }
 }

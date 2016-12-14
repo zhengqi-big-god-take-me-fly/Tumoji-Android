@@ -9,11 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
+import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
@@ -22,18 +25,25 @@ import com.tumoji.tumoji.memes.contract.MemesContract;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MemesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemesFragment extends Fragment implements MemesContract.View {
+public class MemesFragment extends Fragment implements MemesContract.View, View.OnClickListener {
     private MemesContract.Presenter mPresenter;
-
     private TagsRecyclerAdapter mTagsRecyclerAdapter;
     private MemesPagerAdapter mPagerAdapter;
 
+    // Nav Drawer
+    private CircleImageView mAvatarImage;
+    private TextView mUsernameText;
+    private TextView mEmailText;
+    // Appbar
     private RecyclerView mTagsRecyclerView;
+    // This fragment
     private ViewPager mViewPager;
 
 
@@ -74,14 +84,27 @@ public class MemesFragment extends Fragment implements MemesContract.View {
 
         mPresenter.init();
 
+        // Nav Drawer
+        mAvatarImage = (CircleImageView) getActivity().findViewById(R.id.avatar_image);
+        mAvatarImage.setOnClickListener(this);
+        mUsernameText = (TextView) getActivity().findViewById(R.id.username_text);
+        mEmailText = (TextView) getActivity().findViewById(R.id.email_text);
+        // This fragment
+        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        mViewPager.setAdapter(mPagerAdapter);
+        // Appbar
         mTagsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.tags_recycler_view);
         mTagsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mTagsRecyclerView.addItemDecoration(new SpacingItemDecoration(24));
         mTagsRecyclerView.setAdapter(mTagsRecyclerAdapter);
-        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        mViewPager.setAdapter(mPagerAdapter);
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.viewResume();
     }
 
     @Override
@@ -116,5 +139,35 @@ public class MemesFragment extends Fragment implements MemesContract.View {
     public void refreshHdMeme(MemeModel newMemeModel) {
         // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshHdMeme
         throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void refreshUserInfo(AccountModel accountModel) {
+        if (accountModel != null) {
+            mUsernameText.setText(accountModel.getUsername());
+            mEmailText.setText(accountModel.getEmail());
+        } else {
+            mUsernameText.setText(R.string.not_signed_in);
+            mEmailText.setText(R.string.click_the_avatar_to_sign_in_or_sign_up);
+        }
+    }
+
+    public void onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_settings) {
+            // TODO
+//            startActivity(new Intent(getContext(), SettingsActivity.class));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.avatar_image:
+                mPresenter.requestOpenUserProfilePage();
+                break;
+            default:
+                break;
+        }
     }
 }

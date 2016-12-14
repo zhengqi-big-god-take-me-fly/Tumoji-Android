@@ -34,6 +34,11 @@ public class MemesPresenter implements MemesContract.Presenter {
     }
 
     @Override
+    public void viewResume() {
+        mView.refreshUserInfo(mAccountRepository.getSignedInAccount());
+    }
+
+    @Override
     public void memeThumbnailItemClicked(MemeModel memeModel) {
         mView.showHdMeme(memeModel);
     }
@@ -170,5 +175,14 @@ public class MemesPresenter implements MemesContract.Presenter {
     public void requestUploadingMeme() {
         // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.requestUploadingMeme
         throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void requestOpenUserProfilePage() {
+        if (mAccountRepository.hasSignedInAccount()) {
+            mView.gotoProfilePage();
+        } else {
+            mView.gotoSignInSignUpPage();
+        }
     }
 }
