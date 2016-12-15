@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
+import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.fragment.MemesListFragment;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(), null, MockTagRepository.getInstance(this), memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(), MockMemeRepository.getInstance(), MockTagRepository.getInstance(this), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 
@@ -79,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (memesFragment != null) {
             memesFragment.onNavigationItemSelected(item);
@@ -90,5 +88,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRefreshMemesList(int index) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onRefreshMemesList(index);
+        }
+    }
+
+    @Override
+    public void onLoadMore(int index, int offset) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onLoadMore(index, offset);
+        }
     }
 }

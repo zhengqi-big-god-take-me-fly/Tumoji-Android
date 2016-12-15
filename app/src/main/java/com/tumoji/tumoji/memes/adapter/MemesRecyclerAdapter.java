@@ -10,6 +10,7 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: perqin
@@ -20,28 +21,6 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
     private ArrayList<MemeModel> mMemesList = new ArrayList<>();
 
     public MemesRecyclerAdapter() {
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
-        mMemesList.add(new MemeModel());
     }
 
     @Override
@@ -58,6 +37,20 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
     @Override
     public int getItemCount() {
         return mMemesList.size();
+    }
+
+    public void refreshMemesList(List<MemeModel> memeModels, int offset) {
+        if (mMemesList.size() < offset) {
+            offset = mMemesList.size();
+        }
+        int removed = 0;
+        for (int i = mMemesList.size() - 1; i >= offset; --i) {
+            mMemesList.remove(i);
+            ++removed;
+        }
+        notifyItemRangeRemoved(offset, removed);
+        mMemesList.addAll(memeModels);
+        notifyItemRangeInserted(offset, memeModels.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
