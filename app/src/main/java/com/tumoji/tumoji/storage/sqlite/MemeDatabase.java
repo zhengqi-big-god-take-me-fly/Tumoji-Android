@@ -71,7 +71,7 @@ public class MemeDatabase {
         /**
          * Perform query
          */
-        Cursor cursor = readableMemeDatas.rawQuery("select * from " + DBOpenHelper.MEME_TABLE + " where " + DBOpenHelper.TAG_NAME + "=" + name , null);
+        Cursor cursor = readableMemeDatas.rawQuery("select * from " + DBOpenHelper.MEME_TABLE + " where " + DBOpenHelper.MEME_TITLE + "=" + name , null);
         if (cursor.moveToNext()) {
             String memeID = cursor.getString(cursor.getColumnIndex(DBOpenHelper.MEME_ID));
             String memeTitle = cursor.getString(cursor.getColumnIndex(DBOpenHelper.MEME_TITLE));
@@ -122,7 +122,7 @@ public class MemeDatabase {
 
 
     /**
-     * Tag removal function
+     * Meme removal function
      * @param memeModel
      * @return success or not
      */
@@ -137,7 +137,7 @@ public class MemeDatabase {
 
 
     /**
-     * Tag updation Function
+     * meme updation Function
      * @param memeModel
      * @return success or not
      */
@@ -156,7 +156,7 @@ public class MemeDatabase {
     }
 
     /**
-     * Tag Synchronizical function to sync datas in repo and database
+     * Meme Synchronizical function to sync datas in repo and database
      * @param toBeSinced
      * @return
      */

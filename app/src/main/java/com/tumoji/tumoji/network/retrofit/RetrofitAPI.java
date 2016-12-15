@@ -24,8 +24,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitAPI {
     public MemeAPI memeService;
     public TagAPI tagService;
-    public static final String MEME_BASE_URL = "";
+    public AccountAPI accountService;
+
+    public static final String MEME_BASE_URL = "http://place.holder.com/" +
+            "";
     public static final String TAG_BASE_URL = "";
+
+    public static final String ACCOUNT_BASE_URL = "";
 
     /**
      * Getters
@@ -37,6 +42,10 @@ public class RetrofitAPI {
 
     public MemeAPI getMemeService() {
         return memeService;
+    }
+
+    public AccountAPI getAccountService() {
+        return accountService;
     }
 
     RetrofitAPI() {
@@ -72,11 +81,13 @@ public class RetrofitAPI {
             if (StateUtils.isNetworkAvailable(TumojiApp.myContext)) {
                 int maxAge = 0; // Readfrom cache
                 return originalResponse.newBuilder()
+                        .removeHeader("Pragma")
                         .header("Cache-Control" , "public , max-age=" + maxAge)
                         .build();
             } else {
                 int maxStale = 60 * 60 * 24 * 28; // tolerate 4 weeks stale
                 return originalResponse.newBuilder()
+                        .removeHeader("Pragma")
                         .header("Cache-Control" , "public , only-if-cached, max-stale=" + maxStale)
                         .build();
             }
@@ -105,10 +116,16 @@ public class RetrofitAPI {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
+        Retrofit accountRetro = new Retrofit.Builder()
+                .baseUrl(ACCOUNT_BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
 
         memeService = memeRetro.create(MemeAPI.class);
         tagService = tagRetro.create(TagAPI.class);
-
+        accountService = accountRetro.create(AccountAPI.class);
 
     }
 }

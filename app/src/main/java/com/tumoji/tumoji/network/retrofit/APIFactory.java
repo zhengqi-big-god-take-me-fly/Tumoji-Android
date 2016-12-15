@@ -1,5 +1,7 @@
 package com.tumoji.tumoji.network.retrofit;
 
+
+
 import java.util.Objects;
 
 /**
@@ -9,7 +11,7 @@ public class APIFactory {
     protected static final Object monitor = new Object();
     private static MemeAPI memeAPISingleton = null;
     private static TagAPI tagAPISingleton = null;
-
+    private static AccountAPI accountAPISingleton = null;
     /**
      * Singleton of memeAPI
      */
@@ -31,6 +33,18 @@ public class APIFactory {
                 tagAPISingleton = new RetrofitAPI().getTagService();
             }
             return tagAPISingleton;
+        }
+    }
+
+    /**
+     * Singleton of accountAPI
+     */
+    public static AccountAPI getAccountAPIInstance() {
+        synchronized (monitor) {
+            if (accountAPISingleton == null) {
+                accountAPISingleton = new RetrofitAPI().getAccountService();
+            }
+            return accountAPISingleton;
         }
     }
 }
