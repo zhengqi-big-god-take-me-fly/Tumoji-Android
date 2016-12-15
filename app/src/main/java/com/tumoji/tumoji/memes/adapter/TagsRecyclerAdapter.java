@@ -89,6 +89,10 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         return mTagsList.size() + (mSelectedTagIndex == TAG_INDEX_OTHER ? 2 : 1);
     }
 
+    public TagModel getSelectedTag() {
+        return mSelectedTag;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText;
 //        public ImageButton removeButton;
