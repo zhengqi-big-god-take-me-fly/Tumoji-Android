@@ -27,21 +27,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
     private ArrayList<TagModel> mTagsList = new ArrayList<>();
     private TagModel mSelectedTag = null;
     private int mSelectedTagIndex = TAG_INDEX_NONE;
-
-    public void refreshTags(List<TagModel> tagModels) {
-        mTagsList.clear();
-        if (mSelectedTagIndex != TAG_INDEX_NONE) {
-            mSelectedTagIndex = TAG_INDEX_OTHER;
-        }
-        for (int i = 0; i < tagModels.size(); ++i) {
-            mTagsList.add(tagModels.get(i));
-            if (mSelectedTagIndex != TAG_INDEX_NONE) {
-                if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {
-                    mSelectedTagIndex = i;
-                }
-            }
-        }
-    }
+    private OnTagClickListener mListener;
 
     @Override
     public int getItemViewType(int position) {
@@ -65,22 +51,39 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         if (type == TYPE_MORE) {
             holder.titleText.setText(R.string.more);
             holder.itemView.setBackgroundResource(R.drawable.background_chip_unselected);
+            holder.itemView.setOnClickListener(view -> {
+                if (mListener != null) {
+                    mListener.onMoreTagClick();
+                }
+            });
         } else if (type == TYPE_SELECTED) {
             holder.titleText.setText(mSelectedTag.getTagName());
             holder.itemView.setBackgroundResource(R.drawable.background_chip_selected);
+            holder.itemView.setOnClickListener(view -> {
+                deselectTag();
+            });
         } else {
-            holder.itemView.setBackgroundResource(R.drawable.background_chip_unselected);
+            TagModel tagModel;
             if (mSelectedTagIndex == TAG_INDEX_NONE) {
-                holder.titleText.setText(mTagsList.get(position).getTagName());
+                tagModel = mTagsList.get(position);
+//                holder.titleText.setText();
             } else if (mSelectedTagIndex == TAG_INDEX_OTHER) {
-                holder.titleText.setText(mTagsList.get(position - 1).getTagName());
+                tagModel = mTagsList.get(position - 1);
+//                holder.titleText.setText(mTagsList.get(position - 1).getTagName());
             } else {
                 if (mSelectedTagIndex < position) {
-                    holder.titleText.setText(mTagsList.get(position).getTagName());
+                    tagModel = mTagsList.get(position);
+//                    holder.titleText.setText(mTagsList.get(position).getTagName());
                 } else {
-                    holder.titleText.setText(mTagsList.get(position - 1).getTagName());
+                    tagModel = mTagsList.get(position - 1);
+//                    holder.titleText.setText(mTagsList.get(position - 1).getTagName());
                 }
             }
+            holder.titleText.setText(tagModel.getTagName());
+            holder.itemView.setBackgroundResource(R.drawable.background_chip_unselected);
+            holder.itemView.setOnClickListener(view -> {
+                selectTag(tagModel);
+            });
         }
     }
 
@@ -89,19 +92,68 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         return mTagsList.size() + (mSelectedTagIndex == TAG_INDEX_OTHER ? 2 : 1);
     }
 
+    public void setOnTagClickListener(OnTagClickListener listener) {
+        mListener = listener;
+    }
+
     public TagModel getSelectedTag() {
         return mSelectedTag;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleText;
+    public void refreshTags(List<TagModel> tagModels) {
+        mTagsList.clear();
+        if (mSelectedTagIndex != TAG_INDEX_NONE) {
+            mSelectedTagIndex = TAG_INDEX_OTHER;
+        }
+        for (int i = 0; i < tagModels.size(); ++i) {
+            mTagsList.add(tagModels.get(i));
+            if (mSelectedTagIndex != TAG_INDEX_NONE) {
+                if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {
+                    mSelectedTagIndex = i;
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void selectTag(TagModel tagModel) {
+        mSelectedTag =tagModel;
+        mSelectedTagIndex = TAG_INDEX_OTHER;
+        for (int i = 0; i < mTagsList.size(); ++i) {
+            if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {
+                mSelectedTagIndex = i;
+                break;
+            }
+        }
+        notifyDataSetChanged();
+        if (mListener != null) {
+            mListener.onSelectTag(mSelectedTag);
+        }
+    }
+
+    public void deselectTag() {
+        mSelectedTag = null;
+        mSelectedTagIndex = TAG_INDEX_NONE;
+        notifyDataSetChanged();
+        if (mListener != null) {
+            mListener.onSelectTag(mSelectedTag);
+        }
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView titleText;
 //        public ImageButton removeButton;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             titleText = (TextView) itemView.findViewById(R.id.title_text);
 //            removeButton = (ImageButton) itemView.findViewById(R.id.remove_button);
         }
+    }
+
+    public interface OnTagClickListener {
+        void onMoreTagClick();
+        void onSelectTag(TagModel tagModel);
     }
 }
