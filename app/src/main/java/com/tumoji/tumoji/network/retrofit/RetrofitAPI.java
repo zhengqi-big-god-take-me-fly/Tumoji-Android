@@ -26,11 +26,14 @@ public class RetrofitAPI {
     public TagAPI tagService;
     public AccountAPI accountService;
 
-    public static final String MEME_BASE_URL = "http://place.holder.com/" +
-            "";
-    public static final String TAG_BASE_URL = "";
-
-    public static final String ACCOUNT_BASE_URL = "";
+    /**
+     * Deprecated , now use API_SERVER_BASE_URL instead;
+     */
+//    public static final String MEME_BASE_URL = "http://tumoji.perqin.com/api/expressions";
+//    public static final String TAG_BASE_URL = "http://tumoji.perqin.com/api/tags";
+//    public static final String ACCOUNT_BASE_URL = "http://tumoji.perqin.com/api/users";
+//
+    public static final String API_SERVER_BASE_URL = "http://tumoji.perqin.com/api";
 
     /**
      * Getters
@@ -103,21 +106,21 @@ public class RetrofitAPI {
                 .build();
 
         Retrofit memeRetro = new Retrofit.Builder()
-                .baseUrl(MEME_BASE_URL)
+                .baseUrl(API_SERVER_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         Retrofit tagRetro = new Retrofit.Builder()
-                .baseUrl(TAG_BASE_URL)
+                .baseUrl(API_SERVER_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         Retrofit accountRetro = new Retrofit.Builder()
-                .baseUrl(ACCOUNT_BASE_URL)
+                .baseUrl(API_SERVER_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

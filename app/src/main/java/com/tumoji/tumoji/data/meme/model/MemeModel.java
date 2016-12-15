@@ -5,6 +5,8 @@ package com.tumoji.tumoji.data.meme.model;
  * Date     : 16-12-5
  */
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -12,13 +14,17 @@ import java.io.Serializable;
  */
 public class MemeModel implements Serializable {
     // Meme id (for API server)
+    @SerializedName("id")
     private String memeId;
     // Meme displayed title
+    @SerializedName("title")
     private String title;
     // Author user id of this meme
     // NOTE: May be replaced with UserModel someday
+    @SerializedName("authorId")
     private String authorId;
     // Meme image download URL
+    @SerializedName("image")
     private String imageUrl;
 
     public MemeModel() {

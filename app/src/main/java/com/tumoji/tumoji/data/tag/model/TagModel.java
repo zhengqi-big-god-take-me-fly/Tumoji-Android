@@ -1,5 +1,7 @@
 package com.tumoji.tumoji.data.tag.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,9 @@ import java.io.Serializable;
  */
 
 public class TagModel implements Serializable {
+    @SerializedName("name")
     private String tagName;
+    @SerializedName("description")
     private String description;
 
     public TagModel() {
