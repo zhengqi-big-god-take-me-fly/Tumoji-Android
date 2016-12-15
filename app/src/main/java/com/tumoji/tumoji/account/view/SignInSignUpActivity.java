@@ -1,8 +1,10 @@
 package com.tumoji.tumoji.account.view;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
@@ -12,6 +14,8 @@ import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
 public class SignInSignUpActivity extends AppCompatActivity implements SignInSignUpContract.View {
     private SignInSignUpContract.Presenter mPresenter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,13 +24,19 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         setSupportActionBar(toolbar);
 
         mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(), this);
-
         mPresenter.init();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        SignInSignUpFragment.SignInSignUpExample fragement = new SignInSignUpFragment.SignInSignUpExample();
+        fragmentTransaction.add(R.id.fragment_container, fragement);
+        fragmentTransaction.commit();
     }
 
     @Override
     public void pushSignInSignOutProgress() {
         // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInSignOutProgress
+
         throw new UnsupportedOperationException("Method not implemented");
     }
 
