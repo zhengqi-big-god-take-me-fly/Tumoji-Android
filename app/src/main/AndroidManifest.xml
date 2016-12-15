@@ -21,6 +21,10 @@
         <activity
             android:name=".account.view.SignInSignUpActivity"
             android:label="@string/title_activity_sign_in_sign_up"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".account.activity.ProfileActivity"
+            android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

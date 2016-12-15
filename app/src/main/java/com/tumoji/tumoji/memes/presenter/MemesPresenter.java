@@ -30,7 +30,17 @@ public class MemesPresenter implements MemesContract.Presenter {
     @Override
     public void init() {
         mView.refreshTagsList(mTagRepository.getCachedTagsList());
-        // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.init
+        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
+            @Override
+            public void onSuccess(List<TagModel> tagModels) {
+                mView.refreshTagsList(tagModels);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO: Handle error
+            }
+        });
     }
 
     @Override
@@ -54,7 +64,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -70,7 +79,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -86,7 +94,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -102,7 +109,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -118,7 +124,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -134,7 +139,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -150,7 +154,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }
@@ -173,8 +176,11 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void requestUploadingMeme() {
-        // TODO: Implement com.tumoji.tumoji.memes.presenter.MemesPresenter.requestUploadingMeme
-        throw new UnsupportedOperationException("Method not implemented");
+        if (mAccountRepository.hasSignedInAccount()) {
+            mView.gotoMemeUploadPage();
+        } else {
+            mView.gotoSignInSignUpPage();
+        }
     }
 
     @Override

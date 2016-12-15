@@ -139,5 +139,10 @@ public interface MemesContract {
          * Go to sign in/sign up page
          */
         void gotoSignInSignUpPage();
+
+        /**
+         * Go to meme upload page
+         */
+        void gotoMemeUploadPage();
     }
 }
