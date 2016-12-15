@@ -77,16 +77,18 @@ public class MockMemeRepository implements IMemeRepository {
                 mPopularMemeModels.add(new MemeModel().withImageUrl("http://google.com"));
             }
             listener.onSuccess(mPopularMemeModels);
-        }, 15 * 1000);
+        }, 5 * 1000);
     }
 
     @Override
     public void getNewMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-        // TODO: Change to real image
-        for (int i = 0; i < 12; ++i) {
-            mNewMemeModels.add(new MemeModel().withImageUrl("http://google.com"));
-        }
-        listener.onSuccess(mNewMemeModels);
+        mHandler.postDelayed(() -> {
+            // TODO: Change to real image
+            for (int i = 0; i < 12; ++i) {
+                mNewMemeModels.add(new MemeModel().withImageUrl("http://google.com"));
+            }
+            listener.onSuccess(mNewMemeModels);
+        }, 5 * 1000);
     }
 
     @Override

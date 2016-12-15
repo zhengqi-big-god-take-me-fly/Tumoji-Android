@@ -191,4 +191,37 @@ public class MemesPresenter implements MemesContract.Presenter {
             mView.gotoSignInSignUpPage();
         }
     }
+
+    @Override
+    public void requestShowMoreTags() {
+        // TODO: Implement requestShowMoreTags
+    }
+
+    @Override
+    public void changeTag(TagModel tagModel) {
+        mMemeRepository.getPopularMemesList(0, tagModel, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshPopularMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO: Handle error
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
+        mMemeRepository.getNewMemesList(0, tagModel, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshNewMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO: Handle error
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
+    }
 }

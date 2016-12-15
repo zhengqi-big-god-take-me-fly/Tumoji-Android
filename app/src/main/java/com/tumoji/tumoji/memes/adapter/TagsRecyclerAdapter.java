@@ -113,21 +113,38 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
                 }
             }
         }
+        notifyDataSetChanged();
     }
 
     public void selectTag(TagModel tagModel) {
-        // TODO
+        mSelectedTag =tagModel;
+        mSelectedTagIndex = TAG_INDEX_OTHER;
+        for (int i = 0; i < mTagsList.size(); ++i) {
+            if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {
+                mSelectedTagIndex = i;
+                break;
+            }
+        }
+        notifyDataSetChanged();
+        if (mListener != null) {
+            mListener.onSelectTag(mSelectedTag);
+        }
     }
 
     public void deselectTag() {
-        // TODO
+        mSelectedTag = null;
+        mSelectedTagIndex = TAG_INDEX_NONE;
+        notifyDataSetChanged();
+        if (mListener != null) {
+            mListener.onSelectTag(mSelectedTag);
+        }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleText;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView titleText;
 //        public ImageButton removeButton;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             titleText = (TextView) itemView.findViewById(R.id.title_text);

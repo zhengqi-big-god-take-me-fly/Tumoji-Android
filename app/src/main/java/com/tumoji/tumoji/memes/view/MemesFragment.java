@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Use the {@link MemesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemesFragment extends Fragment implements MemesContract.View, View.OnClickListener {
+public class MemesFragment extends Fragment implements MemesContract.View, View.OnClickListener, TagsRecyclerAdapter.OnTagClickListener {
     private MemesContract.Presenter mPresenter;
     private TagsRecyclerAdapter mTagsRecyclerAdapter;
     private MemesPagerAdapter mPagerAdapter;
@@ -69,6 +69,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         super.onCreate(savedInstanceState);
 
         mTagsRecyclerAdapter = new TagsRecyclerAdapter();
+        mTagsRecyclerAdapter.setOnTagClickListener(this);
         mPagerAdapter = new MemesPagerAdapter(getActivity().getSupportFragmentManager(), new String[]{
                 getString(R.string.popular),
                 getString(R.string._new)
@@ -222,5 +223,15 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
                 mPresenter.updateNewMemesList(offset);
             }
         }
+    }
+
+    @Override
+    public void onMoreTagClick() {
+        mPresenter.requestShowMoreTags();
+    }
+
+    @Override
+    public void onSelectTag(TagModel tagModel) {
+        mPresenter.changeTag(tagModel);
     }
 }
