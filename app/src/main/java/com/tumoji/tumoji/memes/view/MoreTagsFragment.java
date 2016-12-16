@@ -57,19 +57,19 @@ public class MoreTagsFragment extends BottomSheetDialogFragment implements MoreT
         // Required empty public constructor
     }
 
+    private void finishSelection(TagModel tagModel) {
+        mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        if (mListener != null) {
+            mListener.onTagClick(tagModel);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mRecyclerAdapter = new MoreTagsRecyclerAdapter();
         mRecyclerAdapter.setOnTagClickListener(this::finishSelection);
-    }
-
-    private void finishSelection(TagModel tagModel) {
-        mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        if (mListener != null) {
-            mListener.onTagClick(tagModel);
-        }
     }
 
     @Override
@@ -134,16 +134,6 @@ public class MoreTagsFragment extends BottomSheetDialogFragment implements MoreT
         mRecyclerAdapter.reloadTagsList(tagModels);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         void onTagClick(TagModel tagModel);
     }
