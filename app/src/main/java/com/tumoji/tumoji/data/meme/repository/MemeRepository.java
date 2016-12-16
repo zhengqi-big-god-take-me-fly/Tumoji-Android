@@ -94,4 +94,16 @@ public class MemeRepository implements IMemeRepository {
     public List<MemeModel> getCachedNewMemesList() {
         return null;
     }
+
+    @Override
+    public void getMeme(String memeId, OnGetResultListener<MemeModel> listener) {
+        // TODO: Implement getMeme
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public MemeModel getCachedMeme(String memeId) {
+        // TODO: Implement getCachedMeme
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }

@@ -25,31 +25,6 @@ public interface MemesContract {
         void viewResume();
 
         /**
-         * Called when user click some meme in the memes list.
-         * @param memeModel Meme data object clicked by user
-         */
-        void memeThumbnailItemClicked(MemeModel memeModel);
-
-        /**
-         * Called when user likes some meme.
-         * @param memeModel The meme data object user likes.
-         */
-        void likeMeme(MemeModel memeModel);
-
-        /**
-         * Called when user unlikes some meme.
-         * @param memeModel The meme data object user likes.
-         */
-        void unlikeMeme(MemeModel memeModel);
-
-        /**
-         * Called when user reports some meme.
-         * @param memeModel The meme data object user reports.
-         * @param reason The report reason.
-         */
-        void reportMeme(MemeModel memeModel, String reason);
-
-        /**
          * Update popular memes list
          * @param offset Update memes from the offset
          */

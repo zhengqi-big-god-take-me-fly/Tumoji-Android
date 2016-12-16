@@ -21,12 +21,15 @@ import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
+import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.contract.MoreTagsContract;
+import com.tumoji.tumoji.memes.presenter.MemeDetailPresenter;
 import com.tumoji.tumoji.memes.presenter.MoreTagsPresenter;
 
 import java.util.List;
@@ -114,7 +117,10 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     }
 
     public void onMemeClick(MemeModel memeModel) {
-        mPresenter.requestOpenMemeDetailSheet(memeModel);
+        MemeDetailFragment detailFragment = MemeDetailFragment.newInstance(memeModel.getMemeId());
+        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(), detailFragment);
+        detailFragment.setPresenter(presenter);
+        detailFragment.show(getActivity().getSupportFragmentManager(), "MemeDetailFragment");
     }
 
     @Override

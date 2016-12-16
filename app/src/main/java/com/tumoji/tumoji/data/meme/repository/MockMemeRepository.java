@@ -100,4 +100,16 @@ public class MockMemeRepository implements IMemeRepository {
     public List<MemeModel> getCachedNewMemesList() {
         throw new UnsupportedOperationException("Method not implemented");
     }
+
+    @Override
+    public void getMeme(String memeId, OnGetResultListener<MemeModel> listener) {
+        mHandler.postDelayed(() -> {
+            listener.onSuccess(new MemeModel().withTitle("New title"));
+        }, 1000);
+    }
+
+    @Override
+    public MemeModel getCachedMeme(String memeId) {
+        return new MemeModel().withMemeId(memeId).withTitle("Original meme title");
+    }
 }
