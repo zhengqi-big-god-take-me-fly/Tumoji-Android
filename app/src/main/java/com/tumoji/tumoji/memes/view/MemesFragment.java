@@ -22,9 +22,12 @@ import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemesContract;
+import com.tumoji.tumoji.memes.contract.MoreTagsContract;
+import com.tumoji.tumoji.memes.presenter.MoreTagsPresenter;
 
 import java.util.List;
 
@@ -78,15 +81,12 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_memes, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mPresenter.init();
 
         // Nav Drawer
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
@@ -105,6 +105,8 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         mTagsRecyclerView.setAdapter(mTagsRecyclerAdapter);
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mPresenter.init();
     }
 
     @Override
@@ -227,11 +229,18 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public void onMoreTagClick() {
-        mPresenter.requestShowMoreTags();
+        MoreTagsFragment fragment = MoreTagsFragment.newInstance();
+        MoreTagsContract.Presenter presenter = new MoreTagsPresenter(MockTagRepository.getInstance(getContext()), fragment);
+        fragment.setPresenter(presenter);
+        fragment.show(getActivity().getSupportFragmentManager(), "MoreTagsFragment");
     }
 
     @Override
     public void onSelectTag(TagModel tagModel) {
         mPresenter.changeTag(tagModel);
+    }
+
+    public void onTagInMoreTagsPageClick(TagModel tagModel) {
+        mTagsRecyclerAdapter.selectTag(tagModel);
     }
 }

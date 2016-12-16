@@ -40,7 +40,12 @@ public class MockTagRepository implements ITagRepository {
 
     @Override
     public void getTagsList(OnGetTagsListListener listener) {
-        listener.onSuccess(tagModels);
+        handler.postDelayed(() -> {
+            tagModels.add(new TagModel().withTagName("This is new 1"));
+            tagModels.add(new TagModel().withTagName("This is new 2"));
+            tagModels.add(new TagModel().withTagName("This is new 3"));
+            listener.onSuccess(tagModels);
+        }, 3 * 1000);
     }
 
     @Override

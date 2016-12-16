@@ -193,11 +193,6 @@ public class MemesPresenter implements MemesContract.Presenter {
     }
 
     @Override
-    public void requestShowMoreTags() {
-        // TODO: Implement requestShowMoreTags
-    }
-
-    @Override
     public void changeTag(TagModel tagModel) {
         mMemeRepository.getPopularMemesList(0, tagModel, new IMemeRepository.OnGetMemesListListener() {
             @Override
