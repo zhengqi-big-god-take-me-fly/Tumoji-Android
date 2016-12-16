@@ -19,8 +19,13 @@ import java.util.List;
 
 public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdapter.ViewHolder> {
     private ArrayList<MemeModel> mMemesList = new ArrayList<>();
+    private OnMemeClickListener mListener;
 
     public MemesRecyclerAdapter() {
+    }
+
+    public void setOnMemeClickListener(OnMemeClickListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -30,8 +35,14 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        throw new UnsupportedOperationException("Method not implemented");
+        MemeModel memeModel = mMemesList.get(position);
+        // TODO: Show read image
         holder.memeImage.setImageResource(position % 2 == 0 ? R.drawable.mock_meme_0 : R.drawable.mock_meme_1);
+        holder.itemView.setOnClickListener(view -> {
+            if (mListener != null) {
+                mListener.onMemeClick(memeModel);
+            }
+        });
     }
 
     @Override
@@ -53,13 +64,17 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
         notifyItemRangeInserted(offset, memeModels.size());
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView memeImage;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView memeImage;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             memeImage = (ImageView) itemView.findViewById(R.id.meme_image);
         }
+    }
+
+    public interface OnMemeClickListener {
+        void onMemeClick(MemeModel memeModel);
     }
 }

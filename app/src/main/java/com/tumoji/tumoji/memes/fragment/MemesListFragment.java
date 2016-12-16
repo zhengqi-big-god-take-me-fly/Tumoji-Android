@@ -19,15 +19,7 @@ import com.tumoji.tumoji.memes.adapter.MemesRecyclerAdapter;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MemesListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MemesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MemesListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MemesListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MemesRecyclerAdapter.OnMemeClickListener {
     private static final String ARG_INDEX = "INDEX";
 
     private OnFragmentInteractionListener mListener;
@@ -65,6 +57,7 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
 
         mIsLoadingMore = false;
         mMemesRecyclerAdapter = new MemesRecyclerAdapter();
+        mMemesRecyclerAdapter.setOnMemeClickListener(this);
     }
 
     @Override
@@ -117,19 +110,11 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onRefreshMemesList(int index);
-        void onLoadMore(int index, int offset);
+    @Override
+    public void onMemeClick(MemeModel memeModel) {
+        if (mListener != null) {
+            mListener.onMemeClick(memeModel);
+        }
     }
 
     private class OnRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
@@ -161,5 +146,11 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
                 }
             }
         }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onRefreshMemesList(int index);
+        void onLoadMore(int index, int offset);
+        void onMemeClick(MemeModel memeModel);
     }
 }

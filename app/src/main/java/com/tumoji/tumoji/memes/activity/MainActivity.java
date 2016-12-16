@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
+import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
@@ -84,6 +85,14 @@ public class MainActivity extends AppCompatActivity
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (memesFragment != null) {
             memesFragment.onLoadMore(index, offset);
+        }
+    }
+
+    @Override
+    public void onMemeClick(MemeModel memeModel) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onMemeClick(memeModel);
         }
     }
 

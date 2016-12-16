@@ -49,56 +49,6 @@ public class MemesPresenter implements MemesContract.Presenter {
     }
 
     @Override
-    public void memeThumbnailItemClicked(MemeModel memeModel) {
-        mView.showHdMeme(memeModel);
-    }
-
-    @Override
-    public void likeMeme(MemeModel memeModel) {
-        mMemeRepository.likeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
-    public void unlikeMeme(MemeModel memeModel) {
-        mMemeRepository.unlikeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
-    public void reportMeme(MemeModel memeModel, String reason) {
-        mMemeRepository.reportMeme(memeModel, reason, new IMemeRepository.OnReportMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
     public void updatePopularMemesList(final int offset) {
         mMemeRepository.getPopularMemesList(offset, null, new IMemeRepository.OnGetMemesListListener() {
             @Override

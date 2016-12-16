@@ -21,12 +21,15 @@ import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
+import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.contract.MoreTagsContract;
+import com.tumoji.tumoji.memes.presenter.MemeDetailPresenter;
 import com.tumoji.tumoji.memes.presenter.MoreTagsPresenter;
 
 import java.util.List;
@@ -52,11 +55,6 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     // This fragment
     private ViewPager mViewPager;
 
-
-    public MemesFragment() {
-        // Required empty public constructor
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -65,6 +63,64 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
      */
     public static MemesFragment newInstance() {
         return new MemesFragment();
+    }
+
+
+    public MemesFragment() {
+        // Required empty public constructor
+    }
+
+    public void onRefreshMemesList(int index) {
+        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
+        if (index == MemesPagerAdapter.INDEX_POPULAR) {
+            if (tagModel != null) {
+                mPresenter.updatePopularMemesListOfTag(0, tagModel);
+            } else {
+                mPresenter.updatePopularMemesList(0);
+            }
+        } else if (index == MemesPagerAdapter.INDEX_NEW) {
+            if (tagModel != null) {
+                mPresenter.updateNewMemesListOfTag(0, tagModel);
+            } else {
+                mPresenter.updateNewMemesList(0);
+            }
+        }
+    }
+
+    public void onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_settings) {
+            // TODO
+//            startActivity(new Intent(getContext(), SettingsActivity.class));
+        }
+    }
+
+    public void onLoadMore(int index, int offset) {
+        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
+        if (index == MemesPagerAdapter.INDEX_POPULAR) {
+            if (tagModel != null) {
+                mPresenter.updatePopularMemesListOfTag(offset, tagModel);
+            } else {
+                mPresenter.updatePopularMemesList(offset);
+            }
+        } else if (index == MemesPagerAdapter.INDEX_NEW) {
+            if (tagModel != null) {
+                mPresenter.updateNewMemesListOfTag(offset, tagModel);
+            } else {
+                mPresenter.updateNewMemesList(offset);
+            }
+        }
+    }
+
+    public void onTagInMoreTagsPageClick(TagModel tagModel) {
+        mTagsRecyclerAdapter.selectTag(tagModel);
+    }
+
+    public void onMemeClick(MemeModel memeModel) {
+        MemeDetailFragment detailFragment = MemeDetailFragment.newInstance(memeModel.getMemeId());
+        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(), detailFragment);
+        detailFragment.setPresenter(presenter);
+        detailFragment.show(getActivity().getSupportFragmentManager(), "MemeDetailFragment");
     }
 
     @Override
@@ -185,48 +241,6 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         }
     }
 
-    public void onRefreshMemesList(int index) {
-        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
-        if (index == MemesPagerAdapter.INDEX_POPULAR) {
-            if (tagModel != null) {
-                mPresenter.updatePopularMemesListOfTag(0, tagModel);
-            } else {
-                mPresenter.updatePopularMemesList(0);
-            }
-        } else if (index == MemesPagerAdapter.INDEX_NEW) {
-            if (tagModel != null) {
-                mPresenter.updateNewMemesListOfTag(0, tagModel);
-            } else {
-                mPresenter.updateNewMemesList(0);
-            }
-        }
-    }
-
-    public void onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_settings) {
-            // TODO
-//            startActivity(new Intent(getContext(), SettingsActivity.class));
-        }
-    }
-
-    public void onLoadMore(int index, int offset) {
-        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
-        if (index == MemesPagerAdapter.INDEX_POPULAR) {
-            if (tagModel != null) {
-                mPresenter.updatePopularMemesListOfTag(offset, tagModel);
-            } else {
-                mPresenter.updatePopularMemesList(offset);
-            }
-        } else if (index == MemesPagerAdapter.INDEX_NEW) {
-            if (tagModel != null) {
-                mPresenter.updateNewMemesListOfTag(offset, tagModel);
-            } else {
-                mPresenter.updateNewMemesList(offset);
-            }
-        }
-    }
-
     @Override
     public void onMoreTagClick() {
         MoreTagsFragment fragment = MoreTagsFragment.newInstance();
@@ -239,9 +253,5 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     public void onSelectTag(TagModel tagModel) {
         mTagsRecyclerView.smoothScrollToPosition(0);
         mPresenter.changeTag(tagModel);
-    }
-
-    public void onTagInMoreTagsPageClick(TagModel tagModel) {
-        mTagsRecyclerAdapter.selectTag(tagModel);
     }
 }
