@@ -76,13 +76,7 @@ public class MoreTagsFragment extends BottomSheetDialogFragment implements MoreT
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
 
-//        View view = View.inflate(getContext(), R.layout.fragment_more_tags, null);
         dialog.setContentView(R.layout.fragment_more_tags);
-
-//        FrameLayout sheetPart = (FrameLayout) dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
-//        ViewGroup.LayoutParams sheetParams = sheetPart.getLayoutParams();
-//        sheetParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//        sheetPart.setLayoutParams(sheetParams);
 
         View sheetContentRoot = dialog.findViewById(R.id.sheet_content);
         mProgressBar = (ProgressBar) sheetContentRoot.findViewById(R.id.progress_bar);

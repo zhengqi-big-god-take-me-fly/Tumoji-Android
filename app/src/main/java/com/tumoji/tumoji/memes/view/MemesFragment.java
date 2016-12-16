@@ -237,6 +237,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public void onSelectTag(TagModel tagModel) {
+        mTagsRecyclerView.smoothScrollToPosition(0);
         mPresenter.changeTag(tagModel);
     }
 
