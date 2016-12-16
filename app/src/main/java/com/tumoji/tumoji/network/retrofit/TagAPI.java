@@ -8,11 +8,14 @@ import com.tumoji.tumoji.utils.IntegerResponse;
 import java.util.List;
 
 
+import okhttp3.RequestBody;
 import retrofit2.adapter.rxjava.Result;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.HEAD;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -28,19 +31,41 @@ public interface TagAPI {
     @GET("/tags")
     Observable<List<TagModel>> getAllTags();
 
-    @GET("/tags/{id}")
-    Observable<TagModel> getTagById(@Path("id") String id);
+    @GET("/tags/{name}")
+    Observable<TagModel> getTagByName(@Path("name") String name);
 
-    @FormUrlEncoded
+    /**
+     * Need to PUT JSON Here
+     * Need to initialized by these steps:
+     * -> Gson gson = new Gson();
+     * -> String route = gson.toJson(tagModel);
+     * -> RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),route);
+     * Then we can put body when calling this methods
+     * @param route
+     * @return
+     */
+    @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("/tags")
-    Observable<TagModel> createTag(@Field("name") String name , @Field("description") String description);
+    Observable<TagModel> createTag(@Body RequestBody route , @Field("access_token") String token);
 
-    @FormUrlEncoded
-    @PUT("/tags/{id}")
-    Observable<TagModel> updateTag(@Path("id") String id , @Field("name") String name , @Field("description") String description);
+    /**
+     * Need to PUT JSON Here
+     * Need to initialized by these steps:
+     * -> Gson gson = new Gson();
+     * -> String route = gson.toJson(tagModel);
+     * -> RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),route);
+     * Then we can put body when calling this methods
+     * @param name
+     * @param route
+     * @return
+     */
+    @Headers({"Content-Type: application/json" , "Accept: application/json"})
+    @PUT("/tags/{name}")
+    Observable<TagModel> updateTag(@Path("name") String name , @Body RequestBody route , @Field("accessToken") String token);
+
 
     @DELETE("/tags/{id}")
-    Observable<TagModel> removeTag(@Path("id") String id);
+    Observable<TagModel> removeTag(@Path("id") String id , @Field("access_token") String token);
 
     @GET("/tags/{id}/exists")
     Observable<BooleanResponse> tagExists(@Path("id") String id);
