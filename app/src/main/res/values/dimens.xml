@@ -11,4 +11,6 @@
     <dimen name="chip_label_left_padding">12dp</dimen>
     <dimen name="chip_remove_icon_horizontal_margin">4dp</dimen>
     <dimen name="chip_remove_icon_size">24dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

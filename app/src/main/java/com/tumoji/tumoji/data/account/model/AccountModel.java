@@ -1,5 +1,9 @@
 package com.tumoji.tumoji.data.account.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Author: perqin
  * Date  : 12/14/16
@@ -7,10 +11,14 @@ package com.tumoji.tumoji.data.account.model;
  * This model stands for the local user account
  */
 
-public class AccountModel {
+public class AccountModel implements Serializable {
+    @SerializedName("id")
     private String userId;
+    @SerializedName("avatar")
     private String avatarUrl;
+    @SerializedName("username")
     private String username;
+    @SerializedName("email")
     private String email;
 
     public AccountModel() {

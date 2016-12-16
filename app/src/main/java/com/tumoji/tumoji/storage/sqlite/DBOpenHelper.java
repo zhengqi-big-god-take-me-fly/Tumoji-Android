@@ -30,6 +30,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
 
     /**
+     * Constant for Accounts
+     */
+    public static final String ACCOUNT_TABLE = "accounts";
+    public static final String ACCOUNT_ID = "id";
+    public static final String ACCOUNT_NAME = "username";
+    public static final String ACCOUNT_AVATAR_URL = "avatar";
+    public static final String ACCOUNT_EMAIL = "email";
+
+    /**
      * Constant for DATABASE OPERATIONS
      */
     public static final String IPAI = "INTEGER PRIMARY KEY AUTOINCREMENT";
@@ -67,6 +76,16 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 + TAG_ID + " " + IPAI + ","
                 + TAG_NAME + " " + TNN + ","
                 + TAG_DESCRIPTION + " " + TNN + ")");
+
+
+        /**
+         * Create User table
+         */
+        db.execSQL("CREATE TABLE if not exists " + ACCOUNT_TABLE + "("
+                + ACCOUNT_ID + " " + IPAI + ","
+                + ACCOUNT_NAME + " " + TNN + ","
+                + ACCOUNT_EMAIL + " " + TNN + ","
+                + ACCOUNT_AVATAR_URL + " " + TNN + ")");
     }
 
     /**

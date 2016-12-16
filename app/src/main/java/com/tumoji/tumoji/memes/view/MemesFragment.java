@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Use the {@link MemesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemesFragment extends Fragment implements MemesContract.View, View.OnClickListener {
+public class MemesFragment extends Fragment implements MemesContract.View, View.OnClickListener, TagsRecyclerAdapter.OnTagClickListener {
     private MemesContract.Presenter mPresenter;
     private TagsRecyclerAdapter mTagsRecyclerAdapter;
     private MemesPagerAdapter mPagerAdapter;
@@ -69,6 +69,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         super.onCreate(savedInstanceState);
 
         mTagsRecyclerAdapter = new TagsRecyclerAdapter();
+        mTagsRecyclerAdapter.setOnTagClickListener(this);
         mPagerAdapter = new MemesPagerAdapter(getActivity().getSupportFragmentManager(), new String[]{
                 getString(R.string.popular),
                 getString(R.string._new)
@@ -125,14 +126,12 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public void refreshPopularMemesList(List<MemeModel> memeModels, int offset) {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshPopularMemesList
-        throw new UnsupportedOperationException("Method not implemented");
+        mPagerAdapter.refreshMemesList(MemesPagerAdapter.INDEX_POPULAR, memeModels, offset);
     }
 
     @Override
     public void refreshNewMemesList(List<MemeModel> memeModels, int offset) {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshNewMemesList
-        throw new UnsupportedOperationException("Method not implemented");
+        mPagerAdapter.refreshMemesList(MemesPagerAdapter.INDEX_NEW, memeModels, offset);
     }
 
     @Override
@@ -168,12 +167,9 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         startActivity(new Intent(getActivity(), SignInSignUpActivity.class));
     }
 
-    public void onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_settings) {
-            // TODO
-//            startActivity(new Intent(getContext(), SettingsActivity.class));
-        }
+    @Override
+    public void gotoMemeUploadPage() {
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
@@ -185,5 +181,57 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
             default:
                 break;
         }
+    }
+
+    public void onRefreshMemesList(int index) {
+        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
+        if (index == MemesPagerAdapter.INDEX_POPULAR) {
+            if (tagModel != null) {
+                mPresenter.updatePopularMemesListOfTag(0, tagModel);
+            } else {
+                mPresenter.updatePopularMemesList(0);
+            }
+        } else if (index == MemesPagerAdapter.INDEX_NEW) {
+            if (tagModel != null) {
+                mPresenter.updateNewMemesListOfTag(0, tagModel);
+            } else {
+                mPresenter.updateNewMemesList(0);
+            }
+        }
+    }
+
+    public void onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_settings) {
+            // TODO
+//            startActivity(new Intent(getContext(), SettingsActivity.class));
+        }
+    }
+
+    public void onLoadMore(int index, int offset) {
+        TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
+        if (index == MemesPagerAdapter.INDEX_POPULAR) {
+            if (tagModel != null) {
+                mPresenter.updatePopularMemesListOfTag(offset, tagModel);
+            } else {
+                mPresenter.updatePopularMemesList(offset);
+            }
+        } else if (index == MemesPagerAdapter.INDEX_NEW) {
+            if (tagModel != null) {
+                mPresenter.updateNewMemesListOfTag(offset, tagModel);
+            } else {
+                mPresenter.updateNewMemesList(offset);
+            }
+        }
+    }
+
+    @Override
+    public void onMoreTagClick() {
+        mPresenter.requestShowMoreTags();
+    }
+
+    @Override
+    public void onSelectTag(TagModel tagModel) {
+        mPresenter.changeTag(tagModel);
     }
 }

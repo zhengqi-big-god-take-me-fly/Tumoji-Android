@@ -20,7 +20,6 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
     @Override
     public void init() {
         // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.init
-        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

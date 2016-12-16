@@ -89,6 +89,17 @@ public interface MemesContract {
          * Called when user click the avatar to see profile or sign in/sign up.
          */
         void requestOpenUserProfilePage();
+
+        /**
+         * Called when user click More tag
+         */
+        void requestShowMoreTags();
+
+        /**
+         * Called when user select or deselect a tag
+         * @param tagModel The tag user select, or null if user deselect the tag
+         */
+        void changeTag(TagModel tagModel);
     }
 
     interface View extends BaseView<Presenter> {
@@ -139,5 +150,10 @@ public interface MemesContract {
          * Go to sign in/sign up page
          */
         void gotoSignInSignUpPage();
+
+        /**
+         * Go to meme upload page
+         */
+        void gotoMemeUploadPage();
     }
 }
