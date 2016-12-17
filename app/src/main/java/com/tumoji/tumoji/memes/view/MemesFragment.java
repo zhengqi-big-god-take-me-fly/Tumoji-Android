@@ -4,6 +4,7 @@ package com.tumoji.tumoji.memes.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
+import com.tumoji.tumoji.memes.activity.MemeUploadActivity;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeDetailContract;
@@ -54,6 +56,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     private RecyclerView mTagsRecyclerView;
     // This fragment
     private ViewPager mViewPager;
+    private FloatingActionButton mUploadFab;
 
     /**
      * Use this factory method to create a new instance of
@@ -161,6 +164,9 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         mTagsRecyclerView.setAdapter(mTagsRecyclerAdapter);
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+        // Others
+        mUploadFab = (FloatingActionButton) getActivity().findViewById(R.id.upload_fab);
+        mUploadFab.setOnClickListener(this);
 
         mPresenter.init();
     }
@@ -227,7 +233,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public void gotoMemeUploadPage() {
-        throw new UnsupportedOperationException("Method not implemented");
+        startActivity(new Intent(getActivity(), MemeUploadActivity.class));
     }
 
     @Override
@@ -235,6 +241,9 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         switch (v.getId()) {
             case R.id.avatar_image:
                 mPresenter.requestOpenUserProfilePage();
+                break;
+            case R.id.upload_fab:
+                mPresenter.requestUploadingMeme();
                 break;
             default:
                 break;

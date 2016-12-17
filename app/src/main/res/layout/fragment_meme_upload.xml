@@ -1,0 +1,68 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tumoji.tumoji.memes.view.MemeUploadFragment"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin">
+
+    <EditText
+        android:id="@+id/title_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/title_label"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:hint="@string/meme_title" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:text="@string/meme_title"
+        android:labelFor="@id/title_edit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/title_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:fontFamily="sans-serif"
+        android:textSize="14sp"
+        android:textStyle="normal|bold"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:text="@string/tags"
+        app:layout_constraintTop_toBottomOf="@+id/title_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/tags_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textSize="14sp"
+        android:textStyle="normal|bold"
+        android:gravity="center_vertical" />
+
+    <ImageButton
+        android:id="@+id/edit_tags_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_label"
+        android:src="@drawable/ic_edit_black_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_label"
+        android:id="@+id/tags_recycler_view"
+        app:layout_constraintRight_toLeftOf="@+id/edit_tags_button"
+        android:layout_height="48dp"
+        tools:listitem="@layout/recycler_item_tag"
+        android:orientation="horizontal" />
+
+</android.support.constraint.ConstraintLayout>

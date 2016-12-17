@@ -8,6 +8,12 @@
     <string name="not_signed_in">Not signed in</string>
     <string name="click_the_avatar_to_sign_in_or_sign_up">Click the avatar to sign in or sign up</string>
     <string name="all_tags">All tags</string>
+    <string name="tap_here_to_pick_meme">Tap here to pick meme</string>
+    <string name="meme_title">Meme title</string>
+    <string name="tags">Tags</string>
+    <string name="upload_successfully">Upload successfully</string>
+    <string name="please_provide_the_meme_title">Please provide the meme title</string>
+    <string name="please_pick_a_meme">Please pick a meme</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -107,4 +113,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_meme_upload">MemeUploadActivity</string>
 </resources>
