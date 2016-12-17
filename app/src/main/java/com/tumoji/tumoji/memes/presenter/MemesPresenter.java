@@ -29,7 +29,11 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void init() {
+        // Show cached content
         mView.refreshTagsList(mTagRepository.getCachedTagsList());
+        mView.refreshPopularMemesList(mMemeRepository.getCachedPopularMemesList(), 0);
+        mView.refreshNewMemesList(mMemeRepository.getCachedNewMemesList(), 0);
+        // Refresh latest content
         mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
             @Override
             public void onSuccess(List<TagModel> tagModels) {
@@ -39,6 +43,30 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Handle error
+            }
+        });
+        mMemeRepository.getPopularMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshPopularMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
+        mMemeRepository.getNewMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshNewMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }

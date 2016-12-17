@@ -20,7 +20,7 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     private MockAccountRepository() {
-        mAccountModel = null;
+        mAccountModel = new AccountModel();
     }
 
     @Override

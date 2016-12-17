@@ -7,6 +7,7 @@ import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Author: perqin
@@ -28,30 +29,29 @@ public class MockMemeRepository implements IMemeRepository {
     }
 
     private MockMemeRepository() {
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mPopularMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
-        mNewMemeModels.add(new MemeModel());
+        for (int i = 0; i < 12; ++i) {
+            mPopularMemeModels.add(generateRandomMeme());
+        }
+        for (int i = 0; i < 10; ++i) {
+            mNewMemeModels.add(generateRandomMeme());
+        }
 
         mHandler = new Handler();
+    }
+
+    private MemeModel generateRandomMeme() {
+        String[] titles = new String[] {
+                "Girl should be WU",
+                "Fear",
+                "The other one don't want to talk to you and throw you a dog"
+        };
+        String[] urls = new String[] {
+                "http://qcloud.perqin.com/girl-wu.jpg",
+                "http://qcloud.perqin.com/fear.png",
+                "http://qcloud.perqin.com/throw-dog.gif"
+        };
+        int index = new Random().nextInt(3);
+        return new MemeModel().withTitle(titles[index]).withImageUrl(urls[index]);
     }
 
     @Override
@@ -71,34 +71,49 @@ public class MockMemeRepository implements IMemeRepository {
 
     @Override
     public void getPopularMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-        mHandler.postDelayed(() -> {
-            // TODO: Change to real image
-            for (int i = 0; i < 12; ++i) {
-                mPopularMemeModels.add(new MemeModel().withImageUrl("http://google.com"));
-            }
-            listener.onSuccess(mPopularMemeModels);
-        }, 5 * 1000);
+        if (offset == 0) {
+            mHandler.postDelayed(() -> {
+                mPopularMemeModels.add(0, generateRandomMeme());
+                mPopularMemeModels.add(0, generateRandomMeme());
+                mPopularMemeModels.add(0, generateRandomMeme());
+                mPopularMemeModels.add(0, generateRandomMeme());
+                listener.onSuccess(mPopularMemeModels.subList(0, mPopularMemeModels.size() < 20 ? mPopularMemeModels.size() : 20));
+            }, 3000);
+        } else {
+            mHandler.postDelayed(() -> {
+                for (int i = 0; i < 15; ++i) {
+                    mPopularMemeModels.add(generateRandomMeme());
+                }
+                listener.onSuccess(mPopularMemeModels.subList(offset, offset + 15));
+            }, 6000);
+        }
     }
 
     @Override
     public void getNewMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-        mHandler.postDelayed(() -> {
-            // TODO: Change to real image
-            for (int i = 0; i < 12; ++i) {
-                mNewMemeModels.add(new MemeModel().withImageUrl("http://google.com"));
-            }
-            listener.onSuccess(mNewMemeModels);
-        }, 5 * 1000);
+        if (offset == 0) {
+            mHandler.postDelayed(() -> {
+                mNewMemeModels.add(0, generateRandomMeme());
+                listener.onSuccess(mNewMemeModels.subList(0, 10));
+            }, 3000);
+        } else {
+            mHandler.postDelayed(() -> {
+                for (int i = 0; i < 9; ++i) {
+                    mNewMemeModels.add(generateRandomMeme());
+                }
+                listener.onSuccess(mNewMemeModels.subList(offset, offset + 10));
+            }, 6000);
+        }
     }
 
     @Override
     public List<MemeModel> getCachedPopularMemesList() {
-        throw new UnsupportedOperationException("Method not implemented");
+        return mPopularMemeModels.subList(0, 10);
     }
 
     @Override
     public List<MemeModel> getCachedNewMemesList() {
-        throw new UnsupportedOperationException("Method not implemented");
+        return mNewMemeModels.subList(0, 10);
     }
 
     @Override
