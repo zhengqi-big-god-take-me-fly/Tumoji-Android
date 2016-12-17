@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.tumoji.tumoji.memes.contract.MoreTagsContract;
 import com.tumoji.tumoji.memes.presenter.MemeDetailPresenter;
 import com.tumoji.tumoji.memes.presenter.MoreTagsPresenter;
 
+import java.util.Arrays;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,6 +59,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     // This fragment
     private ViewPager mViewPager;
     private FloatingActionButton mUploadFab;
+    private boolean[] mPagesInitialized;
 
     /**
      * Use this factory method to create a new instance of
@@ -99,6 +102,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     }
 
     public void onLoadMore(int index, int offset) {
+        Log.i("MemesFrag", "On Load More");
         TagModel tagModel = mTagsRecyclerAdapter.getSelectedTag();
         if (index == MemesPagerAdapter.INDEX_POPULAR) {
             if (tagModel != null) {
@@ -136,6 +140,8 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
                 getString(R.string.popular),
                 getString(R.string._new)
         });
+        mPagesInitialized = new boolean[MemesPagerAdapter.PAGE_COUNT];
+        Arrays.fill(mPagesInitialized, false);
     }
 
     @Override
@@ -167,8 +173,6 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         // Others
         mUploadFab = (FloatingActionButton) getActivity().findViewById(R.id.upload_fab);
         mUploadFab.setOnClickListener(this);
-
-        mPresenter.init();
     }
 
     @Override
@@ -262,5 +266,19 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     public void onSelectTag(TagModel tagModel) {
         mTagsRecyclerView.smoothScrollToPosition(0);
         mPresenter.changeTag(tagModel);
+    }
+
+    public void onListFragmentViewCreated(int index) {
+        mPagesInitialized[index] = true;
+        boolean allInitialized = true;
+        for (boolean initialized : mPagesInitialized) {
+            if (!initialized) {
+                allInitialized = false;
+                break;
+            }
+        }
+        if (allInitialized) {
+            mPresenter.init();
+        }
     }
 }

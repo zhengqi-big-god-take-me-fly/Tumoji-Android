@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,22 +30,26 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
-    public MemesListFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MemesListFragment.
-     */
     public static MemesListFragment newInstance(int index) {
         MemesListFragment memesListFragment = new MemesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_INDEX, index);
         memesListFragment.setArguments(args);
         return memesListFragment;
+    }
+
+    public MemesListFragment() {
+        // Required empty public constructor
+    }
+
+    public void reloadMemesList(List<MemeModel> memeModels, int offset) {
+        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
+        if (mIsLoadingMore) {
+            mIsLoadingMore = false;
+            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -74,7 +78,11 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mMemesRecyclerAdapter);
-        mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        mRecyclerView.addOnItemTouchListener(new OnRecyclerViewItemTouchListener());
+
+        if (mListener != null) {
+            mListener.onListFragmentViewCreated(mIndex);
+        }
     }
 
     @Override
@@ -100,16 +108,6 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
-    public void reloadMemesList(List<MemeModel> memeModels, int offset) {
-        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
-        if (mIsLoadingMore) {
-            mIsLoadingMore = false;
-            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
     @Override
     public void onMemeClick(MemeModel memeModel) {
         if (mListener != null) {
@@ -117,18 +115,34 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
+    private class OnRecyclerViewItemTouchListener extends RecyclerView.SimpleOnItemTouchListener {
+        private void disableLoadingMore() {
+            mRecyclerView.clearOnScrollListeners();
+        }
+
+        private void enableLoadingMore() {
+            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                enableLoadingMore();
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                disableLoadingMore();
+            }
+            return super.onInterceptTouchEvent(rv, event);
+        }
+    }
+
     private class OnRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
         private static final int MAXIMUM_RELOAD_ROW = 2;
-        private static final String TAG = "OnScrollListener";
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
-            Log.i(TAG, "onScrolled: scrolled");
-
             if (mSwipeRefreshLayout.isRefreshing() || mIsLoadingMore) {
-//                mRecyclerView.clearOnScrollListeners();
                 return;
             }
 
@@ -149,6 +163,7 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public interface OnFragmentInteractionListener {
+        void onListFragmentViewCreated(int index);
         void onRefreshMemesList(int index);
         void onLoadMore(int index, int offset);
         void onMemeClick(MemeModel memeModel);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 
@@ -37,7 +38,7 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         MemeModel memeModel = mMemesList.get(position);
         // TODO: Show read image
-        holder.memeImage.setImageResource(position % 2 == 0 ? R.drawable.mock_meme_0 : R.drawable.mock_meme_1);
+        Glide.with(holder.itemView.getContext()).load(memeModel.getImageUrl()).into(holder.memeImage);
         holder.itemView.setOnClickListener(view -> {
             if (mListener != null) {
                 mListener.onMemeClick(memeModel);

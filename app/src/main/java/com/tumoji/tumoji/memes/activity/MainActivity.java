@@ -73,6 +73,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onListFragmentViewCreated(int index) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onListFragmentViewCreated(index);
+        }
+    }
+
+    @Override
     public void onRefreshMemesList(int index) {
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (memesFragment != null) {
