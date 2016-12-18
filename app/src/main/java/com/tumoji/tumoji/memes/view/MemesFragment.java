@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
+import com.tumoji.tumoji.account.activity.ProfileActivity;
 import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.account.model.AccountModel;
@@ -187,12 +189,6 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     }
 
     @Override
-    public void showHdMeme(MemeModel memeModel) {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.showHdMeme
-        throw new UnsupportedOperationException("Method not implemented");
-    }
-
-    @Override
     public void refreshPopularMemesList(List<MemeModel> memeModels, int offset) {
         mPagerAdapter.refreshMemesList(MemesPagerAdapter.INDEX_POPULAR, memeModels, offset);
     }
@@ -208,16 +204,11 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     }
 
     @Override
-    public void refreshHdMeme(MemeModel newMemeModel) {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.refreshHdMeme
-        throw new UnsupportedOperationException("Method not implemented");
-    }
-
-    @Override
     public void refreshUserInfo(AccountModel accountModel) {
         if (accountModel != null) {
             mUsernameText.setText(accountModel.getUsername());
             mEmailText.setText(accountModel.getEmail());
+            Glide.with(getActivity()).load(accountModel.getAvatarUrl()).into(mAvatarImage);
         } else {
             mUsernameText.setText(R.string.not_signed_in);
             mEmailText.setText(R.string.click_the_avatar_to_sign_in_or_sign_up);
@@ -226,8 +217,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     @Override
     public void gotoProfilePage() {
-        // TODO: Implement com.tumoji.tumoji.memes.view.MemesFragment.gotoProfilePage
-        throw new UnsupportedOperationException("Method not implemented");
+        startActivity(new Intent(getActivity(), ProfileActivity.class));
     }
 
     @Override

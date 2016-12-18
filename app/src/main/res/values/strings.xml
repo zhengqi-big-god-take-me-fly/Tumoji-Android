@@ -14,6 +14,9 @@
     <string name="upload_successfully">Upload successfully</string>
     <string name="please_provide_the_meme_title">Please provide the meme title</string>
     <string name="please_pick_a_meme">Please pick a meme</string>
+    <string name="email">Email</string>
+    <string name="profile">Profile</string>
+    <string name="sign_out">Sign out</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

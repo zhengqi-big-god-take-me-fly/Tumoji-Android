@@ -74,12 +74,6 @@ public interface MemesContract {
 
     interface View extends BaseView<Presenter> {
         /**
-         * Popup a sheet to display HD meme image.
-         * @param memeModel The meme data object to be displayed
-         */
-        void showHdMeme(MemeModel memeModel);
-
-        /**
          * Refresh popular memes list
          * @param memeModels Popular memes list
          * @param offset Populate new memes with offset in the list
@@ -98,12 +92,6 @@ public interface MemesContract {
          * @param tagModels Tags list
          */
         void refreshTagsList(List<TagModel> tagModels);
-
-        /**
-         * Refresh HD meme info with new model
-         * @param newMemeModel The new meme data object to be displayed
-         */
-        void refreshHdMeme(MemeModel newMemeModel);
 
         /**
          * Refresh user's information shown in navigation drawer.
