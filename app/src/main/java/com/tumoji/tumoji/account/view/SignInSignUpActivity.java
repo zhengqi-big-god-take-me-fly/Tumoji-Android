@@ -20,8 +20,7 @@ import android.widget.Toast;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
-//import com.tumoji.tumoji.account.presenter.SignInSignUpPresenter;
-import com.tumoji.tumoji.account.view.Presenter;
+import com.tumoji.tumoji.account.presenter.SignInSignUpPresenter;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
 
 import org.w3c.dom.Text;
@@ -32,7 +31,6 @@ import static android.view.View.*;
 public class SignInSignUpActivity extends AppCompatActivity implements SignInSignUpContract.View, SignInExample.SignInOnClick, SignUpExample.SignUpOnClick, SignInSignUpExample.NextOnClick {
     private Context context = this;
     private SignInSignUpContract.Presenter mPresenter;
-    //private SignInSignUpContract.Presenter.
     private SignInExample fragment1;
     private Button next;
     private EditText username;
@@ -62,8 +60,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
             }
         });
         setSupportActionBar(toolbar);
-       // mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(), this);
-        mPresenter = new Presenter(MockAccountRepository.getInstance(), this);
+        mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(), this);
         pushSignInSignOutProgress();
     }
     @Override
