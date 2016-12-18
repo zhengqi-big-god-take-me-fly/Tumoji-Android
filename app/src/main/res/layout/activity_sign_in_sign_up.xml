@@ -20,6 +20,14 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:textSize="30dp"
+            android:id="@+id/title"
+            android:layout_marginLeft="80dp"/>
+
     </android.support.design.widget.AppBarLayout>
    <android.support.design.widget.FloatingActionButton
        android:layout_width="wrap_content"

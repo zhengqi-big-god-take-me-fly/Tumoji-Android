@@ -37,7 +37,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     private Toolbar toolbar;
     private Bundle bundle;
     private FloatingActionButton fab;
-    private ProgressBar progressBar;
+    private TextView title;
     FragmentManager fragmentManager = getFragmentManager();
     android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -52,11 +52,13 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_sign_up);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        title = (TextView)findViewById(R.id.title);
         fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.backToPreviousProgress();
+                title.setText("Sign in/Sign up");
             }
         });
         setSupportActionBar(toolbar);
@@ -68,6 +70,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInSignOutProgress
 
         try {
+            title.setText("Sign in/Sign up");
             fab.setVisibility(INVISIBLE);
             android.app.FragmentTransaction fragmentTransaction0 = fragmentManager.beginTransaction();
             SignInSignUpExample fragment0 = new SignInSignUpExample();
@@ -84,6 +87,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     public void pushSignInProgress() {
         // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInProgress
         try {
+            title.setText("Sign in");
             username = (EditText) findViewById(R.id.sign_in_sign_up_username);
             String username_email = username.getText().toString();
             bundle = new Bundle();
@@ -105,6 +109,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     public void pushSignUpProgress(String username, String email) {
         // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignUpProgress
         try {
+            title.setText("Sign up");
             fab.setVisibility(VISIBLE);
             android.app.FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
             SignUpExample fragment2 = new SignUpExample();

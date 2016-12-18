@@ -35,7 +35,6 @@ public class SignInSignUpExample extends Fragment {
 
     public void startWait() {
         progressBar.setVisibility(View.VISIBLE);
-        //username.setKeyListener(null);
         username.setFocusable(false);
         username.setFocusableInTouchMode(false);
     }
