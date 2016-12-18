@@ -1,5 +1,9 @@
 package com.tumoji.tumoji.data.account.repository;
 
+import android.os.Handler;
+
+import com.tumoji.tumoji.common.OnGetNaiveResultListener;
+import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 
 /**
@@ -20,7 +24,7 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     private MockAccountRepository() {
-        mAccountModel = new AccountModel();
+        mAccountModel = new AccountModel().withUsername("Perqin").withEmail("original@email.com").withAvatarUrl("http://qcloud.perqin.com/shadow.png");
     }
 
     @Override
@@ -31,5 +35,22 @@ public class MockAccountRepository implements IAccountRepository {
     @Override
     public boolean hasSignedInAccount() {
         return mAccountModel != null;
+    }
+
+    @Override
+    public void updateSignedInAccount(OnGetResultListener<AccountModel> listener) {
+        new Handler().postDelayed(() -> {
+            mAccountModel.setUsername("Perqin Ultimate");
+            mAccountModel.setEmail("another@email.com");
+            listener.onSuccess(mAccountModel);
+        }, 600);
+    }
+
+    @Override
+    public void signOut(OnGetNaiveResultListener listener) {
+        new Handler().postDelayed(() -> {
+            mAccountModel = null;
+            listener.onSuccess();
+        }, 600);
     }
 }

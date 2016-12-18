@@ -2,9 +2,6 @@ package com.tumoji.tumoji.account.contract;
 
 import com.tumoji.tumoji.common.BaseView;
 import com.tumoji.tumoji.data.account.model.AccountModel;
-import com.tumoji.tumoji.data.meme.model.MemeModel;
-
-import java.util.List;
 
 /**
  * Author: perqin
@@ -17,7 +14,7 @@ public interface ProfileContract {
 
         void changeAvatar(String newImage);
 
-        void requestUploadMeme();
+//        void requestUploadMeme();
 
         void signOut();
     }
@@ -25,7 +22,7 @@ public interface ProfileContract {
     interface View extends BaseView<Presenter> {
         void refreshProfile(AccountModel accountModel);
 
-        void refreshUploadedMemes(List<MemeModel> memeModels);
+//        void refreshUploadedMemes(List<MemeModel> memeModels);
 
         void closeProfilePage();
     }
