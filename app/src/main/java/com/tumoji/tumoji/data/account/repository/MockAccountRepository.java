@@ -43,7 +43,7 @@ public class MockAccountRepository implements IAccountRepository {
             mAccountModel.setUsername("Perqin Ultimate");
             mAccountModel.setEmail("another@email.com");
             listener.onSuccess(mAccountModel);
-        }, 3000);
+        }, 600);
     }
 
     @Override
@@ -51,6 +51,6 @@ public class MockAccountRepository implements IAccountRepository {
         new Handler().postDelayed(() -> {
             mAccountModel = null;
             listener.onSuccess();
-        }, 1000);
+        }, 600);
     }
 }
