@@ -27,6 +27,11 @@ public class MemeModel implements Serializable {
     @SerializedName("image")
     private String imageUrl;
 
+    private boolean liked;
+    private boolean reported;
+    private int likeCount;
+    private int reportCount;
+
     public MemeModel() {
         this("", "", "", "");
     }
@@ -87,6 +92,58 @@ public class MemeModel implements Serializable {
 
     public MemeModel withImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public MemeModel withLiked(boolean liked) {
+        setLiked(liked);
+        return this;
+    }
+
+    public boolean isReported() {
+        return reported;
+    }
+
+    public void setReported(boolean reported) {
+        this.reported = reported;
+    }
+
+    public MemeModel withReported(boolean reported) {
+        setReported(reported);
+        return this;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public MemeModel withLikeCount(int likeCount) {
+        setLikeCount(likeCount);
+        return this;
+    }
+
+    public int getReportCount() {
+        return reportCount;
+    }
+
+    public void setReportCount(int reportCount) {
+        this.reportCount = reportCount;
+    }
+
+    public MemeModel withReportCount(int reportCount) {
+        setReportCount(reportCount);
         return this;
     }
 }
