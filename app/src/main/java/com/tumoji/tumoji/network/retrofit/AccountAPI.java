@@ -134,7 +134,7 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("/users/{id}/replace")
-    Observable<AccountModel> replaceUserById(@Path("id") String id , @Body ResponseBody route , @Field("access_token") String token);
+    Observable<AccountModel> replaceUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
     @GET("/users/{id}/roles")
     Observable<AccountRole> getUserRoleById(@Path("id") String id , @Field("access_token") String token);
@@ -152,7 +152,7 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("/users/login")
-    Observable<Token> requestLogin(@Body ResponseBody route);
+    Observable<Token> requestLogin(@Body RequestBody route);
 
 
     @POST("/users/logout")

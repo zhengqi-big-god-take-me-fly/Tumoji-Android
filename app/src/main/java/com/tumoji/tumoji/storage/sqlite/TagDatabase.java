@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.nfc.Tag;
 import android.provider.Telephony;
 
+import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class TagDatabase {
     private SQLiteDatabase writableTagDatas;
     public static TagDatabase tagDatabase;
 
-    public static TagDatabase getInstance(Context context) {
-        if (tagDatabase == null) tagDatabase = new TagDatabase(new DBOpenHelper(context));
+    public static TagDatabase getInstance() {
+        if (tagDatabase == null) tagDatabase = new TagDatabase(new DBOpenHelper(TumojiApp.myContext));
         return tagDatabase;
     }
 
