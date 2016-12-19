@@ -10,6 +10,7 @@ import com.tumoji.tumoji.data.account.model.AccountModel;
  */
 
 public interface IAccountRepository {
+
     /**
      * Get the account of current signed in user
      * @return The model of current signed in user, or null if no signed in user.

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class AccountDatabase {
     private SQLiteDatabase writableAccountDatas;
     public static AccountDatabase accountDatabase;
 
-    public static AccountDatabase getInstance(Context context) {
-        if (accountDatabase == null) accountDatabase = new AccountDatabase(new DBOpenHelper(context));
+    public static AccountDatabase getInstance() {
+        if (accountDatabase == null) accountDatabase = new AccountDatabase(new DBOpenHelper(TumojiApp.myContext));
         return accountDatabase;
     }
 
