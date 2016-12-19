@@ -50,7 +50,7 @@ public interface SignInSignUpContract {
         /**
          * Go to the SignInSignUp progress
          */
-        void pushSignInSignOutProgress();
+        void pushSignInSignUpProgress();
 
         /**
          * Go to SignIn progress

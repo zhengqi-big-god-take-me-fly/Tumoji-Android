@@ -25,8 +25,8 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     }
 
     @Override
-    public void pushSignInSignOutProgress() {
-        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInSignOutProgress
+    public void pushSignInSignUpProgress() {
+        // TODO: Implement com.tumoji.tumoji.account.view.SignInSignUpActivity.pushSignInSignUpProgress
         throw new UnsupportedOperationException("Method not implemented");
     }
 

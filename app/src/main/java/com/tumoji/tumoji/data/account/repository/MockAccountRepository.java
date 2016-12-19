@@ -53,4 +53,16 @@ public class MockAccountRepository implements IAccountRepository {
             listener.onSuccess();
         }, 600);
     }
+
+    @Override
+    public void signUp(String username, String email, String password, OnGetNaiveResultListener listener) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void signIn(String usernameOrEmail, boolean isUsername, OnGetNaiveResultListener listener) {
+        // TODO
+        new Handler().postDelayed(listener::onSuccess, 4000);
+    }
 }

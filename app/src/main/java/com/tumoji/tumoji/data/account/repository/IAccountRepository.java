@@ -35,4 +35,21 @@ public interface IAccountRepository {
      * @param listener Callback
      */
     void signOut(OnGetNaiveResultListener listener);
+
+    /**
+     * Sign up for user
+     * @param username Username
+     * @param email Email address
+     * @param password Password
+     * @param listener Callback
+     */
+    void signUp(String username, String email, String password, OnGetNaiveResultListener listener);
+
+    /**
+     * Sign in with username or email
+     * @param usernameOrEmail Username or email
+     * @param isUsername Whether the usernameOrEmail field is username
+     * @param listener Callback
+     */
+    void signIn(String usernameOrEmail, boolean isUsername, OnGetNaiveResultListener listener);
 }

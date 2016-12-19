@@ -1,6 +1,7 @@
 package com.tumoji.tumoji.account.presenter;
 
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
+import com.tumoji.tumoji.common.OnGetNaiveResultListener;
 import com.tumoji.tumoji.data.account.repository.IAccountRepository;
 
 /**
@@ -12,6 +13,9 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
     private IAccountRepository mAccountRepository;
     private SignInSignUpContract.View mView;
 
+    private String mUsernameOrEmail;
+    private boolean mIsUsername;
+
     public SignInSignUpPresenter(IAccountRepository accountRepository, SignInSignUpContract.View view) {
         mAccountRepository = accountRepository;
         mView = view;
@@ -19,36 +23,68 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
 
     @Override
     public void init() {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.init
+        mView.pushSignInSignUpProgress();
     }
 
     @Override
     public void nextAfterSignInSignUp(String usernameOrEmail) {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.nextAfterSignInSignUp
-        throw new UnsupportedOperationException("Method not implemented");
+        // TODO
+        mView.pushSignInProgress();
     }
 
     @Override
     public void nextAfterSignIn(String password) {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.nextAfterSignIn
-        throw new UnsupportedOperationException("Method not implemented");
+        if (password.isEmpty()) {
+            mView.showPasswordBlankOrInvalidError();
+        } else {
+            mAccountRepository.signIn(mUsernameOrEmail, mIsUsername, new OnGetNaiveResultListener() {
+                @Override
+                public void onSuccess() {
+                    mView.finishSignIn();
+                }
+
+                @Override
+                public void onFailure(int error, String msg) {
+                    // TODO
+                    throw new UnsupportedOperationException("Method not implemented");
+                }
+            });
+        }
     }
 
     @Override
     public void nextAfterSignUp(String username, String email, String password, String passwordConfirm) {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.nextAfterSignUp
-        throw new UnsupportedOperationException("Method not implemented");
+        if (username.isEmpty()) {
+            mView.showUsernameBlankOrInvalidError();
+        } else if (email.isEmpty()) {
+            mView.showEmailBlankOrInvalidError();
+        } else if (password.isEmpty()) {
+            mView.showPasswordBlankOrInvalidError();
+        } else if (!password.equals(passwordConfirm)) {
+            mView.showPasswordUnconfirmedError();
+        } else {
+            mAccountRepository.signUp(username, email, password, new OnGetNaiveResultListener() {
+                @Override
+                public void onSuccess() {
+                    mView.finishSignUp();
+                }
+
+                @Override
+                public void onFailure(int error, String msg) {
+                    // TODO
+                    throw new UnsupportedOperationException("Method not implemented");
+                }
+            });
+        }
     }
 
     @Override
     public void backToPreviousProgress() {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.backToPreviousProgress
-        throw new UnsupportedOperationException("Method not implemented");
+        mView.popProgress();
     }
 
     @Override
     public void stopSignInSignUp() {
-        // TODO: Implement com.tumoji.tumoji.account.presenter.SignInSignUpPresenter.stopSignInSignUp
-        throw new UnsupportedOperationException("Method not implemented");
+        mView.cancelSignInSignUp();
     }
 }

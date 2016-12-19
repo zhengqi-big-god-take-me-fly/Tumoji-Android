@@ -147,4 +147,16 @@ public class AccountRepository implements IAccountRepository {
         currentUser = null;
         listener.onSuccess();
     }
+
+    @Override
+    public void signUp(String username, String email, String password, OnGetNaiveResultListener listener) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public void signIn(String usernameOrEmail, boolean isUsername, OnGetNaiveResultListener listener) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }
