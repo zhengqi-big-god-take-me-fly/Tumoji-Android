@@ -8,6 +8,7 @@ import android.nfc.Tag;
 import android.provider.Telephony;
 
 
+import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 
 import java.util.ArrayList;
@@ -22,8 +23,8 @@ public class MemeDatabase {
     private SQLiteDatabase writableMemeDatas;
     public static MemeDatabase memeDatabase;
 
-    public static MemeDatabase getInstance(Context context) {
-        if (memeDatabase == null) memeDatabase = new MemeDatabase(new DBOpenHelper(context));
+    public static MemeDatabase getInstance() {
+        if (memeDatabase == null) memeDatabase = new MemeDatabase(new DBOpenHelper(TumojiApp.myContext));
         return memeDatabase;
     }
 

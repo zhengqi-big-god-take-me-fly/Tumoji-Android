@@ -74,6 +74,20 @@ public interface IMemeRepository {
      */
     List<MemeModel> getCachedNewMemesList();
 
+    /**
+     * Get meme data from API server
+     * @param memeId The meme ID of the meme to get
+     * @param listener Callback
+     */
+    void getMeme(String memeId, OnGetResultListener<MemeModel> listener);
+
+    /**
+     * Get cached meme data from local storage
+     * @param memeId The ID of the meme
+     * @return The meme data
+     */
+    MemeModel getCachedMeme(String memeId);
+
     interface OnLikeUnlikeMemeListener {
         /**
          * Like or un-like a meme successfully
@@ -98,6 +112,21 @@ public interface IMemeRepository {
 
         /**
          * Fail to report a meme
+         * @param error Error code
+         * @param msg Error message
+         */
+        void onFailure(int error, String msg);
+    }
+
+    interface OnGetResultListener<T> {
+        /**
+         * Successfully get things
+         * @param result The things to get
+         */
+        void onSuccess(T result);
+
+        /**
+         * Fail to get things
          * @param error Error code
          * @param msg Error message
          */

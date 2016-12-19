@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tumoji.tumoji.memes.view.MemeDetailFragment">
+
+    <ImageView
+        android:id="@+id/meme_hd_image"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:scaleType="fitCenter"/>
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Title"
+        android:id="@+id/meme_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/uploader_and_tags_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:clipToPadding="false"
+        tools:ignore="RtlSymmetry" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            android:id="@+id/like_button_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/like_icon_image"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_favorite_black_24dp"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:id="@+id/like_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="20dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/like_count_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/report_button_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/report_icon_text"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_phone_black_24dp"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:id="@+id/report_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="20dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/report_count_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

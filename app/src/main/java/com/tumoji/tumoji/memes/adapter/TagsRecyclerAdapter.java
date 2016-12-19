@@ -1,5 +1,8 @@
 package com.tumoji.tumoji.memes.adapter;
 
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +53,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         int type = getItemViewType(position);
         if (type == TYPE_MORE) {
             holder.titleText.setText(R.string.more);
+            holder.titleText.setTextColor(Color.WHITE);
             holder.itemView.setBackgroundResource(R.drawable.background_chip_unselected);
             holder.itemView.setOnClickListener(view -> {
                 if (mListener != null) {
@@ -58,6 +62,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
             });
         } else if (type == TYPE_SELECTED) {
             holder.titleText.setText(mSelectedTag.getTagName());
+            holder.titleText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
             holder.itemView.setBackgroundResource(R.drawable.background_chip_selected);
             holder.itemView.setOnClickListener(view -> {
                 deselectTag();
@@ -80,6 +85,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
                 }
             }
             holder.titleText.setText(tagModel.getTagName());
+            holder.titleText.setTextColor(Color.WHITE);
             holder.itemView.setBackgroundResource(R.drawable.background_chip_unselected);
             holder.itemView.setOnClickListener(view -> {
                 selectTag(tagModel);
@@ -116,8 +122,8 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         notifyDataSetChanged();
     }
 
-    public void selectTag(TagModel tagModel) {
-        mSelectedTag =tagModel;
+    public void selectTag(@NonNull TagModel tagModel) {
+        mSelectedTag = tagModel;
         mSelectedTagIndex = TAG_INDEX_OTHER;
         for (int i = 0; i < mTagsList.size(); ++i) {
             if (mSelectedTag.getTagName().equals(mTagsList.get(i).getTagName())) {

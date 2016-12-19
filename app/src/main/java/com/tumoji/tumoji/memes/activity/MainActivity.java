@@ -15,14 +15,18 @@ import android.view.MenuItem;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.view.SignInSignUpFragment;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
+import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
+import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.fragment.MemesListFragment;
+import com.tumoji.tumoji.memes.view.MoreTagsFragment;
 import com.tumoji.tumoji.memes.presenter.MemesPresenter;
 import com.tumoji.tumoji.memes.view.MemesFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MemesListFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, MemesListFragment.OnFragmentInteractionListener, MoreTagsFragment.OnFragmentInteractionListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,28 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -90,6 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onListFragmentViewCreated(int index) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onListFragmentViewCreated(index);
+        }
     }
 
     @Override
@@ -105,6 +95,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (memesFragment != null) {
             memesFragment.onLoadMore(index, offset);
+        }
+    }
+
+    @Override
+    public void onMemeClick(MemeModel memeModel) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onMemeClick(memeModel);
+        }
+    }
+
+    @Override
+    public void onTagClick(TagModel tagModel) {
+        MemesFragment memesFragment = (MemesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (memesFragment != null) {
+            memesFragment.onTagInMoreTagsPageClick(tagModel);
         }
     }
 }

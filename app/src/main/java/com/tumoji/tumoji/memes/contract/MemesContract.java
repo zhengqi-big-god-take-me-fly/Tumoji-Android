@@ -25,31 +25,6 @@ public interface MemesContract {
         void viewResume();
 
         /**
-         * Called when user click some meme in the memes list.
-         * @param memeModel Meme data object clicked by user
-         */
-        void memeThumbnailItemClicked(MemeModel memeModel);
-
-        /**
-         * Called when user likes some meme.
-         * @param memeModel The meme data object user likes.
-         */
-        void likeMeme(MemeModel memeModel);
-
-        /**
-         * Called when user unlikes some meme.
-         * @param memeModel The meme data object user likes.
-         */
-        void unlikeMeme(MemeModel memeModel);
-
-        /**
-         * Called when user reports some meme.
-         * @param memeModel The meme data object user reports.
-         * @param reason The report reason.
-         */
-        void reportMeme(MemeModel memeModel, String reason);
-
-        /**
          * Update popular memes list
          * @param offset Update memes from the offset
          */
@@ -91,11 +66,6 @@ public interface MemesContract {
         void requestOpenUserProfilePage();
 
         /**
-         * Called when user click More tag
-         */
-        void requestShowMoreTags();
-
-        /**
          * Called when user select or deselect a tag
          * @param tagModel The tag user select, or null if user deselect the tag
          */
@@ -103,12 +73,6 @@ public interface MemesContract {
     }
 
     interface View extends BaseView<Presenter> {
-        /**
-         * Popup a sheet to display HD meme image.
-         * @param memeModel The meme data object to be displayed
-         */
-        void showHdMeme(MemeModel memeModel);
-
         /**
          * Refresh popular memes list
          * @param memeModels Popular memes list
@@ -128,12 +92,6 @@ public interface MemesContract {
          * @param tagModels Tags list
          */
         void refreshTagsList(List<TagModel> tagModels);
-
-        /**
-         * Refresh HD meme info with new model
-         * @param newMemeModel The new meme data object to be displayed
-         */
-        void refreshHdMeme(MemeModel newMemeModel);
 
         /**
          * Refresh user's information shown in navigation drawer.

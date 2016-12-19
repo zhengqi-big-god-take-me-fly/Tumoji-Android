@@ -29,7 +29,11 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void init() {
+        // Show cached content
         mView.refreshTagsList(mTagRepository.getCachedTagsList());
+        mView.refreshPopularMemesList(mMemeRepository.getCachedPopularMemesList(), 0);
+        mView.refreshNewMemesList(mMemeRepository.getCachedNewMemesList(), 0);
+        // Refresh latest content
         mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
             @Override
             public void onSuccess(List<TagModel> tagModels) {
@@ -41,61 +45,35 @@ public class MemesPresenter implements MemesContract.Presenter {
                 // TODO: Handle error
             }
         });
+        mMemeRepository.getPopularMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshPopularMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
+        mMemeRepository.getNewMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
+            @Override
+            public void onSuccess(List<MemeModel> memeModels) {
+                mView.refreshNewMemesList(memeModels, 0);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
     }
 
     @Override
     public void viewResume() {
         mView.refreshUserInfo(mAccountRepository.getSignedInAccount());
-    }
-
-    @Override
-    public void memeThumbnailItemClicked(MemeModel memeModel) {
-        mView.showHdMeme(memeModel);
-    }
-
-    @Override
-    public void likeMeme(MemeModel memeModel) {
-        mMemeRepository.likeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
-    public void unlikeMeme(MemeModel memeModel) {
-        mMemeRepository.unlikeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
-    public void reportMeme(MemeModel memeModel, String reason) {
-        mMemeRepository.reportMeme(memeModel, reason, new IMemeRepository.OnReportMemeListener() {
-            @Override
-            public void onSuccess(MemeModel newMemeModel) {
-                mView.refreshHdMeme(newMemeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
-        });
     }
 
     @Override
@@ -190,11 +168,6 @@ public class MemesPresenter implements MemesContract.Presenter {
         } else {
             mView.gotoSignInSignUpPage();
         }
-    }
-
-    @Override
-    public void requestShowMoreTags() {
-        // TODO: Implement requestShowMoreTags
     }
 
     @Override

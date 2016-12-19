@@ -18,8 +18,7 @@ import java.util.List;
 public class MemesPagerAdapter extends FragmentPagerAdapter {
     public static final int INDEX_POPULAR = 0;
     public static final int INDEX_NEW = 1;
-
-    private static final int PAGE_COUNT = 2;
+    public static final int PAGE_COUNT = 2;
 
     private List<MemesListFragment> mFragments = new ArrayList<>();
     private String[] mTitles;

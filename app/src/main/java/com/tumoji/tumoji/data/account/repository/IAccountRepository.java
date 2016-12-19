@@ -1,5 +1,7 @@
 package com.tumoji.tumoji.data.account.repository;
 
+import com.tumoji.tumoji.common.OnGetNaiveResultListener;
+import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 
 /**
@@ -8,6 +10,7 @@ import com.tumoji.tumoji.data.account.model.AccountModel;
  */
 
 public interface IAccountRepository {
+
     /**
      * Get the account of current signed in user
      * @return The model of current signed in user, or null if no signed in user.
@@ -20,4 +23,16 @@ public interface IAccountRepository {
      * @return Whether there is a signed in account
      */
     boolean hasSignedInAccount();
+
+    /**
+     * Get latest account profile and update local profile data
+     * @param listener Callback
+     */
+    void updateSignedInAccount(OnGetResultListener<AccountModel> listener);
+
+    /**
+     * Sign out currently signed in user and give operation result
+     * @param listener Callback
+     */
+    void signOut(OnGetNaiveResultListener listener);
 }

@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,15 +19,7 @@ import com.tumoji.tumoji.memes.adapter.MemesRecyclerAdapter;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MemesListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MemesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MemesListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MemesListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MemesRecyclerAdapter.OnMemeClickListener {
     private static final String ARG_INDEX = "INDEX";
 
     private OnFragmentInteractionListener mListener;
@@ -38,22 +30,26 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
-    public MemesListFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MemesListFragment.
-     */
     public static MemesListFragment newInstance(int index) {
         MemesListFragment memesListFragment = new MemesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_INDEX, index);
         memesListFragment.setArguments(args);
         return memesListFragment;
+    }
+
+    public MemesListFragment() {
+        // Required empty public constructor
+    }
+
+    public void reloadMemesList(List<MemeModel> memeModels, int offset) {
+        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
+        if (mIsLoadingMore) {
+            mIsLoadingMore = false;
+            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -65,6 +61,7 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
 
         mIsLoadingMore = false;
         mMemesRecyclerAdapter = new MemesRecyclerAdapter();
+        mMemesRecyclerAdapter.setOnMemeClickListener(this);
     }
 
     @Override
@@ -79,9 +76,13 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mMemesRecyclerAdapter);
-        mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        mRecyclerView.addOnItemTouchListener(new OnRecyclerViewItemTouchListener());
+
+        if (mListener != null) {
+            mListener.onListFragmentViewCreated(mIndex);
+        }
     }
 
     @Override
@@ -107,43 +108,41 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
-    public void reloadMemesList(List<MemeModel> memeModels, int offset) {
-        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
-        if (mIsLoadingMore) {
-            mIsLoadingMore = false;
-            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
+    @Override
+    public void onMemeClick(MemeModel memeModel) {
+        if (mListener != null) {
+            mListener.onMemeClick(memeModel);
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onRefreshMemesList(int index);
-        void onLoadMore(int index, int offset);
+    private class OnRecyclerViewItemTouchListener extends RecyclerView.SimpleOnItemTouchListener {
+        private void disableLoadingMore() {
+            mRecyclerView.clearOnScrollListeners();
+        }
+
+        private void enableLoadingMore() {
+            mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                enableLoadingMore();
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                disableLoadingMore();
+            }
+            return super.onInterceptTouchEvent(rv, event);
+        }
     }
 
     private class OnRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
         private static final int MAXIMUM_RELOAD_ROW = 2;
-        private static final String TAG = "OnScrollListener";
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
-            Log.i(TAG, "onScrolled: scrolled");
-
             if (mSwipeRefreshLayout.isRefreshing() || mIsLoadingMore) {
-//                mRecyclerView.clearOnScrollListeners();
                 return;
             }
 
@@ -161,5 +160,12 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
                 }
             }
         }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onListFragmentViewCreated(int index);
+        void onRefreshMemesList(int index);
+        void onLoadMore(int index, int offset);
+        void onMemeClick(MemeModel memeModel);
     }
 }
