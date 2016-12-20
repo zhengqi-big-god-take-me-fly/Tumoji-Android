@@ -57,7 +57,7 @@ public class MockMemeRepository implements IMemeRepository {
             memes.addAll(mAllMemes);
         }
         MemeModel[] memesArray = toArray(memes);
-        Arrays.sort(memesArray, (o1, o2) -> o1.getLikeCount() - o2.getLikeCount());
+        Arrays.sort(memesArray, (o1, o2) -> o2.getLikeCount() - o1.getLikeCount());
         ArrayList<MemeModel> result = new ArrayList<>();
         Collections.addAll(result, memesArray);
         if (offset >= result.size()) {
@@ -94,7 +94,7 @@ public class MockMemeRepository implements IMemeRepository {
     public List<MemeModel> getCachedPopularMemesList() {
         ArrayList<MemeModel> memes = mAllMemes;
         MemeModel[] memesArray = toArray(memes);
-        Arrays.sort(memesArray, (o1, o2) -> o1.getLikeCount() - o2.getLikeCount());
+        Arrays.sort(memesArray, (o1, o2) -> o2.getLikeCount() - o1.getLikeCount());
         ArrayList<MemeModel> result = new ArrayList<>();
         Collections.addAll(result, memesArray);
         return result.subList(0, result.size() >= 15 ? 15 : result.size());
