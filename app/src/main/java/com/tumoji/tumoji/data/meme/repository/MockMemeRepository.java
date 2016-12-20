@@ -1,13 +1,13 @@
 package com.tumoji.tumoji.data.meme.repository;
 
-import android.os.Handler;
-
+import com.tumoji.tumoji.common.DemoMemeStore;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Author: perqin
@@ -17,9 +17,9 @@ import java.util.Random;
 public class MockMemeRepository implements IMemeRepository {
     private static IMemeRepository sInstance;
 
-    private Handler mHandler;
-    private ArrayList<MemeModel> mPopularMemeModels = new ArrayList<>();
-    private ArrayList<MemeModel> mNewMemeModels = new ArrayList<>();
+
+    private ArrayList<MemeModel> mAllMemes = new ArrayList<>();
+    private ArrayList<MemeModel> mXiongbenMemes = new ArrayList<>();
 
     public static IMemeRepository getInstance() {
         if (sInstance == null) {
@@ -29,102 +29,99 @@ public class MockMemeRepository implements IMemeRepository {
     }
 
     private MockMemeRepository() {
-        for (int i = 0; i < 12; ++i) {
-            mPopularMemeModels.add(generateRandomMeme());
-        }
-        for (int i = 0; i < 10; ++i) {
-            mNewMemeModels.add(generateRandomMeme());
-        }
-
-        mHandler = new Handler();
-    }
-
-    private MemeModel generateRandomMeme() {
-        String[] titles = new String[] {
-                "Girl should be WU",
-                "Fear",
-                "The other one don't want to talk to you and throw you a dog"
-        };
-        String[] urls = new String[] {
-                "http://qcloud.perqin.com/girl-wu.jpg",
-                "http://qcloud.perqin.com/fear.png",
-                "http://qcloud.perqin.com/throw-dog.gif"
-        };
-        int index = new Random().nextInt(3);
-        return new MemeModel().withTitle(titles[index]).withImageUrl(urls[index]);
+        mAllMemes = DemoMemeStore.getAllMemes();
+        mXiongbenMemes = DemoMemeStore.getXiongbenMemes();
     }
 
     @Override
     public void likeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
-        throw new UnsupportedOperationException("Method not implemented");
+        listener.onSuccess(memeModel.withLiked(true));
     }
 
     @Override
     public void unlikeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
-        throw new UnsupportedOperationException("Method not implemented");
+        listener.onSuccess(memeModel.withLiked(false));
     }
 
     @Override
     public void reportMeme(MemeModel memeModel, String reason, OnReportMemeListener listener) {
-        throw new UnsupportedOperationException("Method not implemented");
+        listener.onSuccess(memeModel.withReported(true));
     }
 
     @Override
     public void getPopularMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-        if (offset == 0) {
-            mHandler.postDelayed(() -> {
-                mPopularMemeModels.add(0, generateRandomMeme());
-                mPopularMemeModels.add(0, generateRandomMeme());
-                mPopularMemeModels.add(0, generateRandomMeme());
-                mPopularMemeModels.add(0, generateRandomMeme());
-                listener.onSuccess(mPopularMemeModels.subList(0, mPopularMemeModels.size() < 20 ? mPopularMemeModels.size() : 20));
-            }, 3000);
+        ArrayList<MemeModel> memes = new ArrayList<>();
+        if (tagModel != null) {
+            memes.addAll(mXiongbenMemes);
         } else {
-            mHandler.postDelayed(() -> {
-                for (int i = 0; i < 15; ++i) {
-                    mPopularMemeModels.add(generateRandomMeme());
-                }
-                listener.onSuccess(mPopularMemeModels.subList(offset, offset + 15));
-            }, 6000);
+            memes.addAll(mAllMemes);
         }
+        MemeModel[] memesArray = toArray(memes);
+        Arrays.sort(memesArray, (o1, o2) -> o1.getLikeCount() - o2.getLikeCount());
+        ArrayList<MemeModel> result = new ArrayList<>();
+        Collections.addAll(result, memesArray);
+        if (offset >= result.size()) {
+            listener.onSuccess(new ArrayList<>());
+            return;
+        }
+        listener.onSuccess(result.subList(offset, offset + 15 > result.size() ? result.size() : offset + 15));
     }
 
     @Override
     public void getNewMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-        if (offset == 0) {
-            mHandler.postDelayed(() -> {
-                mNewMemeModels.add(0, generateRandomMeme());
-                listener.onSuccess(mNewMemeModels.subList(0, 10));
-            }, 3000);
+        ArrayList<MemeModel> memes = new ArrayList<>();
+        if (tagModel != null) {
+            memes.addAll(mXiongbenMemes);
         } else {
-            mHandler.postDelayed(() -> {
-                for (int i = 0; i < 9; ++i) {
-                    mNewMemeModels.add(generateRandomMeme());
-                }
-                listener.onSuccess(mNewMemeModels.subList(offset, offset + 10));
-            }, 6000);
+            memes.addAll(mAllMemes);
         }
+        if (offset >= memes.size()) {
+            listener.onSuccess(new ArrayList<>());
+            return;
+        }
+        listener.onSuccess(memes.subList(offset, offset + 15 > memes.size() ? memes.size() : offset + 15));
+    }
+
+    private MemeModel[] toArray(ArrayList<MemeModel> memeModels) {
+        MemeModel[] memes = new MemeModel[memeModels.size()];
+        for (int i = 0; i < memeModels.size(); ++i) {
+            memes[i] = memeModels.get(i);
+        }
+        return memes;
     }
 
     @Override
     public List<MemeModel> getCachedPopularMemesList() {
-        return mPopularMemeModels.subList(0, 10);
+        ArrayList<MemeModel> memes = mAllMemes;
+        MemeModel[] memesArray = toArray(memes);
+        Arrays.sort(memesArray, (o1, o2) -> o1.getLikeCount() - o2.getLikeCount());
+        ArrayList<MemeModel> result = new ArrayList<>();
+        Collections.addAll(result, memesArray);
+        return result.subList(0, result.size() >= 15 ? 15 : result.size());
     }
 
     @Override
     public List<MemeModel> getCachedNewMemesList() {
-        return mNewMemeModels.subList(0, 10);
+        return mAllMemes.subList(0, mAllMemes.size() >= 15 ? 15 : mAllMemes.size());
     }
 
     @Override
     public void getMeme(String memeId, OnGetResultListener<MemeModel> listener) {
-        mHandler.postDelayed(() -> {
-            listener.onSuccess(new MemeModel().withTitle("New title"));
-        }, 1000);
+        for (MemeModel memeModel : mAllMemes) {
+            if (memeModel.getMemeId().equals(memeId)) {
+                listener.onSuccess(memeModel);
+                return;
+            }
+        }
     }
 
     @Override
     public MemeModel getCachedMeme(String memeId) {
-        return new MemeModel().withMemeId(memeId).withTitle("Original meme title");
+        for (MemeModel memeModel : mAllMemes) {
+            if (memeModel.getMemeId().equals(memeId)) {
+                return memeModel;
+            }
+        }
+        return null;
     }
 }

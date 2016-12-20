@@ -43,7 +43,10 @@ public class MemesListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public void reloadMemesList(List<MemeModel> memeModels, int offset) {
-        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
+        mRecyclerView.post(() -> {
+            mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
+        });
+//        mMemesRecyclerAdapter.refreshMemesList(memeModels, offset);
         if (mIsLoadingMore) {
             mIsLoadingMore = false;
             mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());

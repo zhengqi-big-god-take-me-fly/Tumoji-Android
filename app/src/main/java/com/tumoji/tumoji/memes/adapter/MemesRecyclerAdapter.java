@@ -37,8 +37,7 @@ public class MemesRecyclerAdapter extends RecyclerView.Adapter<MemesRecyclerAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MemeModel memeModel = mMemesList.get(position);
-        // TODO: Show read image
-        Glide.with(holder.itemView.getContext()).load(memeModel.getImageUrl()).into(holder.memeImage);
+        Glide.with(holder.itemView.getContext()).load(memeModel.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.memeImage);
         holder.itemView.setOnClickListener(view -> {
             if (mListener != null) {
                 mListener.onMemeClick(memeModel);
