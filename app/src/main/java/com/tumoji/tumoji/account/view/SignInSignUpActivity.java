@@ -1,32 +1,43 @@
 package com.tumoji.tumoji.account.view;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.EditText;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
+import com.tumoji.tumoji.account.fragment.SignInProgressFragment;
 import com.tumoji.tumoji.account.fragment.SignInSignUpProgressFragment;
+import com.tumoji.tumoji.account.fragment.SignUpProgressFragment;
 import com.tumoji.tumoji.account.presenter.SignInSignUpPresenter;
+import com.tumoji.tumoji.common.ProgressFragment;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-public class SignInSignUpActivity extends AppCompatActivity implements SignInSignUpContract.View, SignInExample.SignInOnClick, SignUpExample.SignUpOnClick, SignInSignUpProgressFragment.NextOnClick {
+public class SignInSignUpActivity extends AppCompatActivity implements SignInSignUpContract.View, SignInProgressFragment.SignInFragmentInteractionListener, SignUpProgressFragment.SignUpFragmentInteractionListener, SignInSignUpProgressFragment.SignInSignUpFragmentInteractionListener {
     private SignInSignUpContract.Presenter mPresenter;
-    private SignInExample fragment1;
-    private EditText username;
-    private Bundle bundle;
+
     private FloatingActionButton mBackFab;
     private TextView mTitleText;
-    FragmentManager fragmentManager = getFragmentManager();
+
+    private void performBack() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment instanceof SignInSignUpProgressFragment) {
+            mPresenter.stopSignInSignUp();
+        } else {
+            mPresenter.backToPreviousProgress();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,125 +45,141 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         setContentView(R.layout.activity_sign_in_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        }
 
         mTitleText = (TextView) findViewById(R.id.title_text);
         mBackFab = (FloatingActionButton) findViewById(R.id.fab);
-        mBackFab.setOnClickListener(v -> {
-            mPresenter.backToPreviousProgress();
-        });
+        mBackFab.setOnClickListener(v -> performBack());
 
         mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(), this);
 
         mPresenter.init();
     }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            performBack();
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            mPresenter.stopSignInSignUp();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void pushSignInSignUpProgress() {
         mTitleText.setText(R.string.sign_in_sign_up);
         mBackFab.setVisibility(INVISIBLE);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         SignInSignUpProgressFragment fragment = new SignInSignUpProgressFragment();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "SignInSignUp");
-        fragmentTransaction.addToBackStack("SignInOrSignUp");
-        fragmentTransaction.commit();
+        transaction.replace(R.id.fragment_container, fragment, "SignInSignUp");
+        transaction.addToBackStack("SignInOrSignUp");
+        transaction.commit();
     }
 
-
     @Override
-    public void pushSignInProgress() {
+    public void pushSignInProgress(String usernameOrEmail) {
         mTitleText.setText(R.string.sign_in);
-        username = (EditText) findViewById(R.id.sign_in_sign_up_username);
-        String username_email = username.getText().toString();
-        bundle = new Bundle();
-        bundle.putString("username_email", username_email);
         mBackFab.setVisibility(VISIBLE);
-        android.app.FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
-        fragment1 = new SignInExample();
-        fragment1.setArguments(bundle);
-        fragmentTransaction1.addToBackStack("SignInSignUp");
-        fragmentTransaction1.replace(R.id.fragment_container, fragment1, "SignIn");
-        fragmentTransaction1.commit();
-        SignInExample current = (SignInExample)fragmentManager.findFragmentByTag("SignIn");
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        SignInProgressFragment fragment = SignInProgressFragment.newInstance(usernameOrEmail);
+        transaction.addToBackStack("SignInSignUp");
+        transaction.replace(R.id.fragment_container, fragment, "SignIn");
+        transaction.commit();
     }
 
     @Override
     public void pushSignUpProgress(String username, String email) {
-        mTitleText.setText("Sign up");
+        mTitleText.setText(R.string.sign_up);
         mBackFab.setVisibility(VISIBLE);
-        android.app.FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-        SignUpExample fragment2 = new SignUpExample();
-        bundle = new Bundle();
-        bundle.putString("username", username);
-        bundle.putString("email", email);
-        fragment2.setArguments(bundle);
-        fragmentTransaction2.replace(R.id.fragment_container, fragment2, "SignUp");
-        fragmentTransaction2.addToBackStack("SignInSignUp");
-        fragmentTransaction2.commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        SignUpProgressFragment fragment = SignUpProgressFragment.newInstance(username, email);
+        transaction.replace(R.id.fragment_container, fragment, "SignUp");
+        transaction.addToBackStack("SignInSignUp");
+        transaction.commit();
     }
 
     @Override
     public void popProgress() {
         mBackFab.setVisibility(INVISIBLE);
-        fragmentManager.popBackStackImmediate();
+        getSupportFragmentManager().popBackStackImmediate();
     }
 
     @Override
     public void progressStartLoading() {
-        SignInExample s1 = (SignInExample)fragmentManager.findFragmentByTag("SignIn");
-        if(s1 != null) s1.startWait();
-        SignUpExample s2 = (SignUpExample)fragmentManager.findFragmentByTag("SignUp");
-        if (s2 != null) s2.startWait();
-        SignInSignUpProgressFragment s3 = (SignInSignUpProgressFragment)fragmentManager.findFragmentByTag("SignInSignUp");
-        if (s3 != null) s3.startWait();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.startLoading();
+        }
     }
 
     @Override
     public void progressStopLoading() {
-        SignInExample s1 = (SignInExample)fragmentManager.findFragmentByTag("SignIn");
-        if(s1 != null) s1.stopWait();
-        SignUpExample s2 = (SignUpExample)fragmentManager.findFragmentByTag("SignUp");
-        if (s2 != null) s2.stopWait();
-        SignInSignUpProgressFragment s3 = (SignInSignUpProgressFragment)fragmentManager.findFragmentByTag("SignInSignUp");
-        if (s3 != null) s3.stopWait();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.stopLoading();
+        }
     }
 
     @Override
     public void showUsernameBlankOrInvalidError() {
-        SignUpExample currentFragment = (SignUpExample)fragmentManager.findFragmentByTag("SignUp");
-        currentFragment.usernameError();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.the_username_field_is_empty_or_invalid);
+        }
     }
 
     @Override
     public void showEmailBlankOrInvalidError() {
-        SignUpExample currentFragment = (SignUpExample)fragmentManager.findFragmentByTag("SignUp");
-        currentFragment.emailError();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.the_email_field_is_empty_or_invalid);
+        }
     }
 
     @Override
     public void showNetworkError() {
-        SignUpExample s1 = (SignUpExample)fragmentManager.findFragmentByTag("SignUp");
-        if (s1 != null) s1.networkError();
-        SignInExample s2 = (SignInExample)fragmentManager.findFragmentByTag("SignIn");
-        if (s2 != null) s2.networkError();
-        SignInSignUpProgressFragment s3 = (SignInSignUpProgressFragment)fragmentManager.findFragmentByTag("SignInSignUp");
-        if (s3 != null) s3.networkErrror();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.network_error);
+        }
     }
 
     @Override
     public void showPasswordBlankOrInvalidError() {
-        SignUpExample currentFragment = (SignUpExample) fragmentManager.findFragmentByTag("SignIn");
-        currentFragment.passwordError();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.the_password_field_is_empty_or_invalid);
+        }
     }
 
     @Override
     public void showPasswordWrongError() {
-        SignInExample currentFragment = (SignInExample) fragmentManager.findFragmentByTag("SignIn");
-        currentFragment.passwordError();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.password_unconfirmed);
+        }
     }
 
     @Override
     public void showPasswordUnconfirmedError() {
-        SignUpExample currentFragment = (SignUpExample) fragmentManager.findFragmentByTag("SignIn");
-        currentFragment.confirmPasswordError();
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.password_unconfirmed);
+        }
     }
 
     @Override
@@ -177,17 +204,17 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     }
 
     @Override
-    public void onSignInClick(String pwd) {
-        mPresenter.nextAfterSignIn(pwd);
-    }
-
-    @Override
-    public void onSignUpClick(String username, String email, String pwd, String confirm) {
-        mPresenter.nextAfterSignUp(username, email, pwd, confirm);
-    }
-
-    @Override
     public void onClickNext(String username) {
         mPresenter.nextAfterSignInSignUp(username);
+    }
+
+    @Override
+    public void onSignInClick(String username, String password) {
+        mPresenter.nextAfterSignIn(password);
+    }
+
+    @Override
+    public void onSignUpClick(String username, String email, String password, String confirm) {
+        mPresenter.nextAfterSignUp(username, email, password, confirm);
     }
 }

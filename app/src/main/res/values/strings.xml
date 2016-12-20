@@ -18,7 +18,7 @@
     <string name="profile">Profile</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_in_sign_up">Sign in/Sign up</string>
-    <string name="sign_in">sign in</string>
+    <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_in_successfully">Sign in successfully</string>
     <string name="sign_up_successfully">Sign up successfully</string>
@@ -27,6 +27,16 @@
     <string name="count_liked">%1$d liked</string>
     <string name="count_reported">%1$d reported</string>
     <string name="you_have_already_reported_this_meme">You have already reported this meme</string>
+    <string name="next">Next</string>
+    <string name="username_or_email">Username/Email</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_unconfirmed">Password unconfirmed</string>
+    <string name="the_username_field_is_empty_or_invalid">The username field is empty or invalid</string>
+    <string name="the_email_field_is_empty_or_invalid">The email field is empty or invalid</string>
+    <string name="the_password_field_is_empty_or_invalid">The password field is empty or invalid</string>
+    <string name="network_error">Network error</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

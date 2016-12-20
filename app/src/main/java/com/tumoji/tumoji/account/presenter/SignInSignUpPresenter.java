@@ -29,9 +29,9 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
     @Override
     public void nextAfterSignInSignUp(String usernameOrEmail) {
         // TODO
-        mUsernameOrEmail = "perqin";
+        mUsernameOrEmail = usernameOrEmail;
         mIsUsername = true;
-        mView.pushSignInProgress();
+        mView.pushSignInProgress(mUsernameOrEmail);
     }
 
     @Override

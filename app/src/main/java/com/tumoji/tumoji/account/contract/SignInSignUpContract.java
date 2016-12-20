@@ -55,7 +55,7 @@ public interface SignInSignUpContract {
         /**
          * Go to SignIn progress
          */
-        void pushSignInProgress();
+        void pushSignInProgress(String usernameOrEmail);
 
         /**
          * Go to SignUp progress

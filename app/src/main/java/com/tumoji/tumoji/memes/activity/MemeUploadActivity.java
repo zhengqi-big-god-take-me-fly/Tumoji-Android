@@ -23,7 +23,7 @@ public class MemeUploadActivity extends AppCompatActivity implements MemeUploadF
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         }
 
         MemeUploadFragment fragment = (MemeUploadFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
