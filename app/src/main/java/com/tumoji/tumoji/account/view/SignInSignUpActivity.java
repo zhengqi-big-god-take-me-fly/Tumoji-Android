@@ -1,20 +1,14 @@
 package com.tumoji.tumoji.account.view;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +17,9 @@ import com.tumoji.tumoji.account.contract.SignInSignUpContract;
 import com.tumoji.tumoji.account.presenter.SignInSignUpPresenter;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
 
-import org.w3c.dom.Text;
-
-import static android.R.attr.password;
-import static android.view.View.*;
+import static android.view.View.INVISIBLE;
+import static android.view.View.OnClickListener;
+import static android.view.View.VISIBLE;
 
 public class SignInSignUpActivity extends AppCompatActivity implements SignInSignUpContract.View, SignInExample.SignInOnClick, SignUpExample.SignUpOnClick, SignInSignUpExample.NextOnClick {
     private Context context = this;
