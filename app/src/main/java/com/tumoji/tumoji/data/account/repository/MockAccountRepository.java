@@ -24,7 +24,7 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     private MockAccountRepository() {
-        mAccountModel = new AccountModel().withUsername("Perqin").withEmail("original@email.com").withAvatarUrl("http://qcloud.perqin.com/shadow.png");
+        mAccountModel = null;
     }
 
     @Override
@@ -39,11 +39,11 @@ public class MockAccountRepository implements IAccountRepository {
 
     @Override
     public void updateSignedInAccount(OnGetResultListener<AccountModel> listener) {
-        new Handler().postDelayed(() -> {
-            mAccountModel.setUsername("Perqin Ultimate");
-            mAccountModel.setEmail("another@email.com");
-            listener.onSuccess(mAccountModel);
-        }, 600);
+//        new Handler().postDelayed(() -> {
+//            mAccountModel.setUsername("Perqin Ultimate");
+//            mAccountModel.setEmail("another@email.com");
+//            listener.onSuccess(mAccountModel);
+//        }, 500);
     }
 
     @Override
@@ -51,18 +51,30 @@ public class MockAccountRepository implements IAccountRepository {
         new Handler().postDelayed(() -> {
             mAccountModel = null;
             listener.onSuccess();
-        }, 600);
+        }, 500);
     }
 
     @Override
     public void signUp(String username, String email, String password, OnGetNaiveResultListener listener) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+        new Handler().postDelayed(() -> {
+            mAccountModel = new AccountModel()
+                    .withUsername(username)
+                    .withEmail(email)
+                    .withAvatarUrl("http://v.perqin.com/img/avatar.png")
+                    .withUserId("1");
+            listener.onSuccess();
+        }, 500);
     }
 
     @Override
     public void signIn(String usernameOrEmail, boolean isUsername, OnGetNaiveResultListener listener) {
-        // TODO
-        new Handler().postDelayed(listener::onSuccess, 4000);
+        new Handler().postDelayed(() -> {
+            mAccountModel = new AccountModel()
+                    .withUsername(usernameOrEmail)
+                    .withEmail(usernameOrEmail + "@tumoji.com")
+                    .withAvatarUrl("http://v.perqin.com/img/avatar.png")
+                    .withUserId("1");
+            listener.onSuccess();
+        }, 500);
     }
 }
