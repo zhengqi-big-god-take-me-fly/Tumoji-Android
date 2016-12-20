@@ -1,5 +1,6 @@
 package com.tumoji.tumoji.memes.presenter;
 
+import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.memes.contract.MemeDetailContract;
@@ -36,16 +37,65 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
 
     @Override
     public void likeMeme(MemeModel memeModel) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mMemeRepository.likeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
+            @Override
+            public void onSuccess(MemeModel memeModel) {
+                mView.refreshMemeDetail(memeModel);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
     }
 
     @Override
     public void unlikeMeme(MemeModel memeModel) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mMemeRepository.unlikeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
+            @Override
+            public void onSuccess(MemeModel memeModel) {
+                mView.refreshMemeDetail(memeModel);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
     }
 
     @Override
     public void reportMeme(MemeModel memeModel, String reason) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mMemeRepository.reportMeme(memeModel, reason, new IMemeRepository.OnReportMemeListener() {
+            @Override
+            public void onSuccess(MemeModel memeModel) {
+                mView.refreshMemeDetail(memeModel);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
+    }
+
+    @Override
+    public void saveMeme(MemeModel mMemeModel) {
+        mMemeRepository.saveMeme(mMemeModel, new OnGetResultListener<MemeModel>() {
+            @Override
+            public void onSuccess(MemeModel result) {
+                mView.refreshMemeDetail(result);
+            }
+
+            @Override
+            public void onFailure(int error, String msg) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+        });
     }
 }

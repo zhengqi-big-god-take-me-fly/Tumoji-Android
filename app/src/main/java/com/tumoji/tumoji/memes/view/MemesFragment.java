@@ -127,7 +127,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     public void onMemeClick(MemeModel memeModel) {
         MemeDetailFragment detailFragment = MemeDetailFragment.newInstance(memeModel.getMemeId());
-        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(), detailFragment);
+        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(getContext()), detailFragment);
         detailFragment.setPresenter(presenter);
         detailFragment.show(getActivity().getSupportFragmentManager(), "MemeDetailFragment");
     }

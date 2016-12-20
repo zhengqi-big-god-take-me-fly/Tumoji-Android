@@ -32,7 +32,7 @@ public class MemeUploadActivity extends AppCompatActivity implements MemeUploadF
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
-        MemeUploadContract.Presenter presenter = new MemeUploadPresenter(MockMemeRepository.getInstance(), fragment);
+        MemeUploadContract.Presenter presenter = new MemeUploadPresenter(MockMemeRepository.getInstance(this), fragment);
 
         fragment.setPresenter(presenter);
     }

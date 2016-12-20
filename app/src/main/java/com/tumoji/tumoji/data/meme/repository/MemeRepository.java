@@ -1,7 +1,5 @@
 package com.tumoji.tumoji.data.meme.repository;
 
-import android.os.Handler;
-
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
@@ -193,5 +191,11 @@ public class MemeRepository implements IMemeRepository {
 //        // TODO: Implement getCachedMeme
 //        throw new UnsupportedOperationException("Method not implemented");
         return memeDatabase.getMemeByName(memeId);
+    }
+
+    @Override
+    public void saveMeme(MemeModel memeModel, com.tumoji.tumoji.common.OnGetResultListener<MemeModel> listener) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }

@@ -1,10 +1,8 @@
 package com.tumoji.tumoji.memes.activity;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.tumoji.tumoji.R;
-import com.tumoji.tumoji.account.view.SignInSignUpFragment;
 import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
@@ -21,9 +18,9 @@ import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 import com.tumoji.tumoji.memes.fragment.MemesListFragment;
-import com.tumoji.tumoji.memes.view.MoreTagsFragment;
 import com.tumoji.tumoji.memes.presenter.MemesPresenter;
 import com.tumoji.tumoji.memes.view.MemesFragment;
+import com.tumoji.tumoji.memes.view.MoreTagsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MemesListFragment.OnFragmentInteractionListener, MoreTagsFragment.OnFragmentInteractionListener {
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(), MockMemeRepository.getInstance(), MockTagRepository.getInstance(this), memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(), MockMemeRepository.getInstance(this), MockTagRepository.getInstance(this), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 

@@ -36,6 +36,12 @@ public interface MemeDetailContract {
          * @param reason The report reason.
          */
         void reportMeme(MemeModel memeModel, String reason);
+
+        /**
+         * Save meme file to local
+         * @param mMemeModel Meme data object
+         */
+        void saveMeme(MemeModel mMemeModel);
     }
 
     interface View extends BaseView<Presenter> {

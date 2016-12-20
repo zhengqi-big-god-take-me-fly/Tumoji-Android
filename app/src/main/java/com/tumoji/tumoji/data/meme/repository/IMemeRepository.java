@@ -88,6 +88,13 @@ public interface IMemeRepository {
      */
     MemeModel getCachedMeme(String memeId);
 
+    /**
+     * Save meme file to local storage
+     * @param memeModel The meme data object
+     * @param listener Callback
+     */
+    void saveMeme(MemeModel memeModel, com.tumoji.tumoji.common.OnGetResultListener<MemeModel> listener);
+
     interface OnLikeUnlikeMemeListener {
         /**
          * Like or un-like a meme successfully

@@ -31,6 +31,7 @@ public class MemeModel implements Serializable {
     private boolean reported;
     private int likeCount;
     private int reportCount;
+    private boolean saved;
 
     public MemeModel() {
         this("", "", "", "");
@@ -144,6 +145,19 @@ public class MemeModel implements Serializable {
 
     public MemeModel withReportCount(int reportCount) {
         setReportCount(reportCount);
+        return this;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
+    public MemeModel withSaved(boolean saved) {
+        setSaved(saved);
         return this;
     }
 }

@@ -1,6 +1,7 @@
 package com.tumoji.tumoji.memes.view;
 
 
+import android.Manifest;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
@@ -23,11 +26,16 @@ import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 
 import java.util.List;
 
-public class MemeDetailFragment extends BottomSheetDialogFragment implements MemeDetailContract.View {
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
+public class MemeDetailFragment extends BottomSheetDialogFragment implements MemeDetailContract.View, View.OnClickListener {
     private static final String ARG_MEME_ID = "MEME_ID";
 
     private MemeDetailContract.Presenter mPresenter;
     private String mMemeId;
+    private MemeModel mMemeModel;
     private BottomSheetBehavior mBottomSheetBehavior;
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -45,6 +53,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     private ImageView mMemeHdImage;
     private TextView mMemeNameText;
     private RecyclerView mUploaderAndTagsRecyclerView;
+    private ImageButton mSaveButton;
     private RelativeLayout mLikeButtonLayout;
     private ImageView mLikeIconImage;
     private TextView mLikeTitleText;
@@ -84,11 +93,15 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
         mMemeHdImage = (ImageView) view.findViewById(R.id.meme_hd_image);
         mMemeNameText = (TextView) view.findViewById(R.id.meme_name_text);
         mUploaderAndTagsRecyclerView = (RecyclerView) view.findViewById(R.id.uploader_and_tags_recycler_view);
+        mSaveButton = (ImageButton) view.findViewById(R.id.save_button);
+        mSaveButton.setOnClickListener(this);
         mLikeButtonLayout = (RelativeLayout) view.findViewById(R.id.like_button_layout);
+        mLikeButtonLayout.setOnClickListener(this);
         mLikeIconImage = (ImageView) view.findViewById(R.id.like_icon_image);
         mLikeTitleText = (TextView) view.findViewById(R.id.like_title_text);
         mLikeCountText = (TextView) view.findViewById(R.id.like_count_text);
         mReportButtonLayout = (RelativeLayout) view.findViewById(R.id.report_button_layout);
+        mReportButtonLayout.setOnClickListener(this);
         mReportIconImage = (ImageView) view.findViewById(R.id.report_icon_text);
         mReportTitleText = (TextView) view.findViewById(R.id.report_title_text);
         mReportCountText = (TextView) view.findViewById(R.id.report_count_text);
@@ -111,6 +124,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     @Override
     public void refreshMemeDetail(MemeModel memeModel) {
         // TODO: Other meme detail
+        mMemeModel = memeModel;
         Glide.with(getActivity()).load(memeModel.getImageUrl()).into(mMemeHdImage);
         refreshMemeName(memeModel.getTitle());
         refreshMemeLikeStatus(memeModel.isLiked(), memeModel.getLikeCount());
@@ -144,5 +158,35 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     @Override
     public void setPresenter(MemeDetailContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.save_button:
+                MemeDetailFragmentPermissionsDispatcher.handleSavingMemeWithCheck(this, mMemeModel);
+                break;
+            case R.id.like_button_layout:
+                if (mMemeModel.isLiked()) {
+                    mPresenter.unlikeMeme(mMemeModel);
+                } else {
+                    mPresenter.likeMeme(mMemeModel);
+                }
+                break;
+            case R.id.report_button_layout:
+                if (mMemeModel.isReported()) {
+                    Toast.makeText(getContext(), R.string.you_have_already_reported_this_meme, Toast.LENGTH_SHORT).show();
+                } else {
+                    mPresenter.reportMeme(mMemeModel, "");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void handleSavingMeme(MemeModel memeModel) {
+        mPresenter.saveMeme(memeModel);
     }
 }

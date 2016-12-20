@@ -1,13 +1,27 @@
 package com.tumoji.tumoji.data.meme.repository;
 
+import android.content.Context;
+import android.media.MediaScannerConnection;
+import android.os.Environment;
+
 import com.tumoji.tumoji.common.DemoMemeStore;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Author: perqin
@@ -17,35 +31,39 @@ import java.util.List;
 public class MockMemeRepository implements IMemeRepository {
     private static IMemeRepository sInstance;
 
-
+    private File mMemeDownloadDirectory;
     private ArrayList<MemeModel> mAllMemes = new ArrayList<>();
     private ArrayList<MemeModel> mXiongbenMemes = new ArrayList<>();
+    private Context mAppContext;
 
-    public static IMemeRepository getInstance() {
+    public static IMemeRepository getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new MockMemeRepository();
+            sInstance = new MockMemeRepository(context);
         }
         return sInstance;
     }
 
-    private MockMemeRepository() {
+    private MockMemeRepository(Context context) {
+        mAppContext = context.getApplicationContext();
+        mMemeDownloadDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Tumoji");
+        mMemeDownloadDirectory.mkdirs();
         mAllMemes = DemoMemeStore.getAllMemes();
         mXiongbenMemes = DemoMemeStore.getXiongbenMemes();
     }
 
     @Override
     public void likeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
-        listener.onSuccess(memeModel.withLiked(true));
+        listener.onSuccess(memeModel.withLiked(true).withLikeCount(memeModel.getLikeCount() + 1));
     }
 
     @Override
     public void unlikeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
-        listener.onSuccess(memeModel.withLiked(false));
+        listener.onSuccess(memeModel.withLiked(false).withLikeCount(memeModel.getLikeCount() - 1));
     }
 
     @Override
     public void reportMeme(MemeModel memeModel, String reason, OnReportMemeListener listener) {
-        listener.onSuccess(memeModel.withReported(true));
+        listener.onSuccess(memeModel.withReported(true).withReportCount(memeModel.getReportCount() + 1));
     }
 
     @Override
@@ -123,5 +141,47 @@ public class MockMemeRepository implements IMemeRepository {
             }
         }
         return null;
+    }
+
+    @Override
+    public void saveMeme(MemeModel memeModel, com.tumoji.tumoji.common.OnGetResultListener<MemeModel> listener) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(memeModel.getImageUrl()).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String filename = getFilenameFromUrl(memeModel.getImageUrl());
+                        File memeFile = new File(mMemeDownloadDirectory, filename);
+                        FileOutputStream fileOutputStream = new FileOutputStream(memeFile);
+                        InputStream inputStream = response.body().byteStream();
+                        try {
+                            byte[] buffer = new byte[4096];
+                            int read;
+                            while ((read = inputStream.read(buffer)) != -1) {
+                                fileOutputStream.write(buffer, 0, read);
+                            }
+                            fileOutputStream.flush();
+                            MediaScannerConnection.scanFile(mAppContext, new String[]{ memeFile.getAbsolutePath() }, null, null);
+                        } finally {
+                            fileOutputStream.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private String getFilenameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }
