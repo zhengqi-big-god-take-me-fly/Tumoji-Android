@@ -22,6 +22,10 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_in_successfully">Sign in successfully</string>
     <string name="sign_up_successfully">Sign up successfully</string>
+    <string name="like_it">Like</string>
+    <string name="report_it">Report</string>
+    <string name="count_liked">%1$d liked</string>
+    <string name="count_reported">%1$d reported</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

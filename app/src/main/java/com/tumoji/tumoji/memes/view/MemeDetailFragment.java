@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
@@ -109,9 +110,11 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
 
     @Override
     public void refreshMemeDetail(MemeModel memeModel) {
-        refreshMemeName(memeModel.getTitle());
         // TODO: Other meme detail
-        mMemeHdImage.setImageResource(R.drawable.mock_meme_1);
+        Glide.with(getActivity()).load(memeModel.getImageUrl()).into(mMemeHdImage);
+        refreshMemeName(memeModel.getTitle());
+        refreshMemeLikeStatus(memeModel.isLiked(), memeModel.getLikeCount());
+        refreshMemeReportStatus(memeModel.isReported(), memeModel.getReportCount());
     }
 
     @Override
@@ -126,12 +129,16 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
 
     @Override
     public void refreshMemeLikeStatus(boolean like, int count) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mLikeTitleText.setText(R.string.like_it);
+        mLikeCountText.setText(getString(R.string.count_liked, count));
+        mLikeIconImage.setImageResource(like ? R.drawable.ic_liked_24dp : R.drawable.ic_unliked_black_24dp);
     }
 
     @Override
     public void refreshMemeReportStatus(boolean report, int count) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mReportTitleText.setText(R.string.report_it);
+        mReportCountText.setText(getString(R.string.count_reported, count));
+        mReportIconImage.setImageResource(report ? R.drawable.ic_reported_black_24dp : R.drawable.ic_unreported_black_24dp);
     }
 
     @Override

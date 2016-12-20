@@ -30,22 +30,19 @@ public class MockTagRepository implements ITagRepository {
         handler = new Handler();
 
         // Mock data
-        tagModels.add(new TagModel().withTagName("Tag A"));
-        tagModels.add(new TagModel().withTagName("Tag B"));
-        tagModels.add(new TagModel().withTagName("Tag C"));
-        tagModels.add(new TagModel().withTagName("Tag D"));
-        tagModels.add(new TagModel().withTagName("Tag E"));
-        tagModels.add(new TagModel().withTagName("Long long tag"));
+        tagModels.add(new TagModel().withTagName("熊本"));
+        tagModels.add(new TagModel().withTagName("仓鼠"));
+        tagModels.add(new TagModel().withTagName("咸鱼"));
+        tagModels.add(new TagModel().withTagName("皮卡丘"));
+        tagModels.add(new TagModel().withTagName("单身狗"));
+        tagModels.add(new TagModel().withTagName("搞事"));
     }
 
     @Override
     public void getTagsList(OnGetTagsListListener listener) {
         handler.postDelayed(() -> {
-            tagModels.add(new TagModel().withTagName("This is new 1"));
-            tagModels.add(new TagModel().withTagName("This is new 2"));
-            tagModels.add(new TagModel().withTagName("This is new 3"));
             listener.onSuccess(tagModels);
-        }, 3 * 1000);
+        }, 1000);
     }
 
     @Override
