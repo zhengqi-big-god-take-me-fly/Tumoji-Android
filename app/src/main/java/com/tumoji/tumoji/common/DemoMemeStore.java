@@ -8,16 +8,18 @@ import java.util.ArrayList;
  * Created by Cindy on 2016/12/19.
  */
 
-public class AddMeme {
-    ArrayList<MemeModel> memeModels = new ArrayList<>();
-    public ArrayList<MemeModel> addMeme() {
+public class DemoMemeStore {
+//    ArrayList<MemeModel> memeModels = new ArrayList<>();
+    public static ArrayList<MemeModel> getAllMemes() {
+        ArrayList<MemeModel> memeModels = new ArrayList<>();
+
         String[] title = new String[] {"送狗粮", "重启试试", "关你屁事", "管他呢", "你喜欢犯花痴的我吗", "恋爱的酸臭味", "被子不让我起床", "除了我谁要你" };
 
         for (int i = 41; i <= 48; i++) {
             MemeModel memeModel = new MemeModel()
                     .withMemeId("jq" + i)
                     .withAuthorId("1")
-                    .withImageUrl("http://v.perqin.com/" + i + ".jpg")
+                    .withImageUrl("http://t.perqin.com/img/" + i + ".jpg")
                     .withTitle(title[i-41])
                     .withLiked(true)
                     .withLikeCount(30+i)
@@ -30,7 +32,7 @@ public class AddMeme {
             MemeModel memeModel = new MemeModel()
                     .withMemeId("jq" + i)
                     .withAuthorId("1")
-                    .withImageUrl("http://v.perqin.com/" + i + ".jpg")
+                    .withImageUrl("http://t.perqin.com/img/" + i + ".jpg")
                     .withTitle("title:" + i)
                     .withLiked(true)
                     .withLikeCount(20)
@@ -42,7 +44,7 @@ public class AddMeme {
             MemeModel memeModel = new MemeModel()
                     .withMemeId("jq" + i)
                     .withAuthorId("1")
-                    .withImageUrl("http://v.perqin.com/" + i + ".gif")
+                    .withImageUrl("http://t.perqin.com/img/" + i + ".gif")
                     .withTitle("title:" + i)
                     .withLiked(false)
                     .withLikeCount(40)
@@ -55,10 +57,11 @@ public class AddMeme {
 
     }
 
-    public ArrayList<MemeModel> AddMemeList() {
+    public static ArrayList<MemeModel> getXiongbenMemes() {
+        ArrayList<MemeModel> allMemes = getAllMemes();
         ArrayList<MemeModel> memeModels1 = new ArrayList<>();
         for (int i = 33; i <= 48; i++) {
-            memeModels1.add(memeModels.get(i));
+            memeModels1.add(allMemes.get(i));
         }
         return memeModels1;
     }

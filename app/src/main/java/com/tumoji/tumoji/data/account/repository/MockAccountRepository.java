@@ -60,7 +60,7 @@ public class MockAccountRepository implements IAccountRepository {
             mAccountModel = new AccountModel()
                     .withUsername(username)
                     .withEmail(email)
-                    .withAvatarUrl("http://v.perqin.com/img/avatar.png")
+                    .withAvatarUrl("http://t.perqin.com/img/avatar.png")
                     .withUserId("1");
             listener.onSuccess();
         }, 500);
@@ -72,7 +72,7 @@ public class MockAccountRepository implements IAccountRepository {
             mAccountModel = new AccountModel()
                     .withUsername(usernameOrEmail)
                     .withEmail(usernameOrEmail + "@tumoji.com")
-                    .withAvatarUrl("http://v.perqin.com/img/avatar.png")
+                    .withAvatarUrl("http://t.perqin.com/img/avatar.png")
                     .withUserId("1");
             listener.onSuccess();
         }, 500);

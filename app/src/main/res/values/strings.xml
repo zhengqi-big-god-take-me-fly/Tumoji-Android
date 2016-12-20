@@ -17,6 +17,11 @@
     <string name="email">Email</string>
     <string name="profile">Profile</string>
     <string name="sign_out">Sign out</string>
+    <string name="sign_in_sign_up">Sign in/Sign up</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in_successfully">Sign in successfully</string>
+    <string name="sign_up_successfully">Sign up successfully</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
