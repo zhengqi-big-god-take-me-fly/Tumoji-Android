@@ -212,6 +212,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
         } else {
             mUsernameText.setText(R.string.not_signed_in);
             mEmailText.setText(R.string.click_the_avatar_to_sign_in_or_sign_up);
+            mAvatarImage.setImageResource(R.drawable.ic_default_avatar_black_24dp);
         }
     }
 
