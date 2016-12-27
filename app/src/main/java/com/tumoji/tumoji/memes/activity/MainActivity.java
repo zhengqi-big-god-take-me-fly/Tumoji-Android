@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(), MockMemeRepository.getInstance(this), MockTagRepository.getInstance(this), memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(MockAccountRepository.getInstance(this), MockMemeRepository.getInstance(this), MockTagRepository.getInstance(this), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 

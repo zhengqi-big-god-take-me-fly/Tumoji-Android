@@ -4,8 +4,6 @@ import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.utils.StateUtils;
 
 import java.io.File;
-import java.net.CacheRequest;
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -33,7 +31,7 @@ public class RetrofitAPI {
 //    public static final String TAG_BASE_URL = "http://tumoji.perqin.com/api/tags";
 //    public static final String ACCOUNT_BASE_URL = "http://tumoji.perqin.com/api/users";
 //
-    public static final String API_SERVER_BASE_URL = "http://tumoji.perqin.com/api";
+    public static final String API_SERVER_BASE_URL = "http://tumoji.perqin.com/api/";
 
     /**
      * Getters

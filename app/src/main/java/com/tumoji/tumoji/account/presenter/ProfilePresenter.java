@@ -1,7 +1,6 @@
 package com.tumoji.tumoji.account.presenter;
 
 import com.tumoji.tumoji.account.contract.ProfileContract;
-import com.tumoji.tumoji.common.OnGetNaiveResultListener;
 import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.account.repository.IAccountRepository;
@@ -45,17 +44,11 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void signOut() {
-        mAccountRepository.signOut(new OnGetNaiveResultListener() {
-            @Override
-            public void onSuccess() {
-                mView.closeProfilePage();
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        mAccountRepository.signOut().subscribe(aVoid -> {
+            mView.closeProfilePage();
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 }

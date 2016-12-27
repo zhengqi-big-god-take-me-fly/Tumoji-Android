@@ -11,8 +11,6 @@ import com.tumoji.tumoji.utils.Token;
 import java.util.List;
 
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -28,7 +26,7 @@ import rx.Observable;
  */
 public interface AccountAPI {
 
-    @GET("/users")
+    @GET("users")
     Observable<List<AccountModel>> getAllUsers();
 
     /**
@@ -42,7 +40,7 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @PUT("/users")
+    @PUT("users")
     Observable<AccountModel> updateUserRaw(@Body RequestBody route);
 
     /**
@@ -56,10 +54,10 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @POST("/users")
+    @POST("users")
     Observable<AccountModel> createUser(@Body RequestBody route);
 
-    @GET("/users/{id}")
+    @GET("users/{id}")
     Observable<AccountModel> getUserById(@Path("id") String id);
 
 
@@ -74,26 +72,26 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @PUT("/users/{id}")
+    @PUT("users/{id}")
     Observable<AccountModel> updateUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
 
-    @DELETE("/users/{id}")
+    @DELETE("users/{id}")
     Observable<ErrorType> deleteUserById(@Path("id") String id);
 
-    @GET("/users/{id}/accessTokens")
+    @GET("users/{id}/accessTokens")
     Observable<Token> getAccessTokenByUserId(@Path("id") String id);
 
-    @DELETE("/users/{id}/accessTokens")
+    @DELETE("users/{id}/accessTokens")
     Observable<ErrorType> removeAllAccessTokensByUserId(@Path("id") String id, @Field("access_token") String token);
 
-    @GET("/users/{id}/accessTokens/count")
+    @GET("users/{id}/accessTokens/count")
     Observable<IntegerResponse> checkAccessTokenCountByUserId(@Path("id") String id);
 
-    @GET("/users/{id}/exists")
+    @GET("users/{id}/exists")
     Observable<BooleanResponse> checkUserExistenceByUserId(@Path("id") String id);
 
-    @GET("/users/{id}/expressions")
+    @GET("users/{id}/expressions")
     Observable<List<MemeModel>> getExpressionsPostedByUserId(@Path("id") String id);
 
     /**
@@ -107,19 +105,19 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @POST("/users/{id}/expressions")
+    @POST("users/{id}/expressions")
     Observable<MemeModel> addNewExpressionByUser(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
-    @DELETE("/users/{id}/expressions")
+    @DELETE("users/{id}/expressions")
     Observable<ErrorType> removeAllExpressionsByUserId(@Path("id") String id);
 
-    @GET("/users/{id}/expressions/count")
+    @GET("users/{id}/expressions/count")
     Observable<IntegerResponse> getUserExpressionCountById(@Path("id") String id);
 
-    @GET("/users/{id}/likes")
+    @GET("users/{id}/likes")
     Observable<List<MemeModel>> getAllLikedMemesByUserId(@Path("id") String id , @Field("access_token") String token);
 
-    @GET("/users/{id}/likes/count")
+    @GET("users/{id}/likes/count")
     Observable<IntegerResponse> getAllLikedMemesCountByUserId(@Path("id") String id , @Field("access_token") String token);
 
     /**
@@ -133,10 +131,10 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @POST("/users/{id}/replace")
+    @POST("users/{id}/replace")
     Observable<AccountModel> replaceUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
-    @GET("/users/{id}/roles")
+    @GET("users/{id}/roles")
     Observable<AccountRole> getUserRoleById(@Path("id") String id , @Field("access_token") String token);
 
 
@@ -151,11 +149,11 @@ public interface AccountAPI {
      * @return
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
-    @POST("/users/login")
+    @POST("users/login")
     Observable<Token> requestLogin(@Body RequestBody route);
 
 
-    @POST("/users/logout")
+    @POST("users/logout")
     Observable<ErrorType> requstLogout(@Field("access_token") String token);
 
 

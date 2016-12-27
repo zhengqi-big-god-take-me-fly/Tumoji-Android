@@ -39,17 +39,11 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
         if (password.isEmpty()) {
             mView.showPasswordBlankOrInvalidError();
         } else {
-            mAccountRepository.signIn(mUsernameOrEmail, mIsUsername, new OnGetNaiveResultListener() {
-                @Override
-                public void onSuccess() {
-                    mView.finishSignIn();
-                }
-
-                @Override
-                public void onFailure(int error, String msg) {
-                    // TODO
-                    throw new UnsupportedOperationException("Method not implemented");
-                }
+            mAccountRepository.signIn(mUsernameOrEmail, mIsUsername, password).subscribe(o -> {
+                mView.finishSignIn();
+            }, throwable -> {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
             });
         }
     }

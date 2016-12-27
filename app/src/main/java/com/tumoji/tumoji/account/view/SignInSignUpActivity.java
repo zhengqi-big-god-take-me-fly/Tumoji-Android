@@ -55,7 +55,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         mBackFab = (FloatingActionButton) findViewById(R.id.fab);
         mBackFab.setOnClickListener(v -> performBack());
 
-        mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(), this);
+        mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(this), this);
 
         mPresenter.init();
     }

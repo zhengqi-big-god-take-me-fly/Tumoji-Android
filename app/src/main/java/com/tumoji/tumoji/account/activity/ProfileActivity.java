@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
             fragment = ProfileFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
-        ProfileContract.Presenter presenter = new ProfilePresenter(MockAccountRepository.getInstance(), fragment);
+        ProfileContract.Presenter presenter = new ProfilePresenter(MockAccountRepository.getInstance(this), fragment);
         fragment.setPresenter(presenter);
     }
 

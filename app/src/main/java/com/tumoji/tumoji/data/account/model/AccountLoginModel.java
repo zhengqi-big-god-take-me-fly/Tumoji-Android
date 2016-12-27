@@ -5,12 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by souler on 16-12-17.
+ * Author: souler
+ * Date  : 16-12-17
  */
 public class AccountLoginModel implements Serializable {
 
     @SerializedName("username")
     private String username;
+    @SerializedName("email")
+    private String email;
     @SerializedName("password")
     private String password;
 
@@ -20,6 +23,14 @@ public class AccountLoginModel implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

@@ -1,10 +1,13 @@
 package com.tumoji.tumoji.data.account.repository;
 
+import android.content.Context;
 import android.os.Handler;
 
 import com.tumoji.tumoji.common.OnGetNaiveResultListener;
 import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountModel;
+
+import rx.Observable;
 
 /**
  * Author: perqin
@@ -15,15 +18,18 @@ public class MockAccountRepository implements IAccountRepository {
     private static MockAccountRepository sInstance;
 
     private AccountModel mAccountModel;
+    // Delegate from real repo, to integrate functionality gradually.
+    private IAccountRepository mDelegate;
 
-    public static MockAccountRepository getInstance() {
+    public static MockAccountRepository getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new MockAccountRepository();
+            sInstance = new MockAccountRepository(context);
         }
         return sInstance;
     }
 
-    private MockAccountRepository() {
+    private MockAccountRepository(Context context) {
+        mDelegate = AccountRepository.getInstance(context);
         mAccountModel = null;
     }
 
@@ -55,6 +61,11 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     @Override
+    public Observable<Void> signOut() {
+        return mDelegate.signOut();
+    }
+
+    @Override
     public void signUp(String username, String email, String password, OnGetNaiveResultListener listener) {
         new Handler().postDelayed(() -> {
             mAccountModel = new AccountModel()
@@ -67,14 +78,20 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     @Override
-    public void signIn(String usernameOrEmail, boolean isUsername, OnGetNaiveResultListener listener) {
-        new Handler().postDelayed(() -> {
-            mAccountModel = new AccountModel()
-                    .withUsername(usernameOrEmail)
-                    .withEmail(usernameOrEmail + "@tumoji.com")
-                    .withAvatarUrl("http://t.perqin.com/img/avatar.png")
-                    .withUserId("1");
-            listener.onSuccess();
-        }, 500);
+    public void signIn(String usernameOrEmail, boolean isUsername, String password, OnGetNaiveResultListener listener) {
+        throw new RuntimeException("Method deprecated");
+//        new Handler().postDelayed(() -> {
+//            mAccountModel = new AccountModel()
+//                    .withUsername(usernameOrEmail)
+//                    .withEmail(usernameOrEmail + "@tumoji.com")
+//                    .withAvatarUrl("http://t.perqin.com/img/avatar.png")
+//                    .withUserId("1");
+//            listener.onSuccess();
+//        }, 500);
+    }
+
+    @Override
+    public Observable<Void> signIn(String usernameOrEmail, boolean isUsername, String password) {
+        return mDelegate.signIn(usernameOrEmail, isUsername, password);
     }
 }
