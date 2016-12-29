@@ -19,6 +19,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -60,6 +61,15 @@ public interface AccountAPI {
     @GET("users/{id}")
     Observable<AccountModel> getUserById(@Path("id") String id);
 
+    /**
+     * Get users with filter
+     * Query format: ?filter[where][or][0][username]=USERNAME&filter[where][or][1][email]=EMAIL
+     * @param username Username to search
+     * @param email Email to search
+     * @return The observable which emits a list of account models.
+     */
+    @GET("users")
+    Observable<List<AccountModel>> findAccount(@Query("filter[where][or][0][username]") String username, @Query("filter[where][or][1][email]") String email);
 
     /**
      * Need to PUT JSON Here

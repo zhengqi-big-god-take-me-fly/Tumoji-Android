@@ -3,7 +3,6 @@ package com.tumoji.tumoji.account.view;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -83,39 +82,52 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     public void pushSignInSignUpProgress() {
         mTitleText.setText(R.string.sign_in_sign_up);
         mBackFab.setVisibility(INVISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        SignInSignUpProgressFragment fragment = new SignInSignUpProgressFragment();
-        transaction.replace(R.id.fragment_container, fragment, "SignInSignUp");
-        transaction.addToBackStack("SignInOrSignUp");
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        SignInSignUpProgressFragment fragment = new SignInSignUpProgressFragment();
+//        transaction.replace(R.id.fragment_container, fragment, "SignInSignUp");
+//        transaction.addToBackStack("SignInOrSignUp");
+//        transaction.commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, SignInSignUpProgressFragment.newInstance())
+                .addToBackStack("SignInSignUp")
+                .commit();
     }
 
     @Override
     public void pushSignInProgress(String usernameOrEmail) {
         mTitleText.setText(R.string.sign_in);
         mBackFab.setVisibility(VISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        SignInProgressFragment fragment = SignInProgressFragment.newInstance(usernameOrEmail);
-        transaction.addToBackStack("SignInSignUp");
-        transaction.replace(R.id.fragment_container, fragment, "SignIn");
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        SignInProgressFragment fragment = SignInProgressFragment.newInstance(usernameOrEmail);
+//        transaction.addToBackStack("SignInSignUp");
+//        transaction.replace(R.id.fragment_container, fragment, "SignIn");
+//        transaction.commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, SignInProgressFragment.newInstance(usernameOrEmail))
+                .addToBackStack("SignIn")
+                .commit();
     }
 
     @Override
     public void pushSignUpProgress(String username, String email) {
         mTitleText.setText(R.string.sign_up);
         mBackFab.setVisibility(VISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        SignUpProgressFragment fragment = SignUpProgressFragment.newInstance(username, email);
-        transaction.replace(R.id.fragment_container, fragment, "SignUp");
-        transaction.addToBackStack("SignInSignUp");
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        SignUpProgressFragment fragment = SignUpProgressFragment.newInstance(username, email);
+//        transaction.replace(R.id.fragment_container, fragment, "SignUp");
+//        transaction.addToBackStack("SignInSignUp");
+//        transaction.commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, SignUpProgressFragment.newInstance(username, email))
+                .addToBackStack("SignUp")
+                .commit();
     }
 
     @Override
     public void popProgress() {
         mBackFab.setVisibility(INVISIBLE);
-        getSupportFragmentManager().popBackStackImmediate();
+//        getSupportFragmentManager().popBackStackImmediate();
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -131,6 +143,14 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (progressFragment != null) {
             progressFragment.stopLoading();
+        }
+    }
+
+    @Override
+    public void showUsernameOrEmailBlankOrInvalidError() {
+        ProgressFragment progressFragment = (ProgressFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (progressFragment != null) {
+            progressFragment.showError(R.string.the_username_or_email_field_is_empty_or_invalid);
         }
     }
 

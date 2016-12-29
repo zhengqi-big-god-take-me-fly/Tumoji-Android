@@ -2,15 +2,16 @@ package com.tumoji.tumoji.data.account.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 
 import com.google.gson.Gson;
 import com.tumoji.tumoji.common.OnGetNaiveResultListener;
 import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountLoginModel;
 import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.account.model.FindAccountResultModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.AccountAPI;
+import com.tumoji.tumoji.network.retrofit.NetworkScheduler;
 import com.tumoji.tumoji.storage.preferences.SharedPreferencesFactory;
 import com.tumoji.tumoji.utils.Token;
 
@@ -43,8 +44,6 @@ public class AccountRepository implements IAccountRepository {
     // Singleton
     private static AccountRepository accountRepository;
 
-    private Handler mHandler;
-
     // Well , I do think that Retrofit should used in presenter level
     private static final AccountAPI accountApi = APIFactory.getAccountAPIInstance();
 
@@ -65,7 +64,6 @@ public class AccountRepository implements IAccountRepository {
         mToken.setId(mSharedPreferences.getString(SharedPreferencesFactory.PK_ACCOUNT_TOKEN, null));
         argumentUser = null;
         allUserList = new ArrayList<>();
-        mHandler = new Handler();
     }
 
 
@@ -97,6 +95,11 @@ public class AccountRepository implements IAccountRepository {
         return currentUser != null;
     }
 
+    @Override
+    public boolean isSignedIn() {
+        return currentUser != null;
+    }
+
     /**
      * TODO: Should be able to get user profile with token only which is the responsibility of server
      * Get latest account profile and update local profile data
@@ -120,7 +123,7 @@ public class AccountRepository implements IAccountRepository {
                     .subscribe(token -> {
                         this.mToken = token;
                     });
-            // Get user Infomation
+            // Get user information
             accountApi.getUserById(mToken.getUserId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -135,6 +138,34 @@ public class AccountRepository implements IAccountRepository {
 
         }
         listener.onSuccess(currentUser);
+    }
+
+    @Override
+    public Observable<AccountModel> updateSignedInAccount() {
+        // NOTE: Ehh...why no /users/me API?
+        return accountApi.getUserById(mToken.getUserId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<AccountModel, Observable<AccountModel>>() {
+                    @Override
+                    public Observable<AccountModel> call(AccountModel accountModel) {
+                        return Observable.create(new Observable.OnSubscribe<AccountModel>() {
+                            @Override
+                            public void call(Subscriber<? super AccountModel> subscriber) {
+                                try {
+                                    if (!subscriber.isUnsubscribed()) {
+                                        // TODO: Save account profile to local storage
+                                        currentUser = accountModel;
+                                        subscriber.onNext(accountModel);
+                                        subscriber.onCompleted();
+                                    }
+                                } catch (Exception e) {
+                                    subscriber.onError(e);
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
     /**
@@ -196,7 +227,7 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
-    public Observable<Void> signIn(String usernameOrEmail, boolean isUsername, String password) {
+    public Observable<AccountModel> signIn(String usernameOrEmail, boolean isUsername, String password) {
         Gson gson = new Gson();
         if (argumentUser == null) {
             argumentUser = new AccountLoginModel();
@@ -229,6 +260,32 @@ public class AccountRepository implements IAccountRepository {
                             }
                         });
                     }
+                }).flatMap(new Func1<Void, Observable<AccountModel>>() {
+                    @Override
+                    public Observable<AccountModel> call(Void aVoid) {
+                        return updateSignedInAccount();
+                    }
                 });
+    }
+
+    @Override
+    public Observable<FindAccountResultModel> findAccount(String usernameOrEmail) {
+        return accountApi.findAccount(usernameOrEmail, usernameOrEmail)
+                .compose(NetworkScheduler.applySchedulers())
+                .map(accountModels -> {
+                    if (accountModels.size() == 0) {
+                        return new FindAccountResultModel(FindAccountResultModel.RESULT_NOT_FOUND);
+                    } else if (accountModels.get(0).getUsername().equals(usernameOrEmail)) {
+                        return new FindAccountResultModel(FindAccountResultModel.RESULT_USERNAME_FOUND);
+                    } else {
+                        return new FindAccountResultModel(FindAccountResultModel.RESULT_EMAIL_FOUND);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<AccountModel> signUp(String username, String email, String password) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }

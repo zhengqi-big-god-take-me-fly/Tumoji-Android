@@ -82,6 +82,11 @@ public interface SignInSignUpContract {
         void progressStopLoading();
 
         /**
+         * Notice user  that the UsernameOrEmail field is either blank or invalid
+         */
+        void showUsernameOrEmailBlankOrInvalidError();
+
+        /**
          * Notice user that the Username field is either blank or invalid
          */
         void showUsernameBlankOrInvalidError();

@@ -33,6 +33,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="password_unconfirmed">Password unconfirmed</string>
+    <string name="the_username_or_email_field_is_empty_or_invalid">The username or email field is empty or invalid</string>
     <string name="the_username_field_is_empty_or_invalid">The username field is empty or invalid</string>
     <string name="the_email_field_is_empty_or_invalid">The email field is empty or invalid</string>
     <string name="the_password_field_is_empty_or_invalid">The password field is empty or invalid</string>

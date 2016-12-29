@@ -2,6 +2,7 @@ package com.tumoji.tumoji.account.presenter;
 
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
 import com.tumoji.tumoji.common.OnGetNaiveResultListener;
+import com.tumoji.tumoji.data.account.model.FindAccountResultModel;
 import com.tumoji.tumoji.data.account.repository.IAccountRepository;
 
 /**
@@ -28,10 +29,23 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
 
     @Override
     public void nextAfterSignInSignUp(String usernameOrEmail) {
-        // TODO
-        mUsernameOrEmail = usernameOrEmail;
-        mIsUsername = true;
-        mView.pushSignInProgress(mUsernameOrEmail);
+        if (usernameOrEmail.isEmpty()) {
+            mView.showUsernameOrEmailBlankOrInvalidError();
+        } else {
+            mUsernameOrEmail = usernameOrEmail;
+            // TODO: Add validation
+            mIsUsername = !usernameOrEmail.contains("@");
+            mAccountRepository.findAccount(usernameOrEmail).subscribe(findAccountResultModel -> {
+                if (findAccountResultModel.getResult() == FindAccountResultModel.RESULT_NOT_FOUND) {
+                    mView.pushSignUpProgress(mIsUsername ? usernameOrEmail : "", mIsUsername ? "" : usernameOrEmail);
+                } else {
+                    mView.pushSignInProgress(usernameOrEmail);
+                }
+            }, throwable -> {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            });
+        }
     }
 
     @Override

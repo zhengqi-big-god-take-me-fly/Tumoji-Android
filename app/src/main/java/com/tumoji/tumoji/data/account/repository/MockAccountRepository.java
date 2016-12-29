@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.tumoji.tumoji.common.OnGetNaiveResultListener;
 import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.account.model.FindAccountResultModel;
 
 import rx.Observable;
 
@@ -44,12 +45,22 @@ public class MockAccountRepository implements IAccountRepository {
     }
 
     @Override
+    public boolean isSignedIn() {
+        return mDelegate.isSignedIn();
+    }
+
+    @Override
     public void updateSignedInAccount(OnGetResultListener<AccountModel> listener) {
 //        new Handler().postDelayed(() -> {
 //            mAccountModel.setUsername("Perqin Ultimate");
 //            mAccountModel.setEmail("another@email.com");
 //            listener.onSuccess(mAccountModel);
 //        }, 500);
+    }
+
+    @Override
+    public Observable<AccountModel> updateSignedInAccount() {
+        return mDelegate.updateSignedInAccount();
     }
 
     @Override
@@ -80,18 +91,20 @@ public class MockAccountRepository implements IAccountRepository {
     @Override
     public void signIn(String usernameOrEmail, boolean isUsername, String password, OnGetNaiveResultListener listener) {
         throw new RuntimeException("Method deprecated");
-//        new Handler().postDelayed(() -> {
-//            mAccountModel = new AccountModel()
-//                    .withUsername(usernameOrEmail)
-//                    .withEmail(usernameOrEmail + "@tumoji.com")
-//                    .withAvatarUrl("http://t.perqin.com/img/avatar.png")
-//                    .withUserId("1");
-//            listener.onSuccess();
-//        }, 500);
     }
 
     @Override
-    public Observable<Void> signIn(String usernameOrEmail, boolean isUsername, String password) {
+    public Observable<AccountModel> signIn(String usernameOrEmail, boolean isUsername, String password) {
         return mDelegate.signIn(usernameOrEmail, isUsername, password);
+    }
+
+    @Override
+    public Observable<FindAccountResultModel> findAccount(String usernameOrEmail) {
+        return mDelegate.findAccount(usernameOrEmail);
+    }
+
+    @Override
+    public Observable<AccountModel> signUp(String username, String email, String password) {
+        return mDelegate.signUp(username, email, password);
     }
 }

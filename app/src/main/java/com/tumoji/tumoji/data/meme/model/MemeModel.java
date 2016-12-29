@@ -5,6 +5,8 @@ package com.tumoji.tumoji.data.meme.model;
  * Date     : 16-12-5
  */
 
+import android.net.Uri;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -25,13 +27,17 @@ public class MemeModel implements Serializable {
     private String authorId;
     // Meme image download URL
     @SerializedName("image")
+    @Deprecated
     private String imageUrl;
-
+    // Contain the path to the downloaded meme, or the download URL of un-downloaded meme
+    private Uri memeUri;
+    private int memeWidth;
+    private int memeHeight;
     private boolean liked;
     private boolean reported;
     private int likeCount;
     private int reportCount;
-    private boolean saved;
+    private boolean downloaded;
 
     public MemeModel() {
         this("", "", "", "");
@@ -83,14 +89,17 @@ public class MemeModel implements Serializable {
         return this;
     }
 
+    @Deprecated
     public String getImageUrl() {
         return imageUrl;
     }
 
+    @Deprecated
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
+    @Deprecated
     public MemeModel withImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
@@ -148,16 +157,40 @@ public class MemeModel implements Serializable {
         return this;
     }
 
-    public boolean isSaved() {
-        return saved;
+    public boolean isDownloaded() {
+        return downloaded;
     }
 
-    public void setSaved(boolean saved) {
-        this.saved = saved;
+    public void setDownloaded(boolean downloaded) {
+        this.downloaded = downloaded;
     }
 
     public MemeModel withSaved(boolean saved) {
-        setSaved(saved);
+        setDownloaded(saved);
         return this;
+    }
+
+    public Uri getMemeUri() {
+        return memeUri;
+    }
+
+    public void setMemeUri(Uri memeUri) {
+        this.memeUri = memeUri;
+    }
+
+    public int getMemeWidth() {
+        return memeWidth;
+    }
+
+    public void setMemeWidth(int memeWidth) {
+        this.memeWidth = memeWidth;
+    }
+
+    public int getMemeHeight() {
+        return memeHeight;
+    }
+
+    public void setMemeHeight(int memeHeight) {
+        this.memeHeight = memeHeight;
     }
 }
