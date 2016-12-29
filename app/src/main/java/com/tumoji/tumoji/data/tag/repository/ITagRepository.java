@@ -4,6 +4,8 @@ import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Author: perqin
  * Date  : 12/13/16
@@ -16,12 +18,11 @@ import java.util.List;
 
 public interface ITagRepository {
     /**
-     * Get latest tags list from API server.
-     * NOTE: You should cache the gotten tags list to local storage (SQLite, etc.) for the further
-     * calls of {@link #getCachedTagsList() getCachedTagsList} method.
-     * @param listener Result callback
+     * Get latest tags list from API server
+     * NOTE: You should update local cache in this method.
+     * @return Observable which emits a list of TagModel
      */
-    void getTagsList(OnGetTagsListListener listener);
+    Observable<List<TagModel>> getTagsList();
 
     /**
      * Get cached tags list from local storage
@@ -30,6 +31,16 @@ public interface ITagRepository {
     List<TagModel> getCachedTagsList();
 
     /**
+     * @deprecated Use {@link #getTagsList()} instead.
+     * Get latest tags list from API server.
+     * NOTE: You should cache the gotten tags list to local storage (SQLite, etc.) for the further
+     * calls of {@link #getCachedTagsList() getCachedTagsList} method.
+     * @param listener Result callback
+     */
+    void getTagsList(OnGetTagsListListener listener);
+
+    /**
+     * @deprecated
      * Listener on tags list gotten.
      */
     interface OnGetTagsListListener {

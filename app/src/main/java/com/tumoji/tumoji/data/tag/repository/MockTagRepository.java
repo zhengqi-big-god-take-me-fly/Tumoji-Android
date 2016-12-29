@@ -8,6 +8,8 @@ import com.tumoji.tumoji.data.tag.model.TagModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Author: perqin
  * Date  : 12/14/16
@@ -18,6 +20,7 @@ public class MockTagRepository implements ITagRepository {
 
     private Handler handler;
     private ArrayList<TagModel> tagModels = new ArrayList<>();
+    private ITagRepository mDelegate;
 
     public static MockTagRepository getInstance(Context context) {
         if (sInstance == null) {
@@ -28,6 +31,8 @@ public class MockTagRepository implements ITagRepository {
 
     private MockTagRepository(Context context) {
         handler = new Handler();
+
+        mDelegate = TagRepository.getInstance();
 
         // Mock data
         tagModels.add(new TagModel().withTagName("熊本"));
@@ -43,6 +48,11 @@ public class MockTagRepository implements ITagRepository {
         handler.postDelayed(() -> {
             listener.onSuccess(tagModels);
         }, 1000);
+    }
+
+    @Override
+    public Observable<List<TagModel>> getTagsList() {
+        return mDelegate.getTagsList();
     }
 
     @Override

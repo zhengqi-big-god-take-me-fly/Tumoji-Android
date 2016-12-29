@@ -1,7 +1,5 @@
 package com.tumoji.tumoji.data.tag.repository;
 
-import android.nfc.Tag;
-
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.TagAPI;
@@ -10,6 +8,7 @@ import com.tumoji.tumoji.storage.sqlite.TagDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -70,6 +69,12 @@ public class TagRepository implements ITagRepository {
 
         listener.onSuccess(this.tagModels);
 
+    }
+
+    @Override
+    public Observable<List<TagModel>> getTagsList() {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     /**
