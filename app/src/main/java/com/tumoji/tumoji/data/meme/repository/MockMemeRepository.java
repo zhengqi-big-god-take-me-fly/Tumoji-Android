@@ -22,6 +22,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import rx.Observable;
 
 /**
  * Author: perqin
@@ -31,6 +32,7 @@ import okhttp3.Response;
 public class MockMemeRepository implements IMemeRepository {
     private static IMemeRepository sInstance;
 
+    private IMemeRepository mDelegate;
     private File mMemeDownloadDirectory;
     private ArrayList<MemeModel> mAllMemes = new ArrayList<>();
     private ArrayList<MemeModel> mXiongbenMemes = new ArrayList<>();
@@ -45,10 +47,36 @@ public class MockMemeRepository implements IMemeRepository {
 
     private MockMemeRepository(Context context) {
         mAppContext = context.getApplicationContext();
+        mDelegate = MemeRepository.getInstance();
         mMemeDownloadDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Tumoji");
         mMemeDownloadDirectory.mkdirs();
         mAllMemes = DemoMemeStore.getAllMemes();
         mXiongbenMemes = DemoMemeStore.getXiongbenMemes();
+    }
+
+    @Override
+    public Observable<MemeModel> likeMeme(String token, String memeId, boolean like) {
+        return mDelegate.likeMeme(token, memeId, like);
+    }
+
+    @Override
+    public Observable<MemeModel> reportMeme(String token, String memeId, String reason) {
+        return mDelegate.reportMeme(token, memeId, reason);
+    }
+
+    @Override
+    public Observable<List<MemeModel>> getMemesList(int offset, int count, TagModel tagModel, int order) {
+        return mDelegate.getMemesList(offset, count, tagModel, order);
+    }
+
+    @Override
+    public Observable<MemeModel> getMeme(String memeId) {
+        return mDelegate.getMeme(memeId);
+    }
+
+    @Override
+    public Observable<MemeModel> downloadMeme(String memeId, File destDir) {
+        return mDelegate.downloadMeme(memeId, destDir);
     }
 
     @Override

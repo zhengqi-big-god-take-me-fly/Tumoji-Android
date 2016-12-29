@@ -7,13 +7,32 @@ import com.tumoji.tumoji.network.retrofit.MemeAPI;
 import com.tumoji.tumoji.storage.sqlite.MemeDatabase;
 import com.tumoji.tumoji.utils.Token;
 
+import java.io.File;
 import java.util.List;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by souler on 16-12-14.
+ * Author: souler
+ * Date  : 16-12-14
+ *
+ * NOTE:
+ * Now we have 4 models commonly used over the app: User, Account, Meme, Tag. Account extends User
+ * with some extra fields (accessToken, etc.).
+ * User and Tag are recommended to be cached in the database. Since Account extends User, we only
+ * cache the User that current Account extends, and store other extending fields to
+ * SharedPreferences (Well, there should have been a Session model if we allow a user to be signed
+ * in on multiple devices. But we simply ignore such case and merge Session model into Account
+ * model).
+ * After serious thinking, I decided that Meme model lists will not be cached to database. Simply
+ * put, the most popular and latest memes updates very frequently, so it becomes meaningless to
+ * cache them. However, I plan to add two more features: Downloaded Meme Management and Downloaded
+ * Meme Distinguishing. The former requires a SQLite table (says downloaded_memes) which records the
+ * meme ID, title, uploader, image size and local filename. These fields don't change frequently and
+ * should be accessible offline. The latter requires new boolean field to tell whether this meme is
+ * downloaded. I've already updated the MemeModel.
  */
 public class MemeRepository implements IMemeRepository {
     // Meme singleton
@@ -48,6 +67,36 @@ public class MemeRepository implements IMemeRepository {
 
     private MemeRepository() {
         usingToken = null;
+    }
+
+    @Override
+    public Observable<MemeModel> likeMeme(String token, String memeId, boolean like) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public Observable<MemeModel> reportMeme(String token, String memeId, String reason) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public Observable<List<MemeModel>> getMemesList(int offset, int count, TagModel tagModel, int order) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public Observable<MemeModel> getMeme(String memeId) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public Observable<MemeModel> downloadMeme(String memeId, File destDir) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     /**
