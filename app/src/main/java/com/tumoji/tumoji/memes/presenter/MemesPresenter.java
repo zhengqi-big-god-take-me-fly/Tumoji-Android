@@ -34,8 +34,6 @@ public class MemesPresenter implements MemesContract.Presenter {
     public void init() {
         // Show cached content
         mView.refreshTagsList(mTagRepository.getCachedTagsList());
-        mView.refreshPopularMemesList(mMemeRepository.getCachedPopularMemesList(), 0);
-        mView.refreshNewMemesList(mMemeRepository.getCachedNewMemesList(), 0);
         // Refresh latest content
         mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
             @Override
@@ -76,12 +74,25 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void viewResume() {
-        mUserRepository.getUser(mAuthRepository.getLocalAuth().getUserId()).subscribe(userModel -> {
-            mView.refreshUserInfo(userModel);
-        }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
-        });
+        if (mAuthRepository.isSignedIn()) {
+            String userId = mAuthRepository.getLocalAuth().getUserId();
+            // Refresh with local cache
+            mUserRepository.getUser(userId).subscribe(userModel -> {
+                mView.refreshUserInfo(userModel);
+            }, throwable -> {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            });
+            // Get latest profile
+            mUserRepository.updateUser(userId).subscribe(userModel -> {
+                mView.refreshUserInfo(userModel);
+            }, throwable -> {
+                // TODO
+                throw new UnsupportedOperationException("Method not implemented");
+            });
+        } else {
+            mView.refreshUserInfo(null);
+        }
     }
 
     @Override

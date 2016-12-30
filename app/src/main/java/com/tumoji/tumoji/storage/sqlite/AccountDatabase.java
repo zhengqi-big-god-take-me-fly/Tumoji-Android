@@ -104,17 +104,17 @@ public class AccountDatabase {
 
     /**
      * Account adding function
-     * @param authModel
+     * @param userModel
      * @return success or not
      */
-    public boolean addAccount(UserModel authModel) {
-        if (writableAccountDatas == null || authModel == null || checkAccountExistence(authModel.getUserId())) return false;
+    public boolean addAccount(UserModel userModel) {
+        if (writableAccountDatas == null || userModel == null || checkAccountExistence(userModel.getUserId())) return false;
 
         ContentValues cv = new ContentValues();
-        cv.put(DBOpenHelper.ACCOUNT_ID , authModel.getUserId());
-        cv.put(DBOpenHelper.ACCOUNT_NAME , authModel.getUsername());
-        cv.put(DBOpenHelper.ACCOUNT_EMAIL , authModel.getEmail());
-        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , authModel.getAvatarUrl());
+        cv.put(DBOpenHelper.ACCOUNT_ID , userModel.getUserId());
+        cv.put(DBOpenHelper.ACCOUNT_NAME , userModel.getUsername());
+        cv.put(DBOpenHelper.ACCOUNT_EMAIL , userModel.getEmail());
+        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , userModel.getAvatarUrl());
 
         writableAccountDatas.insert(DBOpenHelper.ACCOUNT_TABLE , null , cv);
         return true;
@@ -168,4 +168,21 @@ public class AccountDatabase {
         return getAllLocalAccounts();
     }
 
+    public UserModel getUserByUserId(String userId) {
+        if (readableAccountDatas == null) return null;
+        UserModel tempModel = null;
+        /**
+         * Perform query
+         */
+        Cursor cursor = readableAccountDatas.rawQuery("select * from " + DBOpenHelper.ACCOUNT_TABLE + " where " + DBOpenHelper.ACCOUNT_ID + "=" + userId , null);
+        if (cursor.moveToFirst()) {
+            tempModel = new UserModel()
+                    .withUserId(cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_ID)))
+                    .withUsername(cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_NAME)))
+                    .withEmail(cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_EMAIL)))
+                    .withEmail(cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_AVATAR_URL)));
+            cursor.close();
+        }
+        return tempModel;
+    }
 }
