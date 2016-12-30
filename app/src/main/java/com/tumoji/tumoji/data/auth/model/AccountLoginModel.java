@@ -1,4 +1,4 @@
-package com.tumoji.tumoji.data.account.model;
+package com.tumoji.tumoji.data.auth.model;
 
 import com.google.gson.annotations.SerializedName;
 

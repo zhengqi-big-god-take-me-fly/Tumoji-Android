@@ -1,10 +1,11 @@
 package com.tumoji.tumoji.memes.presenter;
 
-import com.tumoji.tumoji.data.account.repository.IAccountRepository;
+import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.ITagRepository;
+import com.tumoji.tumoji.data.user.repository.IUserRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
 
 import java.util.List;
@@ -15,13 +16,15 @@ import java.util.List;
  */
 
 public class MemesPresenter implements MemesContract.Presenter {
-    private IAccountRepository mAccountRepository;
+    private IAuthRepository mAuthRepository;
+    private IUserRepository mUserRepository;
     private IMemeRepository mMemeRepository;
     private ITagRepository mTagRepository;
     private MemesContract.View mView;
 
-    public MemesPresenter(IAccountRepository accountRepository, IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
-        mAccountRepository = accountRepository;
+    public MemesPresenter(IAuthRepository authRepository, IUserRepository userRepository, IMemeRepository memeRepository, ITagRepository tagRepository, MemesContract.View view) {
+        mAuthRepository = authRepository;
+        mUserRepository = userRepository;
         mMemeRepository = memeRepository;
         mTagRepository = tagRepository;
         mView = view;
@@ -73,7 +76,12 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void viewResume() {
-        mView.refreshUserInfo(mAccountRepository.getSignedInAccount());
+        mUserRepository.getUser(mAuthRepository.getLocalAuth().getUserId()).subscribe(userModel -> {
+            mView.refreshUserInfo(userModel);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
+        });
     }
 
     @Override
@@ -154,7 +162,7 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void requestUploadingMeme() {
-        if (mAccountRepository.hasSignedInAccount()) {
+        if (mAuthRepository.isSignedIn()) {
             mView.gotoMemeUploadPage();
         } else {
             mView.gotoSignInSignUpPage();
@@ -163,7 +171,7 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void requestOpenUserProfilePage() {
-        if (mAccountRepository.hasSignedInAccount()) {
+        if (mAuthRepository.isSignedIn()) {
             mView.gotoProfilePage();
         } else {
             mView.gotoSignInSignUpPage();

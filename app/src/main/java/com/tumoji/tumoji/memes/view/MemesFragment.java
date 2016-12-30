@@ -23,11 +23,12 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.activity.ProfileActivity;
 import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
+import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.memes.activity.MemeUploadActivity;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
@@ -204,11 +205,11 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     }
 
     @Override
-    public void refreshUserInfo(AccountModel accountModel) {
-        if (accountModel != null) {
-            mUsernameText.setText(accountModel.getUsername());
-            mEmailText.setText(accountModel.getEmail());
-            Glide.with(getActivity()).load(accountModel.getAvatarUrl()).into(mAvatarImage);
+    public void refreshUserInfo(UserModel userModel) {
+        if (userModel != null) {
+            mUsernameText.setText(userModel.getUsername());
+            mEmailText.setText(userModel.getEmail());
+            Glide.with(getActivity()).load(userModel.getAvatarUrl()).into(mAvatarImage);
         } else {
             mUsernameText.setText(R.string.not_signed_in);
             mEmailText.setText(R.string.click_the_avatar_to_sign_in_or_sign_up);

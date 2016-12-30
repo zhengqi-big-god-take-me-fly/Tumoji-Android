@@ -1,4 +1,4 @@
-package com.tumoji.tumoji.data.account.model;
+package com.tumoji.tumoji.data.user.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,30 +6,28 @@ import java.io.Serializable;
 
 /**
  * Author: perqin
- * Date  : 12/14/16
- *
- * This model stands for the local user account
+ * Date  : 12/30/16
  */
 
-public class AccountModel implements Serializable {
+public class UserModel implements Serializable {
     @SerializedName("id")
     private String userId;
-    @SerializedName("avatar")
-    private String avatarUrl;
     @SerializedName("username")
     private String username;
     @SerializedName("email")
     private String email;
+    @SerializedName("avatar")
+    private String avatarUrl;
 
-    public AccountModel() {
+    public UserModel() {
         this("", "", "", "");
     }
 
-    public AccountModel(String userId, String avatarUrl, String username, String email) {
+    public UserModel(String userId, String username, String email, String avatarUrl) {
         this.userId = userId;
-        this.avatarUrl = avatarUrl;
         this.username = username;
         this.email = email;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getUserId() {
@@ -40,21 +38,8 @@ public class AccountModel implements Serializable {
         this.userId = userId;
     }
 
-    public AccountModel withUserId(String userId) {
+    public UserModel withUserId(String userId) {
         setUserId(userId);
-        return this;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public AccountModel withAvatarUrl(String avatarUrl) {
-        setAvatarUrl(avatarUrl);
         return this;
     }
 
@@ -66,7 +51,7 @@ public class AccountModel implements Serializable {
         this.username = username;
     }
 
-    public AccountModel withUsername(String username) {
+    public UserModel withUsername(String username) {
         setUsername(username);
         return this;
     }
@@ -79,8 +64,21 @@ public class AccountModel implements Serializable {
         this.email = email;
     }
 
-    public AccountModel withEmail(String email) {
+    public UserModel withEmail(String email) {
         setEmail(email);
+        return this;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public UserModel withAvatarUrl(String avatarUrl) {
+        setAvatarUrl(avatarUrl);
         return this;
     }
 }

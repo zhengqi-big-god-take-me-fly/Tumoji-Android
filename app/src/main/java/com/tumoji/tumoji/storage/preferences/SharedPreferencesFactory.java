@@ -10,7 +10,8 @@ import android.preference.PreferenceManager;
  */
 
 public final class SharedPreferencesFactory {
-    public static final String PK_ACCOUNT_TOKEN = "ACCOUNT_TOKEN";
+    public static final String PK_ACCESS_TOKEN = "ACCESS_TOKEN";
+    public static final String PK_SIGNED_IN_USER_ID = "SIGNED_IN_USER_ID";
 
     private SharedPreferencesFactory() {
         // Prevent construction

@@ -1,12 +1,12 @@
 package com.tumoji.tumoji.storage.sqlite;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.tumoji.tumoji.TumojiApp;
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.auth.model.AuthModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 import java.util.ArrayList;
 
@@ -38,8 +38,8 @@ public class AccountDatabase {
      * Get all local Accounts
      * @return a list of AccountModel
      */
-    public ArrayList<AccountModel> getAllLocalAccounts() {
-        ArrayList<AccountModel> ls = new ArrayList<>();
+    public ArrayList<UserModel> getAllLocalAccounts() {
+        ArrayList<UserModel> ls = new ArrayList<>();
         if (readableAccountDatas == null) return null;
 
         /**
@@ -51,7 +51,7 @@ public class AccountDatabase {
             String accountName = accountCursor.getString(accountCursor.getColumnIndex(DBOpenHelper.ACCOUNT_NAME));
             String accountEmail = accountCursor.getString(accountCursor.getColumnIndex(DBOpenHelper.ACCOUNT_EMAIL));
             String accountAvartar = accountCursor.getString(accountCursor.getColumnIndex(DBOpenHelper.ACCOUNT_AVATAR_URL));
-            AccountModel tempModel = new AccountModel(accountID,accountAvartar,accountName,accountEmail);
+            UserModel tempModel = new UserModel(accountID,accountAvartar,accountName,accountEmail);
             ls.add(tempModel);
         }
         accountCursor.close();
@@ -64,9 +64,9 @@ public class AccountDatabase {
      * @param name
      * @return accountmodel am
      */
-    public AccountModel getAccountByName(String name) {
+    public UserModel getAccountByName(String name) {
         if (readableAccountDatas == null) return null;
-        AccountModel tempModel = null;
+        UserModel tempModel = null;
 
         /**
          * Perform query
@@ -77,7 +77,7 @@ public class AccountDatabase {
             String accountName = cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_NAME));
             String accountEmail = cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_EMAIL));
             String accountAvartar = cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_AVATAR_URL));
-            tempModel = new AccountModel(accountID,accountAvartar,accountName,accountEmail);
+            tempModel = new UserModel(accountID,accountAvartar,accountName,accountEmail);
             cursor.close();
         }
         return tempModel;
@@ -104,17 +104,17 @@ public class AccountDatabase {
 
     /**
      * Account adding function
-     * @param accountModel
+     * @param authModel
      * @return success or not
      */
-    public boolean addAccount(AccountModel accountModel) {
-        if (writableAccountDatas == null || accountModel == null || checkAccountExistence(accountModel.getUserId())) return false;
+    public boolean addAccount(UserModel authModel) {
+        if (writableAccountDatas == null || authModel == null || checkAccountExistence(authModel.getUserId())) return false;
 
         ContentValues cv = new ContentValues();
-        cv.put(DBOpenHelper.ACCOUNT_ID , accountModel.getUserId());
-        cv.put(DBOpenHelper.ACCOUNT_NAME , accountModel.getUsername());
-        cv.put(DBOpenHelper.ACCOUNT_EMAIL , accountModel.getEmail());
-        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , accountModel.getAvatarUrl());
+        cv.put(DBOpenHelper.ACCOUNT_ID , authModel.getUserId());
+        cv.put(DBOpenHelper.ACCOUNT_NAME , authModel.getUsername());
+        cv.put(DBOpenHelper.ACCOUNT_EMAIL , authModel.getEmail());
+        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , authModel.getAvatarUrl());
 
         writableAccountDatas.insert(DBOpenHelper.ACCOUNT_TABLE , null , cv);
         return true;
@@ -123,13 +123,13 @@ public class AccountDatabase {
 
     /**
      * Account removal function
-     * @param accountModel
+     * @param authModel
      * @return success or not
      */
-    public boolean removeAccount(AccountModel accountModel) {
-        if (writableAccountDatas == null || accountModel == null || !checkAccountExistence(accountModel.getUserId())) return false;
+    public boolean removeAccount(AuthModel authModel) {
+        if (writableAccountDatas == null || authModel == null || !checkAccountExistence(authModel.getUserId())) return false;
 
-        writableAccountDatas.delete(DBOpenHelper.ACCOUNT_TABLE , DBOpenHelper.ACCOUNT_ID + "=?" , new String []{accountModel.getUserId()});
+        writableAccountDatas.delete(DBOpenHelper.ACCOUNT_TABLE , DBOpenHelper.ACCOUNT_ID + "=?" , new String []{authModel.getUserId()});
 
         return true;
 
@@ -138,20 +138,20 @@ public class AccountDatabase {
 
     /**
      * Account updation Function
-     * @param accountModel
+     * @param authModel
      * @return success or not
      */
-    public boolean updateAccount(AccountModel accountModel) {
-        if (writableAccountDatas == null || accountModel == null || !checkAccountExistence(accountModel.getUserId())) return false;
+    public boolean updateAccount(UserModel authModel) {
+        if (writableAccountDatas == null || authModel == null || !checkAccountExistence(authModel.getUserId())) return false;
 
         ContentValues cv = new ContentValues();
-        cv.put(DBOpenHelper.ACCOUNT_ID , accountModel.getUserId());
-        cv.put(DBOpenHelper.ACCOUNT_NAME , accountModel.getUsername());
-        cv.put(DBOpenHelper.ACCOUNT_EMAIL , accountModel.getEmail());
-        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , accountModel.getAvatarUrl());
+        cv.put(DBOpenHelper.ACCOUNT_ID , authModel.getUserId());
+        cv.put(DBOpenHelper.ACCOUNT_NAME , authModel.getUsername());
+        cv.put(DBOpenHelper.ACCOUNT_EMAIL , authModel.getEmail());
+        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL , authModel.getAvatarUrl());
 
 
-        writableAccountDatas.update(DBOpenHelper.ACCOUNT_TABLE , cv , DBOpenHelper.ACCOUNT_ID+"="+accountModel.getUserId() , null);
+        writableAccountDatas.update(DBOpenHelper.ACCOUNT_TABLE , cv , DBOpenHelper.ACCOUNT_ID+"="+ authModel.getUserId() , null);
         return true;
     }
 
@@ -160,7 +160,7 @@ public class AccountDatabase {
      * @param toBeSinced
      * @return
      */
-    public ArrayList<AccountModel> syncAccount(ArrayList<AccountModel> toBeSinced) {
+    public ArrayList<UserModel> syncAccount(ArrayList<UserModel> toBeSinced) {
         if (toBeSinced == null || readableAccountDatas == null) return getAllLocalAccounts();
         for (int i = 0 ; i < toBeSinced.size() ; i++) {
             addAccount(toBeSinced.get(i));

@@ -1,7 +1,7 @@
 package com.tumoji.tumoji.account.contract;
 
 import com.tumoji.tumoji.common.BaseView;
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 /**
  * Author: perqin
@@ -20,7 +20,7 @@ public interface ProfileContract {
     }
 
     interface View extends BaseView<Presenter> {
-        void refreshProfile(AccountModel accountModel);
+        void refreshProfile(UserModel userModel);
 
 //        void refreshUploadedMemes(List<MemeModel> memeModels);
 

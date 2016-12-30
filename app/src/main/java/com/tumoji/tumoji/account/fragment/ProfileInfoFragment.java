@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tumoji.tumoji.R;
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 public class ProfileInfoFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
@@ -62,8 +62,8 @@ public class ProfileInfoFragment extends Fragment {
         mListener = null;
     }
 
-    public void refreshProfile(AccountModel accountModel) {
-        mEmailText.setText(accountModel.getEmail());
+    public void refreshProfile(UserModel userModel) {
+        mEmailText.setText(userModel.getEmail());
     }
 
     public interface OnFragmentInteractionListener {

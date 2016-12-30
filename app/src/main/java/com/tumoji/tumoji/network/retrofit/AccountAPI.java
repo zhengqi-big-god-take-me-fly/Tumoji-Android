@@ -1,7 +1,8 @@
 package com.tumoji.tumoji.network.retrofit;
 
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.utils.AccountRole;
 import com.tumoji.tumoji.utils.BooleanResponse;
 import com.tumoji.tumoji.utils.ErrorType;
@@ -28,7 +29,7 @@ import rx.Observable;
 public interface AccountAPI {
 
     @GET("users")
-    Observable<List<AccountModel>> getAllUsers();
+    Observable<List<AuthModel>> getAllUsers();
 
     /**
      * Need to PUT JSON Here
@@ -42,9 +43,10 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @PUT("users")
-    Observable<AccountModel> updateUserRaw(@Body RequestBody route);
+    Observable<UserModel> updateUserRaw(@Body RequestBody route);
 
     /**
+     * FIXME: UserModel doesn't have password field
      * Need to PUT JSON Here
      * Need to initialized by these steps:
      * -> Gson gson = new Gson();
@@ -56,10 +58,10 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("users")
-    Observable<AccountModel> createUser(@Body RequestBody route);
+    Observable<UserModel> createUser(@Body RequestBody route);
 
     @GET("users/{id}")
-    Observable<AccountModel> getUserById(@Path("id") String id);
+    Observable<UserModel> getUserById(@Path("id") String id);
 
     /**
      * Get users with filter
@@ -69,7 +71,7 @@ public interface AccountAPI {
      * @return The observable which emits a list of account models.
      */
     @GET("users")
-    Observable<List<AccountModel>> findAccount(@Query("filter[where][or][0][username]") String username, @Query("filter[where][or][1][email]") String email);
+    Observable<List<UserModel>> findAccount(@Query("filter[where][or][0][username]") String username, @Query("filter[where][or][1][email]") String email);
 
     /**
      * Need to PUT JSON Here
@@ -83,7 +85,7 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @PUT("users/{id}")
-    Observable<AccountModel> updateUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
+    Observable<UserModel> updateUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
 
     @DELETE("users/{id}")
@@ -142,7 +144,7 @@ public interface AccountAPI {
      */
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("users/{id}/replace")
-    Observable<AccountModel> replaceUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
+    Observable<UserModel> replaceUserById(@Path("id") String id , @Body RequestBody route , @Field("access_token") String token);
 
     @GET("users/{id}/roles")
     Observable<AccountRole> getUserRoleById(@Path("id") String id , @Field("access_token") String token);

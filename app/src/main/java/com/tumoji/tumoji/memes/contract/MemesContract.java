@@ -1,9 +1,9 @@
 package com.tumoji.tumoji.memes.contract;
 
 import com.tumoji.tumoji.common.BaseView;
-import com.tumoji.tumoji.data.account.model.AccountModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 import java.util.List;
 
@@ -95,9 +95,9 @@ public interface MemesContract {
 
         /**
          * Refresh user's information shown in navigation drawer.
-         * @param accountModel The model where user's information stored.
+         * @param userModel The model where user's information stored.
          */
-        void refreshUserInfo(AccountModel accountModel);
+        void refreshUserInfo(UserModel userModel);
 
         /**
          * Go to user profile page

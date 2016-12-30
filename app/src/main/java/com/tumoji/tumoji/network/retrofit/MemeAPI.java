@@ -1,6 +1,6 @@
 package com.tumoji.tumoji.network.retrofit;
 
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.utils.BooleanResponse;
@@ -14,9 +14,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -67,7 +65,7 @@ public interface MemeAPI {
     Observable<IntegerResponse> removeMemeById(@Path("id") String id , @Field("access_token") String token);
 
     @GET("/expressions/{id}/author")
-    Observable<AccountModel> getMemeAuthorByMemeId(@Path("id") String id);
+    Observable<AuthModel> getMemeAuthorByMemeId(@Path("id") String id);
 
     @GET("/expressions/{id}/exists")
     Observable<BooleanResponse> checkMemeExistenceById(@Path("id") String id);
@@ -86,7 +84,7 @@ public interface MemeAPI {
     Observable<ErrorType> unlikeMemeByIdAndToken(@Path("id") String id , @Field("access_token") String token);
 
     @GET("/expressions/{id}/likes")
-    Observable<List<AccountModel>> getLikersOfMemeById(@Path("id") String id);
+    Observable<List<AuthModel>> getLikersOfMemeById(@Path("id") String id);
 
     @GET("/expressions/{id}/likes/count")
     Observable<IntegerResponse> getLikersCountOfMemeById(@Path("id") String id);

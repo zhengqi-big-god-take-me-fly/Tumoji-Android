@@ -20,7 +20,7 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.adapter.ProfilePagerAdapter;
 import com.tumoji.tumoji.account.contract.ProfileContract;
 import com.tumoji.tumoji.account.fragment.ProfileInfoFragment;
-import com.tumoji.tumoji.data.account.model.AccountModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
     private ProfileContract.Presenter mPresenter;
@@ -103,10 +103,10 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     @Override
-    public void refreshProfile(AccountModel accountModel) {
-        Glide.with(getActivity()).load(accountModel.getAvatarUrl()).into(mAvatarImage);
-        mUsernameText.setText(accountModel.getUsername());
-        ((ProfileInfoFragment) mPagerAdapter.getItem(0)).refreshProfile(accountModel);
+    public void refreshProfile(UserModel userModel) {
+        Glide.with(getActivity()).load(userModel.getAvatarUrl()).into(mAvatarImage);
+        mUsernameText.setText(userModel.getUsername());
+        ((ProfileInfoFragment) mPagerAdapter.getItem(0)).refreshProfile(userModel);
     }
 
     @Override

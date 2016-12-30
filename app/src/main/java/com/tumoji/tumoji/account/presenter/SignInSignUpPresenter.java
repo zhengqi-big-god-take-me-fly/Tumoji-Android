@@ -1,9 +1,7 @@
 package com.tumoji.tumoji.account.presenter;
 
 import com.tumoji.tumoji.account.contract.SignInSignUpContract;
-import com.tumoji.tumoji.common.OnGetNaiveResultListener;
-import com.tumoji.tumoji.data.account.model.FindAccountResultModel;
-import com.tumoji.tumoji.data.account.repository.IAccountRepository;
+import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
 
 /**
  * Author: perqin
@@ -11,14 +9,14 @@ import com.tumoji.tumoji.data.account.repository.IAccountRepository;
  */
 
 public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
-    private IAccountRepository mAccountRepository;
+    private IAuthRepository mAuthRepository;
     private SignInSignUpContract.View mView;
 
     private String mUsernameOrEmail;
     private boolean mIsUsername;
 
-    public SignInSignUpPresenter(IAccountRepository accountRepository, SignInSignUpContract.View view) {
-        mAccountRepository = accountRepository;
+    public SignInSignUpPresenter(IAuthRepository accountRepository, SignInSignUpContract.View view) {
+        mAuthRepository = accountRepository;
         mView = view;
     }
 
@@ -35,16 +33,17 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
             mUsernameOrEmail = usernameOrEmail;
             // TODO: Add validation
             mIsUsername = !usernameOrEmail.contains("@");
-            mAccountRepository.findAccount(usernameOrEmail).subscribe(findAccountResultModel -> {
-                if (findAccountResultModel.getResult() == FindAccountResultModel.RESULT_NOT_FOUND) {
-                    mView.pushSignUpProgress(mIsUsername ? usernameOrEmail : "", mIsUsername ? "" : usernameOrEmail);
-                } else {
-                    mView.pushSignInProgress(usernameOrEmail);
-                }
-            }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            });
+            // TODO: find account with UserRepository
+//            mAuthRepository.findAccount(usernameOrEmail).subscribe(findAccountResultModel -> {
+//                if (findAccountResultModel.getResult() == FindAccountResultModel.RESULT_NOT_FOUND) {
+//                    mView.pushSignUpProgress(mIsUsername ? usernameOrEmail : "", mIsUsername ? "" : usernameOrEmail);
+//                } else {
+//                    mView.pushSignInProgress(usernameOrEmail);
+//                }
+//            }, throwable -> {
+//                // TODO
+//                throw new UnsupportedOperationException("Method not implemented");
+//            });
         }
     }
 
@@ -53,7 +52,7 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
         if (password.isEmpty()) {
             mView.showPasswordBlankOrInvalidError();
         } else {
-            mAccountRepository.signIn(mUsernameOrEmail, mIsUsername, password).subscribe(o -> {
+            mAuthRepository.signIn(mUsernameOrEmail, mIsUsername, password).subscribe(o -> {
                 mView.finishSignIn();
             }, throwable -> {
                 // TODO
@@ -73,18 +72,19 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
         } else if (!password.equals(passwordConfirm)) {
             mView.showPasswordUnconfirmedError();
         } else {
-            mAccountRepository.signUp(username, email, password, new OnGetNaiveResultListener() {
-                @Override
-                public void onSuccess() {
-                    mView.finishSignUp();
-                }
-
-                @Override
-                public void onFailure(int error, String msg) {
-                    // TODO
-                    throw new UnsupportedOperationException("Method not implemented");
-                }
-            });
+            // TODO: Create user with UserRepository
+//            mAuthRepository.signUp(username, email, password, new OnGetNaiveResultListener() {
+//                @Override
+//                public void onSuccess() {
+//                    mView.finishSignUp();
+//                }
+//
+//                @Override
+//                public void onFailure(int error, String msg) {
+//                    // TODO
+//                    throw new UnsupportedOperationException("Method not implemented");
+//                }
+//            });
         }
     }
 

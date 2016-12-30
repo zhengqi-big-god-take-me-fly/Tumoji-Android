@@ -18,7 +18,7 @@ import com.tumoji.tumoji.account.fragment.SignInSignUpProgressFragment;
 import com.tumoji.tumoji.account.fragment.SignUpProgressFragment;
 import com.tumoji.tumoji.account.presenter.SignInSignUpPresenter;
 import com.tumoji.tumoji.common.ProgressFragment;
-import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
+import com.tumoji.tumoji.data.auth.repository.AuthRepository;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -54,7 +54,7 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
         mBackFab = (FloatingActionButton) findViewById(R.id.fab);
         mBackFab.setOnClickListener(v -> performBack());
 
-        mPresenter = new SignInSignUpPresenter(MockAccountRepository.getInstance(this), this);
+        mPresenter = new SignInSignUpPresenter(AuthRepository.getInstance(this), this);
 
         mPresenter.init();
     }

@@ -1,4 +1,4 @@
-package com.tumoji.tumoji.data.account.model;
+package com.tumoji.tumoji.data.auth.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,13 +7,13 @@ import java.util.List;
  * Created by souler on 16-12-15.
  */
 public class AccountList implements Serializable {
-    private List<AccountModel> accounts;
+    private List<AuthModel> accounts;
 
-    public List<AccountModel> getAccounts() {
+    public List<AuthModel> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<AccountModel> accounts) {
+    public void setAccounts(List<AuthModel> accounts) {
         this.accounts = accounts;
     }
 

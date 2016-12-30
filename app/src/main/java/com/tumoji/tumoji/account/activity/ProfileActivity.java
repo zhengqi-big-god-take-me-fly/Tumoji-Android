@@ -10,7 +10,8 @@ import com.tumoji.tumoji.account.contract.ProfileContract;
 import com.tumoji.tumoji.account.fragment.ProfileInfoFragment;
 import com.tumoji.tumoji.account.presenter.ProfilePresenter;
 import com.tumoji.tumoji.account.view.ProfileFragment;
-import com.tumoji.tumoji.data.account.repository.MockAccountRepository;
+import com.tumoji.tumoji.data.auth.repository.AuthRepository;
+import com.tumoji.tumoji.data.user.repository.UserRepository;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener, ProfileInfoFragment.OnFragmentInteractionListener {
 
@@ -33,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
             fragment = ProfileFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
-        ProfileContract.Presenter presenter = new ProfilePresenter(MockAccountRepository.getInstance(this), fragment);
+        ProfileContract.Presenter presenter = new ProfilePresenter(AuthRepository.getInstance(this), UserRepository.getInstance(), fragment);
         fragment.setPresenter(presenter);
     }
 

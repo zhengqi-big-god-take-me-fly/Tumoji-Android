@@ -1,9 +1,8 @@
 package com.tumoji.tumoji.account.presenter;
 
 import com.tumoji.tumoji.account.contract.ProfileContract;
-import com.tumoji.tumoji.common.OnGetResultListener;
-import com.tumoji.tumoji.data.account.model.AccountModel;
-import com.tumoji.tumoji.data.account.repository.IAccountRepository;
+import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
+import com.tumoji.tumoji.data.user.repository.IUserRepository;
 
 /**
  * Author: perqin
@@ -11,28 +10,30 @@ import com.tumoji.tumoji.data.account.repository.IAccountRepository;
  */
 
 public class ProfilePresenter implements ProfileContract.Presenter {
-    private IAccountRepository mAccountRepository;
+    private IAuthRepository mAuthRepository;
+    private IUserRepository mUserRepository;
     private ProfileContract.View mView;
 
-    public ProfilePresenter(IAccountRepository accountRepository, ProfileContract.View view) {
-        this.mAccountRepository = accountRepository;
+    public ProfilePresenter(IAuthRepository accountRepository, IUserRepository userRepository, ProfileContract.View view) {
+        this.mAuthRepository = accountRepository;
+        this.mUserRepository = userRepository;
         this.mView = view;
     }
 
     @Override
     public void init() {
-        mView.refreshProfile(mAccountRepository.getSignedInAccount());
-        mAccountRepository.updateSignedInAccount(new OnGetResultListener<AccountModel>() {
-            @Override
-            public void onSuccess(AccountModel result) {
-                mView.refreshProfile(result);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        String userId = mAuthRepository.getLocalAuth().getUserId();
+        mUserRepository.getUser(userId).subscribe(userModel -> {
+            mView.refreshProfile(userModel);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
+        });
+        mUserRepository.updateUser(userId).subscribe(userModel -> {
+            mView.refreshProfile(userModel);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 
@@ -44,7 +45,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void signOut() {
-        mAccountRepository.signOut().subscribe(aVoid -> {
+        mAuthRepository.signOut().subscribe(aVoid -> {
             mView.closeProfilePage();
         }, throwable -> {
             // TODO
