@@ -43,13 +43,23 @@ public class DBOpenHelper extends SQLiteOpenHelper {
      */
     public static final String IPAI = "INTEGER PRIMARY KEY AUTOINCREMENT";
     public static final String TNN = "TEXT NOT NULL";
+    private static final int DB_VERSION = 2;
+
+    private static DBOpenHelper sInstance;
+
+    public static DBOpenHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DBOpenHelper(context);
+        }
+        return sInstance;
+    }
 
     /**
      *
      * @param context
      */
     public DBOpenHelper(Context context) {
-        super(context , DATABASE_NAME , null ,1);
+        super(context , DATABASE_NAME , null , DB_VERSION);
     }
 
 
@@ -64,7 +74,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
          * Create MEME table
          */
         db.execSQL("CREATE TABLE if not exists " + MEME_TABLE + "("
-                + MEME_ID + " " + IPAI + ","
+                + MEME_ID + " " + "TEXT PRIMARY KEY" + ","
                 + MEME_TITLE + " " + TNN + ","
                 + MEME_AUTHORID + " " + TNN + ","
                 + MEME_DOWNLOAD_URL + " " + TNN + ")");
@@ -73,16 +83,17 @@ public class DBOpenHelper extends SQLiteOpenHelper {
          * Create Tag table
          */
         db.execSQL("CREATE TABLE if not exists " + TAG_TABLE + "("
-                + TAG_ID + " " + IPAI + ","
+                + TAG_ID + " " + "TEXT PRIMARY KEY" + ","
                 + TAG_NAME + " " + TNN + ","
                 + TAG_DESCRIPTION + " " + TNN + ")");
 
 
         /**
          * Create User table
+         * NOTE: We force cached user to have a user ID, so AUTOINCREMENT is not needed
          */
         db.execSQL("CREATE TABLE if not exists " + ACCOUNT_TABLE + "("
-                + ACCOUNT_ID + " " + IPAI + ","
+                + ACCOUNT_ID + " " + "TEXT PRIMARY KEY" + ","
                 + ACCOUNT_NAME + " " + TNN + ","
                 + ACCOUNT_EMAIL + " " + TNN + ","
                 + ACCOUNT_AVATAR_URL + " " + TNN + ")");
@@ -96,6 +107,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        // Simply drop old tables
+        // FIXME ON RELEASE: Don't forget to migrate old data to new database
+        db.execSQL(String.format("DROP TABLE IF EXISTS %s", ACCOUNT_TABLE));
+        db.execSQL(String.format("DROP TABLE IF EXISTS %s", MEME_TABLE));
+        db.execSQL(String.format("DROP TABLE IF EXISTS %s", TAG_TABLE));
+        onCreate(db);
     }
 }

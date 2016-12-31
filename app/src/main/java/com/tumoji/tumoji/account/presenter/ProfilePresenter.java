@@ -27,6 +27,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
             mView.refreshProfile(userModel);
         }, throwable -> {
             // TODO
+            throwable.printStackTrace();
             throw new UnsupportedOperationException("Method not implemented");
         });
         mUserRepository.updateUser(userId).subscribe(userModel -> {

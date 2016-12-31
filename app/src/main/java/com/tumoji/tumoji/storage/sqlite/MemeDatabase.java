@@ -1,18 +1,13 @@
 package com.tumoji.tumoji.storage.sqlite;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
-import android.provider.Telephony;
-
 
 import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by souler on 16-12-14.
@@ -24,7 +19,7 @@ public class MemeDatabase {
     public static MemeDatabase memeDatabase;
 
     public static MemeDatabase getInstance() {
-        if (memeDatabase == null) memeDatabase = new MemeDatabase(new DBOpenHelper(TumojiApp.myContext));
+        if (memeDatabase == null) memeDatabase = new MemeDatabase(/*new DBOpenHelper(TumojiApp.myContext)*/DBOpenHelper.getInstance(TumojiApp.myContext));
         return memeDatabase;
     }
 

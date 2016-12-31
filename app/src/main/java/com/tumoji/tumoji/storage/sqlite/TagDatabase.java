@@ -1,17 +1,13 @@
 package com.tumoji.tumoji.storage.sqlite;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
-import android.provider.Telephony;
 
 import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by souler on 16-12-14.
@@ -23,7 +19,7 @@ public class TagDatabase {
     public static TagDatabase tagDatabase;
 
     public static TagDatabase getInstance() {
-        if (tagDatabase == null) tagDatabase = new TagDatabase(new DBOpenHelper(TumojiApp.myContext));
+        if (tagDatabase == null) tagDatabase = new TagDatabase(/*new DBOpenHelper(TumojiApp.myContext)*/DBOpenHelper.getInstance(TumojiApp.myContext));
         return tagDatabase;
     }
 

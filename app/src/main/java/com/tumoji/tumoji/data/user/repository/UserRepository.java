@@ -48,7 +48,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Observable<UserModel> updateUser(String userId) {
-        return mRemote.getUser(userId).compose(NetworkScheduler.applySchedulers())
+        return mRemote.getUser(userId)
                 .flatMap(userModel -> mLocal.saveOrUpdateUser(userModel));
     }
 }

@@ -71,7 +71,7 @@ public class LocalAuthStore {
                             .putString(SharedPreferencesFactory.PK_SIGNED_IN_USER_ID, authModel.getUserId())
                             .putString(SharedPreferencesFactory.PK_ACCESS_TOKEN, authModel.getAccessToken())
                             .apply();
-                    mLocalAuth.withUserId(authModel.getUserId()).withAccessToken(authModel.getAccessToken());
+                    mLocalAuth = new AuthModel().withUserId(authModel.getUserId()).withAccessToken(authModel.getAccessToken());
                     subscriber.onNext(mLocalAuth);
                     subscriber.onCompleted();
                 }

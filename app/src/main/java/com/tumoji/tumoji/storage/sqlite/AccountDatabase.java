@@ -23,7 +23,7 @@ public class AccountDatabase {
     public static AccountDatabase accountDatabase;
 
     public static AccountDatabase getInstance() {
-        if (accountDatabase == null) accountDatabase = new AccountDatabase(new DBOpenHelper(TumojiApp.myContext));
+        if (accountDatabase == null) accountDatabase = new AccountDatabase(/*new DBOpenHelper(TumojiApp.myContext)*/DBOpenHelper.getInstance(TumojiApp.myContext));
         return accountDatabase;
     }
 
@@ -174,7 +174,8 @@ public class AccountDatabase {
         /**
          * Perform query
          */
-        Cursor cursor = readableAccountDatas.rawQuery("select * from " + DBOpenHelper.ACCOUNT_TABLE + " where " + DBOpenHelper.ACCOUNT_ID + "=" + userId , null);
+//        Cursor cursor = readableAccountDatas.rawQuery("select * from " + DBOpenHelper.ACCOUNT_TABLE + " where " + DBOpenHelper.ACCOUNT_ID + "=" + userId , null);
+        Cursor cursor = readableAccountDatas.query(DBOpenHelper.ACCOUNT_TABLE, null, String.format("%s = ?", DBOpenHelper.ACCOUNT_ID), new String[]{ userId }, null, null, null);
         if (cursor.moveToFirst()) {
             tempModel = new UserModel()
                     .withUserId(cursor.getString(cursor.getColumnIndex(DBOpenHelper.ACCOUNT_ID)))
@@ -184,5 +185,17 @@ public class AccountDatabase {
             cursor.close();
         }
         return tempModel;
+    }
+
+    public UserModel insertOrReplaceUser(UserModel userModel) {
+        if (writableAccountDatas == null) return null;
+        ContentValues cv = new ContentValues();
+        cv.put(DBOpenHelper.ACCOUNT_ID, userModel.getUserId());
+        cv.put(DBOpenHelper.ACCOUNT_NAME, userModel.getUsername());
+        cv.put(DBOpenHelper.ACCOUNT_EMAIL, userModel.getEmail());
+        cv.put(DBOpenHelper.ACCOUNT_AVATAR_URL, /*userModel.getAvatarUrl()*/"GitHub");
+        // FIXME: Deal with conflict. Should use ACCOUNT_ID as rowid.
+        writableAccountDatas.insertWithOnConflict(DBOpenHelper.ACCOUNT_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        return userModel;
     }
 }

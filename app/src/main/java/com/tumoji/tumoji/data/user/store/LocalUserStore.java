@@ -19,7 +19,16 @@ public class LocalUserStore {
     }
 
     public Observable<UserModel> saveOrUpdateUser(UserModel userModel) {
-        return null;
+        return Observable.create(new Observable.OnSubscribe<UserModel>() {
+            @Override
+            public void call(Subscriber<? super UserModel> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    mDb.insertOrReplaceUser(userModel);
+                    subscriber.onNext(userModel);
+                    subscriber.onCompleted();
+                }
+            }
+        });
     }
 
     public Observable<UserModel> getUser(String userId) {

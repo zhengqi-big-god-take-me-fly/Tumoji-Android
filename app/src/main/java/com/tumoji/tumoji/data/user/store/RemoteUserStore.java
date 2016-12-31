@@ -3,6 +3,7 @@ package com.tumoji.tumoji.data.user.store;
 import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.AccountAPI;
+import com.tumoji.tumoji.network.retrofit.NetworkScheduler;
 
 import rx.Observable;
 
@@ -15,7 +16,7 @@ public class RemoteUserStore {
     public static final AccountAPI mAccountApi = APIFactory.getAccountAPIInstance();
 
     public Observable<UserModel> findUser(String usernameOrEmail) {
-        return mAccountApi.findAccount(usernameOrEmail, usernameOrEmail).map(userModels -> {
+        return mAccountApi.findAccount(usernameOrEmail, usernameOrEmail).compose(NetworkScheduler.applySchedulers()).map(userModels -> {
             if (userModels.size() == 0) {
                 throw new RuntimeException("Cannot find this user");
             }
@@ -24,7 +25,7 @@ public class RemoteUserStore {
     }
 
     public Observable<UserModel> getUser(String id) {
-        return mAccountApi.getUserById(id);
+        return mAccountApi.getUserById(id).compose(NetworkScheduler.applySchedulers());
     }
 
     public Observable<UserModel> createUser(String username, String email, String password) {
