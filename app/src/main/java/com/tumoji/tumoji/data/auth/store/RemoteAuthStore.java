@@ -5,7 +5,7 @@ import com.tumoji.tumoji.data.auth.model.AccountLoginModel;
 import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.AccountAPI;
-import com.tumoji.tumoji.network.retrofit.NetworkScheduler;
+import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -30,17 +30,12 @@ public class RemoteAuthStore {
             model.setEmail(usernameOrEmail);
         }
         model.setPassword(password);
-        return mAccountApi.requestLogin(RequestBody.create(MediaType.parse(""), new Gson().toJson(model)))
-                .compose(NetworkScheduler.applySchedulers())
+        return mAccountApi.requestLogin(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(model)))
+                .compose(ApplySchedulers.network())
                 .map(token -> new AuthModel(token.getUserId(), token.getId()));
     }
 
     public Observable<Void> removeAuth(String token) {
-        return mAccountApi.requstLogout(token).compose(NetworkScheduler.applySchedulers()).map(errorType -> {
-            if (errorType.getError().getStatusCode() != 200) {
-                throw new RuntimeException("Failed to sign out");
-            }
-            return null;
-        });
+        return mAccountApi.requestLogout(token).compose(ApplySchedulers.network());
     }
 }

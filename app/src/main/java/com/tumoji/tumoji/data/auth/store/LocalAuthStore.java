@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.storage.preferences.SharedPreferencesFactory;
+import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -46,16 +47,20 @@ public class LocalAuthStore {
             @Override
             public void call(Subscriber<? super Void> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
-                    mSharedPreferences.edit()
-                            .remove(SharedPreferencesFactory.PK_SIGNED_IN_USER_ID)
-                            .remove(SharedPreferencesFactory.PK_ACCESS_TOKEN)
-                            .apply();
-                    mLocalAuth = null;
+                    removeAuthSync();
                     subscriber.onNext(null);
                     subscriber.onCompleted();
                 }
             }
-        });
+        }).compose(ApplySchedulers.storage());
+    }
+
+    public void removeAuthSync() {
+        mSharedPreferences.edit()
+                .remove(SharedPreferencesFactory.PK_SIGNED_IN_USER_ID)
+                .remove(SharedPreferencesFactory.PK_ACCESS_TOKEN)
+                .apply();
+        mLocalAuth = null;
     }
 
     public boolean available() {
@@ -67,15 +72,19 @@ public class LocalAuthStore {
             @Override
             public void call(Subscriber<? super AuthModel> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
-                    mSharedPreferences.edit()
-                            .putString(SharedPreferencesFactory.PK_SIGNED_IN_USER_ID, authModel.getUserId())
-                            .putString(SharedPreferencesFactory.PK_ACCESS_TOKEN, authModel.getAccessToken())
-                            .apply();
-                    mLocalAuth = new AuthModel().withUserId(authModel.getUserId()).withAccessToken(authModel.getAccessToken());
-                    subscriber.onNext(mLocalAuth);
+                    subscriber.onNext(saveAuthSync(authModel));
                     subscriber.onCompleted();
                 }
             }
-        });
+        }).compose(ApplySchedulers.storage());
+    }
+
+    public AuthModel saveAuthSync(AuthModel authModel) {
+        mSharedPreferences.edit()
+                .putString(SharedPreferencesFactory.PK_SIGNED_IN_USER_ID, authModel.getUserId())
+                .putString(SharedPreferencesFactory.PK_ACCESS_TOKEN, authModel.getAccessToken())
+                .apply();
+        mLocalAuth = new AuthModel().withUserId(authModel.getUserId()).withAccessToken(authModel.getAccessToken());
+        return mLocalAuth;
     }
 }

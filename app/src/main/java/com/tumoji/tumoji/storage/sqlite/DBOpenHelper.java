@@ -43,7 +43,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
      */
     public static final String IPAI = "INTEGER PRIMARY KEY AUTOINCREMENT";
     public static final String TNN = "TEXT NOT NULL";
-    private static final int DB_VERSION = 2;
+    // FIXME: Reset to 1 after first release
+    private static final int DB_VERSION = 3;
 
     private static DBOpenHelper sInstance;
 
@@ -83,7 +84,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
          * Create Tag table
          */
         db.execSQL("CREATE TABLE if not exists " + TAG_TABLE + "("
-                + TAG_ID + " " + "TEXT PRIMARY KEY" + ","
+                + TAG_ID + " " + IPAI + ","
                 + TAG_NAME + " " + TNN + ","
                 + TAG_DESCRIPTION + " " + TNN + ")");
 

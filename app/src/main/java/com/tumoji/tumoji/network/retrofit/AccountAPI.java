@@ -166,7 +166,7 @@ public interface AccountAPI {
 
 
     @POST("users/logout")
-    Observable<ErrorType> requstLogout(@Field("access_token") String token);
+    Observable<Void> requestLogout(@Query("access_token") String token);
 
 
 }

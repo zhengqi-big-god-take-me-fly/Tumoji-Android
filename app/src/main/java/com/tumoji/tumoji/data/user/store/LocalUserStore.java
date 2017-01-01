@@ -2,6 +2,7 @@ package com.tumoji.tumoji.data.user.store;
 
 import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.storage.sqlite.AccountDatabase;
+import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -23,24 +24,30 @@ public class LocalUserStore {
             @Override
             public void call(Subscriber<? super UserModel> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
-                    mDb.insertOrReplaceUser(userModel);
-                    subscriber.onNext(userModel);
+                    subscriber.onNext(saveOrUpdateUserSync(userModel));
                     subscriber.onCompleted();
                 }
             }
-        });
+        }).compose(ApplySchedulers.storage());
     }
 
-    public Observable<UserModel> getUser(String userId) {
+    public UserModel saveOrUpdateUserSync(UserModel userModel) {
+        return mDb.insertOrReplaceUser(userModel);
+    }
+
+    public Observable<UserModel> getUserById(String userId) {
         return Observable.create(new Observable.OnSubscribe<UserModel>() {
             @Override
             public void call(Subscriber<? super UserModel> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
-                    UserModel userModel = mDb.getUserByUserId(userId);
-                    subscriber.onNext(userModel);
+                    subscriber.onNext(getUserByIdSync(userId));
                     subscriber.onCompleted();
                 }
             }
-        });
+        }).compose(ApplySchedulers.storage());
+    }
+
+    public UserModel getUserByIdSync(String userId) {
+        return mDb.getUserByUserId(userId);
     }
 }

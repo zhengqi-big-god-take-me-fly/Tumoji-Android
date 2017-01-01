@@ -3,7 +3,6 @@ package com.tumoji.tumoji.data.user.repository;
 import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.data.user.store.LocalUserStore;
 import com.tumoji.tumoji.data.user.store.RemoteUserStore;
-import com.tumoji.tumoji.network.retrofit.NetworkScheduler;
 
 import rx.Observable;
 
@@ -32,17 +31,17 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Observable<UserModel> getUser(String userId) {
-        return mLocal.getUser(userId);
+        return mLocal.getUserById(userId);
     }
 
     @Override
     public Observable<UserModel> findUser(String usernameOrEmail) {
-        return mRemote.findUser(usernameOrEmail).compose(NetworkScheduler.applySchedulers());
+        return mRemote.findUser(usernameOrEmail);
     }
 
     @Override
     public Observable<UserModel> signUpNewUser(String username, String email, String password) {
-        return mRemote.createUser(username, email, password).compose(NetworkScheduler.applySchedulers())
+        return mRemote.createUser(username, email, password)
                 .flatMap(userModel -> mLocal.saveOrUpdateUser(userModel));
     }
 
