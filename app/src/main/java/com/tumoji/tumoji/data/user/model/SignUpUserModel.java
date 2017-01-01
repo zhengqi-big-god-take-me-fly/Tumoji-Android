@@ -9,17 +9,48 @@ import java.io.Serializable;
  * Date  : 1/1/17
  */
 
-public class SignUpUserModel extends UserModel implements Serializable {
+public class SignUpUserModel implements Serializable {
+    @SerializedName("username")
+    private String username;
+    @SerializedName("email")
+    private String email;
     @SerializedName("password")
     private String password;
 
     public SignUpUserModel() {
-        this("", "", "", "", "");
+        this("", "", "");
     }
 
-    public SignUpUserModel(String userId, String username, String email, String avatarUrl, String password) {
-        super(userId, username, email, avatarUrl);
+    public SignUpUserModel(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public SignUpUserModel withUsername(String username) {
+        setUsername(username);
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public SignUpUserModel withEmail(String email) {
+        setEmail(email);
+        return this;
     }
 
     public String getPassword() {
@@ -32,30 +63,6 @@ public class SignUpUserModel extends UserModel implements Serializable {
 
     public SignUpUserModel withPassword(String password) {
         setPassword(password);
-        return this;
-    }
-
-    @Override
-    public SignUpUserModel withUserId(String userId) {
-        setUserId(userId);
-        return this;
-    }
-
-    @Override
-    public SignUpUserModel withUsername(String username) {
-        setUsername(username);
-        return this;
-    }
-
-    @Override
-    public SignUpUserModel withEmail(String email) {
-        setEmail(email);
-        return this;
-    }
-
-    @Override
-    public SignUpUserModel withAvatarUrl(String avatarUrl) {
-        setAvatarUrl(avatarUrl);
         return this;
     }
 }
