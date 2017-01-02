@@ -1,7 +1,10 @@
 package com.tumoji.tumoji.account.view;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,8 +24,19 @@ import com.tumoji.tumoji.account.adapter.ProfilePagerAdapter;
 import com.tumoji.tumoji.account.contract.ProfileContract;
 import com.tumoji.tumoji.account.fragment.ProfileInfoFragment;
 import com.tumoji.tumoji.data.user.model.UserModel;
+import com.tumoji.tumoji.utils.FileUtils;
 
-public class ProfileFragment extends Fragment implements ProfileContract.View {
+import java.io.File;
+
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+import static android.app.Activity.RESULT_OK;
+
+@RuntimePermissions
+public class ProfileFragment extends Fragment implements ProfileContract.View, View.OnClickListener {
+    private static final int REQUEST_PICK_AVATAR = 1;
+
     private ProfileContract.Presenter mPresenter;
     private OnFragmentInteractionListener mListener;
     private ProfilePagerAdapter mPagerAdapter;
@@ -32,12 +46,21 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
+    }
+
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance() {
-        return new ProfileFragment();
+    public void onProfileInfoFragmentViewCreated() {
+        mPresenter.init();
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    protected void changeAvatar(File file) {
+        mPresenter.changeAvatar(file);
     }
 
     @Override
@@ -60,6 +83,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         super.onViewCreated(view, savedInstanceState);
 
         mAvatarImage = (ImageView) getActivity().findViewById(R.id.avatar_image);
+        mAvatarImage.setOnClickListener(this);
         mUsernameText = (TextView) getActivity().findViewById(R.id.username_text);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -103,6 +127,17 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PICK_AVATAR) {
+            if (resultCode == RESULT_OK) {
+                ProfileFragmentPermissionsDispatcher.changeAvatarWithCheck(this, FileUtils.fromUri(getContext(), data.getData()));
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void refreshProfile(UserModel userModel) {
         Glide.with(getActivity()).load(userModel.getAvatarUrl()).into(mAvatarImage);
         mUsernameText.setText(userModel.getUsername());
@@ -119,8 +154,16 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         mPresenter = presenter;
     }
 
-    public void onProfileInfoFragmentViewCreated() {
-        mPresenter.init();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.avatar_image:
+                // Pick new avatar
+                startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), REQUEST_PICK_AVATAR);
+                break;
+            default:
+                break;
+        }
     }
 
     public interface OnFragmentInteractionListener {

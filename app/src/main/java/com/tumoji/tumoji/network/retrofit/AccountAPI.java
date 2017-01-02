@@ -3,6 +3,7 @@ package com.tumoji.tumoji.network.retrofit;
 import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.user.model.UserModel;
+import com.tumoji.tumoji.network.body.PutUserAvatarReq;
 import com.tumoji.tumoji.utils.AccountRole;
 import com.tumoji.tumoji.utils.BooleanResponse;
 import com.tumoji.tumoji.utils.ErrorType;
@@ -168,5 +169,6 @@ public interface AccountAPI {
     @POST("users/logout")
     Observable<Void> requestLogout(@Query("access_token") String token);
 
-
+    @PUT("users/{id}")
+    Observable<UserModel> changeUserAvatar(@Path("id") String userId, @Query("access_token") String token, @Body PutUserAvatarReq req);
 }

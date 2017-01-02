@@ -23,6 +23,7 @@ public class RetrofitAPI {
     public MemeAPI memeService;
     public TagAPI tagService;
     public AccountAPI accountService;
+    public ImageApi imageService;
 
     /**
      * Deprecated , now use API_SERVER_BASE_URL instead;
@@ -47,6 +48,10 @@ public class RetrofitAPI {
 
     public AccountAPI getAccountService() {
         return accountService;
+    }
+
+    public ImageApi getImageService() {
+        return imageService;
     }
 
     RetrofitAPI() {
@@ -124,9 +129,16 @@ public class RetrofitAPI {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
+        Retrofit imageRetrofit = new Retrofit.Builder()
+                .baseUrl(API_SERVER_BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
         memeService = memeRetro.create(MemeAPI.class);
         tagService = tagRetro.create(TagAPI.class);
         accountService = accountRetro.create(AccountAPI.class);
-
+        imageService = imageRetrofit.create(ImageApi.class);
     }
 }

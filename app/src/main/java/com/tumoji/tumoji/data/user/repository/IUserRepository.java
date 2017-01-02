@@ -2,6 +2,8 @@ package com.tumoji.tumoji.data.user.repository;
 
 import com.tumoji.tumoji.data.user.model.UserModel;
 
+import java.io.File;
+
 import rx.Observable;
 
 /**
@@ -17,4 +19,6 @@ public interface IUserRepository {
     Observable<UserModel> signUpNewUser(String username, String email, String password);
 
     Observable<UserModel> updateUser(String userId);
+
+    Observable<UserModel> changeUserAvatar(String token, String userId, File file);
 }

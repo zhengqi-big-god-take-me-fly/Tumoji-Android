@@ -50,7 +50,10 @@ public class AuthRepository implements IAuthRepository {
 
     @Override
     public Observable<Void> signOut() {
-        return Observable.concat(mRemote.removeAuth(mLocal.getAccessToken()), mLocal.removeAuth());
+//        return Observable.concat(mRemote.removeAuth(mLocal.getAccessToken()), mLocal.removeAuth());
+        // NOTE: To force signing out, remove local auth before removing remote auth
+        String token = mLocal.getAccessToken();
+        return Observable.concat(mLocal.removeAuth(), mRemote.removeAuth(token));
     }
 
     @Override

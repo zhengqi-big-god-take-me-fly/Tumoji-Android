@@ -4,6 +4,8 @@ import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.data.user.store.LocalUserStore;
 import com.tumoji.tumoji.data.user.store.RemoteUserStore;
 
+import java.io.File;
+
 import rx.Observable;
 
 /**
@@ -49,5 +51,10 @@ public class UserRepository implements IUserRepository {
     public Observable<UserModel> updateUser(String userId) {
         return mRemote.getUser(userId)
                 .flatMap(userModel -> mLocal.saveOrUpdateUser(userModel));
+    }
+
+    @Override
+    public Observable<UserModel> changeUserAvatar(String token, String userId, File file) {
+        return mRemote.changeUserAvatar(token, userId, file);
     }
 }

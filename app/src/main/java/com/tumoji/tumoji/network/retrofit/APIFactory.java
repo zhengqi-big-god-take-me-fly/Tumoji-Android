@@ -2,8 +2,6 @@ package com.tumoji.tumoji.network.retrofit;
 
 
 
-import java.util.Objects;
-
 /**
  * Created by souler on 16-12-14.
  */
@@ -12,6 +10,7 @@ public class APIFactory {
     private static MemeAPI memeAPISingleton = null;
     private static TagAPI tagAPISingleton = null;
     private static AccountAPI accountAPISingleton = null;
+    private static ImageApi imageApiSingleton = null;
     /**
      * Singleton of memeAPI
      */
@@ -45,6 +44,15 @@ public class APIFactory {
                 accountAPISingleton = new RetrofitAPI().getAccountService();
             }
             return accountAPISingleton;
+        }
+    }
+
+    public static ImageApi getImageApiInstance() {
+        synchronized (monitor) {
+            if (imageApiSingleton == null) {
+                imageApiSingleton = new RetrofitAPI().getImageService();
+            }
+            return imageApiSingleton;
         }
     }
 }
