@@ -32,7 +32,6 @@ import rx.Observable;
 public class MockMemeRepository implements IMemeRepository {
     private static IMemeRepository sInstance;
 
-    private IMemeRepository mDelegate;
     private File mMemeDownloadDirectory;
     private ArrayList<MemeModel> mAllMemes = new ArrayList<>();
     private ArrayList<MemeModel> mXiongbenMemes = new ArrayList<>();
@@ -47,7 +46,6 @@ public class MockMemeRepository implements IMemeRepository {
 
     private MockMemeRepository(Context context) {
         mAppContext = context.getApplicationContext();
-        mDelegate = MemeRepository.getInstance();
         mMemeDownloadDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Tumoji");
         mMemeDownloadDirectory.mkdirs();
         mAllMemes = DemoMemeStore.getAllMemes();
@@ -56,27 +54,38 @@ public class MockMemeRepository implements IMemeRepository {
 
     @Override
     public Observable<MemeModel> likeMeme(String token, String memeId, boolean like) {
-        return mDelegate.likeMeme(token, memeId, like);
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public Observable<MemeModel> reportMeme(String token, String memeId, String reason) {
-        return mDelegate.reportMeme(token, memeId, reason);
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public Observable<List<MemeModel>> getMemesList(int offset, int count, TagModel tagModel, int order) {
-        return mDelegate.getMemesList(offset, count, tagModel, order);
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public Observable<MemeModel> getMeme(String memeId) {
-        return mDelegate.getMeme(memeId);
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public Observable<MemeModel> downloadMeme(String memeId, File destDir) {
-        return mDelegate.downloadMeme(memeId, destDir);
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    @Override
+    public Observable<MemeModel> uploadMeme(MemeModel memeModel, File memeFile) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

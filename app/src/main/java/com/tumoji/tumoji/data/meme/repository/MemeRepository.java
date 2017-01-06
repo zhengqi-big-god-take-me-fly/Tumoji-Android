@@ -1,5 +1,7 @@
 package com.tumoji.tumoji.data.meme.repository;
 
+import android.content.Context;
+
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
@@ -50,6 +52,9 @@ public class MemeRepository implements IMemeRepository {
     // caching temporary memes
     private MemeModel tempMeme;
 
+    // Debug: Use to delegate unimplemented method calls to mock repository
+    private IMemeRepository mDelegate;
+
     public Token getUsingToken() {
         return usingToken;
     }
@@ -58,15 +63,15 @@ public class MemeRepository implements IMemeRepository {
         this.usingToken = usingToken;
     }
 
-    public static MemeRepository getInstance() {
+    public static MemeRepository getInstance(Context context) {
         if (memeRepository == null) {
-            memeRepository = new MemeRepository();
+            memeRepository = new MemeRepository(context);
         }
         return memeRepository;
     }
 
-    private MemeRepository() {
-        usingToken = null;
+    private MemeRepository(Context context) {
+        mDelegate = MockMemeRepository.getInstance(context);
     }
 
     @Override
@@ -99,6 +104,12 @@ public class MemeRepository implements IMemeRepository {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
+    @Override
+    public Observable<MemeModel> uploadMeme(MemeModel memeModel, File memeFile) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
     /**
      * Like some meme
      * Remember , before calling this function , you need to login first
@@ -108,6 +119,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void likeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
+        if (mDelegate != null) { mDelegate.likeMeme(memeModel, listener); return; }
         if (usingToken == null) {
             listener.onFailure(404 , "You need to login first and set the token parameters");
             return;
@@ -132,6 +144,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void unlikeMeme(MemeModel memeModel, OnLikeUnlikeMemeListener listener) {
+        if (mDelegate != null) { mDelegate.unlikeMeme(memeModel, listener); return; }
         if (usingToken == null) {
             listener.onFailure(404 , "You need to login first and set the token parameters");
             return;
@@ -158,7 +171,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void reportMeme(MemeModel memeModel, String reason, OnReportMemeListener listener) {
-
+        mDelegate.reportMeme(memeModel, reason, listener);
     }
 
     /**
@@ -176,7 +189,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void getPopularMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-
+        mDelegate.getPopularMemesList(offset, tagModel, listener);
     }
 
     /**
@@ -192,7 +205,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void getNewMemesList(int offset, TagModel tagModel, OnGetMemesListListener listener) {
-
+        mDelegate.getNewMemesList(offset, tagModel, listener);
     }
 
     /**
@@ -202,6 +215,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public List<MemeModel> getCachedPopularMemesList() {
+        if (mDelegate != null) return mDelegate.getCachedPopularMemesList();
         return null;
     }
 
@@ -212,6 +226,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public List<MemeModel> getCachedNewMemesList() {
+        if (mDelegate != null) return mDelegate.getCachedNewMemesList();
         return null;
     }
 
@@ -221,6 +236,7 @@ public class MemeRepository implements IMemeRepository {
      */
     @Override
     public void getMeme(String memeId, OnGetResultListener<MemeModel> listener) {
+        if (mDelegate != null) { mDelegate.getMeme(memeId, listener); return; }
 //        // TODO: Implement getMeme
 //        throw new UnsupportedOperationException("Method not implemented");
         memeApi.getMemeById(memeId)
@@ -237,6 +253,7 @@ public class MemeRepository implements IMemeRepository {
 
     @Override
     public MemeModel getCachedMeme(String memeId) {
+        if (mDelegate != null) return mDelegate.getCachedMeme(memeId);
 //        // TODO: Implement getCachedMeme
 //        throw new UnsupportedOperationException("Method not implemented");
         return memeDatabase.getMemeByName(memeId);
