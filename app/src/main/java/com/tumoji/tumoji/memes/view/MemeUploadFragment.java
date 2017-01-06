@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,10 +19,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tumoji.tumoji.R;
+import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.memes.adapter.MemeUploadTagsRecyclerAdapter;
+import com.tumoji.tumoji.memes.adapter.SelectTagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeUploadContract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemeUploadFragment extends Fragment implements MemeUploadContract.View, View.OnClickListener {
     private OnFragmentInteractionListener mListener;
+    private List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> mTagsList = new ArrayList<>();
+    private MemeUploadContract.Presenter mPresenter;
+    private MemeUploadTagsRecyclerAdapter mTagsAdapter;
 
     private FrameLayout mMemeImageLayout;
     private ImageView mMemeImage;
@@ -29,7 +39,7 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
     private EditText mTitleEdit;
     private RecyclerView mTagsRecyclerView;
     private ImageButton mEditTagsButton;
-    private MemeUploadContract.Presenter mPresenter;
+    private SelectTagsFragment mSelectTagsFragment;
 
     public static MemeUploadFragment newInstance() {
         return new MemeUploadFragment();
@@ -46,9 +56,23 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
         mEditTagsButton.setEnabled(enabled);
     }
 
+    private void reloadTagsList(List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> wrappers) {
+        mTagsList.clear();
+        mTagsList.addAll(wrappers);
+        ArrayList<TagModel> selected = new ArrayList<>();
+        for (SelectTagsRecyclerAdapter.TagModelSelectableWrapper wrapper : wrappers) {
+            if (wrapper.isSelected()) {
+                selected.add(wrapper.getTagModel());
+            }
+        }
+        mTagsAdapter.reloadTags(selected);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mTagsAdapter = new MemeUploadTagsRecyclerAdapter();
 
         setHasOptionsMenu(true);
     }
@@ -69,7 +93,12 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
         mUploadFab.setOnClickListener(this);
         mTitleEdit = (EditText) view.findViewById(R.id.title_edit);
         mTagsRecyclerView = (RecyclerView) view.findViewById(R.id.tags_recycler_view);
+        mTagsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mTagsRecyclerView.setAdapter(mTagsAdapter);
         mEditTagsButton = (ImageButton) view.findViewById(R.id.edit_tags_button);
+        mEditTagsButton.setOnClickListener(this);
+
+        mPresenter.init();
     }
 
     @Override
@@ -97,6 +126,19 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void refreshTagsList(List<TagModel> tagModels) {
+        // Only cache them
+        ArrayList<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> wrappers = new ArrayList<>();
+        for (TagModel tagModel : tagModels) {
+            SelectTagsRecyclerAdapter.TagModelSelectableWrapper wrapper = new SelectTagsRecyclerAdapter.TagModelSelectableWrapper();
+            wrapper.setSelected(false);
+            wrapper.setTagModel(tagModel);
+            wrappers.add(wrapper);
+        }
+        reloadTagsList(wrappers);
     }
 
     @Override
@@ -147,9 +189,22 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
             case R.id.upload_fab:
                 mPresenter.requestUpload(null, mTitleEdit.getText().toString(), null);
                 break;
+            case R.id.edit_tags_button:
+                mSelectTagsFragment = SelectTagsFragment.newInstance();
+                mSelectTagsFragment.show(getActivity().getSupportFragmentManager(), SelectTagsFragment.class.toString());
+                break;
             default:
                 break;
         }
+    }
+
+    public void onSelectedTagsFragmentCreateView() {
+        mSelectTagsFragment.reloadTagsList(mTagsList);
+    }
+
+    public void onFinishSelection(List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> tagModels) {
+        mSelectTagsFragment = null;
+        reloadTagsList(tagModels);
     }
 
     public interface OnFragmentInteractionListener {

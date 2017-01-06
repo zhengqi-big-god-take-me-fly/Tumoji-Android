@@ -38,6 +38,7 @@
     <string name="the_email_field_is_empty_or_invalid">The email field is empty or invalid</string>
     <string name="the_password_field_is_empty_or_invalid">The password field is empty or invalid</string>
     <string name="network_error">Network error</string>
+    <string name="done">Done</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

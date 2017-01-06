@@ -15,12 +15,16 @@ import java.util.List;
 
 public interface MemeUploadContract {
     interface Presenter {
+        void init();
+
         void requestUpload(Uri memePath, @NonNull String memeTitle, List<TagModel> tagModels);
 
         void requestStopUpload();
     }
 
     interface View extends BaseView<Presenter> {
+        void refreshTagsList(List<TagModel> tagModels);
+
         void startUpload();
 
         void finishUploadAndClose();

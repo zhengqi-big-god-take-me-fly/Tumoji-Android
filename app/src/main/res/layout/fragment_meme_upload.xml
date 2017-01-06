@@ -66,6 +66,8 @@
         app:layout_constraintRight_toLeftOf="@+id/edit_tags_button"
         android:layout_height="48dp"
         tools:listitem="@layout/recycler_item_tag"
-        android:orientation="horizontal" />
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
 </android.support.constraint.ConstraintLayout>
