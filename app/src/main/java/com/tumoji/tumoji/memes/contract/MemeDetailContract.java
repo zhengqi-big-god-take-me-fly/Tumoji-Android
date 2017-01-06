@@ -3,6 +3,7 @@ package com.tumoji.tumoji.memes.contract;
 import com.tumoji.tumoji.common.BaseView;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 
 import java.util.List;
 
@@ -56,5 +57,7 @@ public interface MemeDetailContract {
         void refreshMemeLikeStatus(boolean like, int count);
 
         void refreshMemeReportStatus(boolean report, int count);
+
+        void refreshMemeAuthor(UserModel userModel);
     }
 }

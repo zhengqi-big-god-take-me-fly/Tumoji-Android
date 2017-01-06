@@ -28,6 +28,7 @@ import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.TagRepository;
 import com.tumoji.tumoji.data.user.model.UserModel;
+import com.tumoji.tumoji.data.user.repository.UserRepository;
 import com.tumoji.tumoji.memes.activity.MemeUploadActivity;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
 import com.tumoji.tumoji.memes.adapter.TagsRecyclerAdapter;
@@ -127,7 +128,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     public void onMemeClick(MemeModel memeModel) {
         MemeDetailFragment detailFragment = MemeDetailFragment.newInstance(memeModel.getMemeId());
-        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(getContext()), detailFragment);
+        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MockMemeRepository.getInstance(getContext()), TagRepository.getInstance(), UserRepository.getInstance(), detailFragment);
         detailFragment.setPresenter(presenter);
         detailFragment.show(getActivity().getSupportFragmentManager(), "MemeDetailFragment");
     }

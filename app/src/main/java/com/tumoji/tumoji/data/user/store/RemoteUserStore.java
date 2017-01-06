@@ -49,4 +49,8 @@ public class RemoteUserStore {
         return mImageApi.uploadImage(token, part).compose(ApplySchedulers.network())
                 .flatMap(uploadImageRes -> mAccountApi.changeUserAvatar(userId, token, new PutUserAvatarReq(uploadImageRes.getUrl())).compose(ApplySchedulers.network()));
     }
+
+    public Observable<UserModel> getMemeAuthor(String memeId) {
+        return mAccountApi.getExpressionAuthor(memeId).compose(ApplySchedulers.network());
+    }
 }

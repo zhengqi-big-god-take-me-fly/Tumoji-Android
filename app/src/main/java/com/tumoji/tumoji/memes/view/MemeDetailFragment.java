@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 
 import java.util.List;
@@ -124,11 +125,14 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     @Override
     public void refreshMemeDetail(MemeModel memeModel) {
         // TODO: Other meme detail
+        // Refresh meme image, title, likes, reports, downloaded
         mMemeModel = memeModel;
-        Glide.with(getActivity()).load(memeModel.getImageUrl()).into(mMemeHdImage);
+//        Glide.with(getActivity()).load(memeModel.getImageUrl()).into(mMemeHdImage);
+        Glide.with(getActivity()).load(memeModel.getMemeUri()).into(mMemeHdImage);
         refreshMemeName(memeModel.getTitle());
         refreshMemeLikeStatus(memeModel.isLiked(), memeModel.getLikeCount());
         refreshMemeReportStatus(memeModel.isReported(), memeModel.getReportCount());
+        mSaveButton.setVisibility(memeModel.isDownloaded() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -153,6 +157,12 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
         mReportTitleText.setText(R.string.report_it);
         mReportCountText.setText(getString(R.string.count_reported, count));
         mReportIconImage.setImageResource(report ? R.drawable.ic_reported_black_24dp : R.drawable.ic_unreported_black_24dp);
+    }
+
+    @Override
+    public void refreshMemeAuthor(UserModel userModel) {
+        // TODO
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

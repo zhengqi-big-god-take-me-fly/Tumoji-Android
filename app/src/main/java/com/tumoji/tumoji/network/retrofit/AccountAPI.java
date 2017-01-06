@@ -171,4 +171,7 @@ public interface AccountAPI {
 
     @PUT("users/{id}")
     Observable<UserModel> changeUserAvatar(@Path("id") String userId, @Query("access_token") String token, @Body PutUserAvatarReq req);
+
+    @GET("expressions/{id}/author")
+    Observable<UserModel> getExpressionAuthor(@Path("id") String memeId);
 }

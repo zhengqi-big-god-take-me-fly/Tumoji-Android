@@ -21,4 +21,6 @@ public interface IUserRepository {
     Observable<UserModel> updateUser(String userId);
 
     Observable<UserModel> changeUserAvatar(String token, String userId, File file);
+
+    Observable<UserModel> getMemeAuthor(String memeId);
 }

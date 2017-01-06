@@ -57,4 +57,10 @@ public class UserRepository implements IUserRepository {
     public Observable<UserModel> changeUserAvatar(String token, String userId, File file) {
         return mRemote.changeUserAvatar(token, userId, file);
     }
+
+    @Override
+    public Observable<UserModel> getMemeAuthor(String memeId) {
+        return mRemote.getMemeAuthor(memeId)
+                .flatMap(userModel -> mLocal.saveOrUpdateUser(userModel));
+    }
 }
