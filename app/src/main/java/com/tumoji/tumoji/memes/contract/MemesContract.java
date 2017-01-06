@@ -51,11 +51,6 @@ public interface MemesContract {
         void updateNewMemesListOfTag(int offset, TagModel tagModel);
 
         /**
-         * Update tags list.
-         */
-        void updateTagsList();
-
-        /**
          * Called when user click on the Upload Meme button
          */
         void requestUploadingMeme();

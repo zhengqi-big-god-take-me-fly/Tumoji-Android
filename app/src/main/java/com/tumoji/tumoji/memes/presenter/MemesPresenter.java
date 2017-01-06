@@ -33,18 +33,27 @@ public class MemesPresenter implements MemesContract.Presenter {
     @Override
     public void init() {
         // Show cached content
-        mView.refreshTagsList(mTagRepository.getCachedTagsList());
+//        mView.refreshTagsList(mTagRepository.getCachedTagsList());
         // Refresh latest content
-        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
-            @Override
-            public void onSuccess(List<TagModel> tagModels) {
-                mView.refreshTagsList(tagModels);
+//        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
+//            @Override
+//            public void onSuccess(List<TagModel> tagModels) {
+//                mView.refreshTagsList(tagModels);
+//            }
+//
+//            @Override
+//            public void onFailure(int error, String msg) {
+//                // TODO: Handle error
+//            }
+//        });
+        mTagRepository.getTagsList().subscribe(tagModels -> {
+            if (tagModels.size() > 8) {
+                tagModels = tagModels.subList(0, 8);
             }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Handle error
-            }
+            mView.refreshTagsList(tagModels);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
         mMemeRepository.getPopularMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
             @Override
@@ -151,22 +160,6 @@ public class MemesPresenter implements MemesContract.Presenter {
             @Override
             public void onFailure(int error, String msg) {
                 // TODO: Implement .onFailure
-            }
-        });
-    }
-
-    @Override
-    public void updateTagsList() {
-        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
-            @Override
-            public void onSuccess(List<TagModel> tagModels) {
-                mView.refreshTagsList(tagModels);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-                throw new UnsupportedOperationException("Method not implemented");
             }
         });
     }

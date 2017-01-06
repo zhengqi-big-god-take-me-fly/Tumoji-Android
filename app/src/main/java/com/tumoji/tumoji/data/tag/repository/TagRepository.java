@@ -4,6 +4,7 @@ import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.TagAPI;
 import com.tumoji.tumoji.storage.sqlite.TagDatabase;
+import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +74,7 @@ public class TagRepository implements ITagRepository {
 
     @Override
     public Observable<List<TagModel>> getTagsList() {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+        return tagApi.getAllTags().compose(ApplySchedulers.network());
     }
 
     /**
@@ -85,5 +85,10 @@ public class TagRepository implements ITagRepository {
     @Override
     public List<TagModel> getCachedTagsList() {
         return tagDatabase.getAllLocalTags();
+    }
+
+    @Override
+    public Observable<List<TagModel>> getTagsListOfMeme(String memeId) {
+        return tagApi.getTagsOfMeme(memeId).compose(ApplySchedulers.network());
     }
 }

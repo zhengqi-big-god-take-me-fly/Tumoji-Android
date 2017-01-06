@@ -1,10 +1,7 @@
 package com.tumoji.tumoji.memes.presenter;
 
-import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.ITagRepository;
 import com.tumoji.tumoji.memes.contract.MoreTagsContract;
-
-import java.util.List;
 
 /**
  * Author: perqin
@@ -23,16 +20,11 @@ public class MoreTagsPresenter implements MoreTagsContract.Presenter {
     @Override
     public void init() {
         mView.startLoading();
-        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
-            @Override
-            public void onSuccess(List<TagModel> tagModels) {
-                mView.finishLoading(tagModels);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        mTagRepository.getTagsList().subscribe(tagModels -> {
+            mView.finishLoading(tagModels);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 }

@@ -23,11 +23,10 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.account.activity.ProfileActivity;
 import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
-import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
-import com.tumoji.tumoji.data.tag.repository.MockTagRepository;
+import com.tumoji.tumoji.data.tag.repository.TagRepository;
 import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.memes.activity.MemeUploadActivity;
 import com.tumoji.tumoji.memes.adapter.MemesPagerAdapter;
@@ -249,7 +248,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     @Override
     public void onMoreTagClick() {
         MoreTagsFragment fragment = MoreTagsFragment.newInstance();
-        MoreTagsContract.Presenter presenter = new MoreTagsPresenter(MockTagRepository.getInstance(getContext()), fragment);
+        MoreTagsContract.Presenter presenter = new MoreTagsPresenter(TagRepository.getInstance(), fragment);
         fragment.setPresenter(presenter);
         fragment.show(getActivity().getSupportFragmentManager(), "MoreTagsFragment");
     }

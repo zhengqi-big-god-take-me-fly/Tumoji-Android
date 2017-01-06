@@ -7,28 +7,23 @@ import com.tumoji.tumoji.utils.IntegerResponse;
 
 import java.util.List;
 
-
 import okhttp3.RequestBody;
-import retrofit2.adapter.rxjava.Result;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.HEAD;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import rx.Observable;
 
-import retrofit2.http.GET;
-
 /**
  * Created by souler on 16-12-14.
  */
 public interface TagAPI {
 
-    @GET("/tags")
+    @GET("tags")
     Observable<List<TagModel>> getAllTags();
 
     @GET("/tags/{name}")
@@ -79,5 +74,6 @@ public interface TagAPI {
     @GET("/tags/count")
     Observable<IntegerResponse> getTagCount();
 
-
+    @GET("expressions/{id}/tags")
+    Observable<List<TagModel>> getTagsOfMeme(@Path("id") String memeId);
 }

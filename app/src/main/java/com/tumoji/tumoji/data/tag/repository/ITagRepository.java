@@ -19,7 +19,7 @@ import rx.Observable;
 public interface ITagRepository {
     /**
      * Get latest tags list from API server
-     * NOTE: You should update local cache in this method.
+     * // NOTE: You should update local cache in this method.
      * @return Observable which emits a list of TagModel
      */
     Observable<List<TagModel>> getTagsList();
@@ -29,6 +29,13 @@ public interface ITagRepository {
      * @return Cached tags list
      */
     List<TagModel> getCachedTagsList();
+
+    /**
+     * Get tags list of a meme from API server
+     * @param memeId The id of the meme
+     * @return Observable which emits a list of TagModel for specific meme
+     */
+    Observable<List<TagModel>> getTagsListOfMeme(String memeId);
 
     /**
      * @deprecated Use {@link #getTagsList()} instead.
