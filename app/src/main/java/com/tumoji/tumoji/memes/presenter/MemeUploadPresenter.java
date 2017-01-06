@@ -47,8 +47,9 @@ public class MemeUploadPresenter implements MemeUploadContract.Presenter {
             mView.failUploadWithNoTitleError();
         } else {
             // Seq: Upload meme -> add tags
-            mMemeRepository.uploadMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeTitle, memeFile)
-                    .flatMap(memeModel -> mTagRepository.addTagsForMeme(memeModel.getMemeId(), tagModels))
+            String token = mAuthRepository.getLocalAuth().getAccessToken();
+            mMemeRepository.uploadMeme(token, memeTitle, memeFile)
+                    .flatMap(memeModel -> mTagRepository.addTagsForMeme(token, memeModel.getMemeId(), tagModels))
                     .subscribe(aVoid -> {
                         mView.finishUploadAndClose();
                     }, throwable -> {

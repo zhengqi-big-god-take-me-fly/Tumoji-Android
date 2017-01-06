@@ -16,12 +16,15 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
  * Created by souler on 16-12-14.
  */
 public interface TagAPI {
+    @PUT("expressions/{meme_id}/tags/rel/{tag_name}")
+    Observable<TagModel> relTagToMeme(@Path("meme_id") String memeId, @Path("tag_name") String tagName, @Query("access_token") String token);
 
     @GET("tags")
     Observable<List<TagModel>> getAllTags();

@@ -11,6 +11,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -73,9 +74,18 @@ public class TagRepository implements ITagRepository {
     }
 
     @Override
-    public Observable<Void> addTagsForMeme(String memeId, List<TagModel> tagModels) {
-        // TODO: Add tags for meme
-        return Observable.just(null);
+    public Observable<Void> addTagsForMeme(String token, String memeId, List<TagModel> tagModels) {
+        ArrayList<Observable<TagModel>> observables = new ArrayList<>();
+        // FIXME: Check tag existence and choose to add new tag or rel a tag
+        for (TagModel tagModel : tagModels) {
+            observables.add(tagApi.relTagToMeme(memeId, tagModel.getTagName(), token).compose(ApplySchedulers.network()));
+        }
+        return Observable.merge(observables).toList().map(new Func1<List<TagModel>, Void>() {
+            @Override
+            public Void call(List<TagModel> tagModels) {
+                return null;
+            }
+        });
     }
 
     @Override
