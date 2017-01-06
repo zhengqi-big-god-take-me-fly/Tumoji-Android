@@ -46,6 +46,8 @@ public interface ITagRepository {
      */
     void getTagsList(OnGetTagsListListener listener);
 
+    Observable<Void> addTagsForMeme(String memeId, List<TagModel> tagModels);
+
     /**
      * @deprecated
      * Listener on tags list gotten.

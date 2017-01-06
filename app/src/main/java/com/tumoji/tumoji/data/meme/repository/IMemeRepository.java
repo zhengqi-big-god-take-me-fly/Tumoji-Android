@@ -72,11 +72,11 @@ public interface IMemeRepository {
 
     /**
      * Upload new meme
-     * @param memeModel The detail data of the meme
+     * @param memeTitle The name of the meme
      * @param memeFile The file of the meme image
      * @return Observable which emits the MemeModel uploaded.
      */
-    Observable<MemeModel> uploadMeme(MemeModel memeModel, File memeFile);
+    Observable<MemeModel> uploadMeme(String token, String memeTitle, File memeFile);
 
     /**
      * @deprecated Use {@link #likeMeme(String, String, boolean)} instead.

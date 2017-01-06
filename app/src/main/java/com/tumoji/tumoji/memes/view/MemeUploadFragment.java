@@ -1,7 +1,12 @@
 package com.tumoji.tumoji.memes.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,20 +23,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.memes.adapter.MemeUploadTagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.adapter.SelectTagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeUploadContract;
+import com.tumoji.tumoji.utils.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
 public class MemeUploadFragment extends Fragment implements MemeUploadContract.View, View.OnClickListener {
+    private static final int REQUEST_PICK_MEME_IMAGE = 1;
+
     private OnFragmentInteractionListener mListener;
     private List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> mTagsList = new ArrayList<>();
     private MemeUploadContract.Presenter mPresenter;
     private MemeUploadTagsRecyclerAdapter mTagsAdapter;
+    private Uri mImageUri;
 
     private FrameLayout mMemeImageLayout;
     private ImageView mMemeImage;
@@ -49,6 +64,11 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
         // Required empty public constructor
     }
 
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    protected void uploadMeme(File file, String title, List<TagModel> tags) {
+        mPresenter.requestUpload(file, title, tags);
+    }
+
     private void setAllEnabled(boolean enabled) {
         mMemeImageLayout.setEnabled(enabled);
         mTitleEdit.setEnabled(enabled);
@@ -59,13 +79,17 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
     private void reloadTagsList(List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> wrappers) {
         mTagsList.clear();
         mTagsList.addAll(wrappers);
+        mTagsAdapter.reloadTags(getSelectedTags(wrappers));
+    }
+
+    private List<TagModel> getSelectedTags(List<SelectTagsRecyclerAdapter.TagModelSelectableWrapper> wrappers) {
         ArrayList<TagModel> selected = new ArrayList<>();
         for (SelectTagsRecyclerAdapter.TagModelSelectableWrapper wrapper : wrappers) {
             if (wrapper.isSelected()) {
                 selected.add(wrapper.getTagModel());
             }
         }
-        mTagsAdapter.reloadTags(selected);
+        return selected;
     }
 
     @Override
@@ -115,6 +139,18 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PICK_MEME_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                mImageUri = data.getData();
+                Glide.with(getActivity()).load(mImageUri).into(mMemeImage);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -184,10 +220,13 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.meme_layout:
-                // TODO: Pick image
+                startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), REQUEST_PICK_MEME_IMAGE);
                 break;
             case R.id.upload_fab:
-                mPresenter.requestUpload(null, mTitleEdit.getText().toString(), null);
+                File memeFile = FileUtils.fromUri(getContext(), mImageUri);
+                String memeTitle = mTitleEdit.getText().toString();
+                List<TagModel> tagModels = getSelectedTags(mTagsList);
+                uploadMeme(memeFile, memeTitle, tagModels);
                 break;
             case R.id.edit_tags_button:
                 mSelectTagsFragment = SelectTagsFragment.newInstance();

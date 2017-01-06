@@ -1,11 +1,11 @@
 package com.tumoji.tumoji.memes.contract;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.tumoji.tumoji.common.BaseView;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public interface MemeUploadContract {
     interface Presenter {
         void init();
 
-        void requestUpload(Uri memePath, @NonNull String memeTitle, List<TagModel> tagModels);
+        void requestUpload(File memeFile, @NonNull String memeTitle, List<TagModel> tagModels);
 
         void requestStopUpload();
     }

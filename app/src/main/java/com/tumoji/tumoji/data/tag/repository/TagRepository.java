@@ -73,6 +73,12 @@ public class TagRepository implements ITagRepository {
     }
 
     @Override
+    public Observable<Void> addTagsForMeme(String memeId, List<TagModel> tagModels) {
+        // TODO: Add tags for meme
+        return Observable.just(null);
+    }
+
+    @Override
     public Observable<List<TagModel>> getTagsList() {
         return tagApi.getAllTags().compose(ApplySchedulers.network());
     }

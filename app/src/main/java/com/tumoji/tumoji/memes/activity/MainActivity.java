@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.auth.repository.AuthRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
-import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
+import com.tumoji.tumoji.data.meme.repository.MemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.TagRepository;
 import com.tumoji.tumoji.data.user.repository.UserRepository;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, memesFragment).commit();
         }
 
-        MemesContract.Presenter presenter = new MemesPresenter(AuthRepository.getInstance(this), UserRepository.getInstance(), MockMemeRepository.getInstance(this), TagRepository.getInstance(), memesFragment);
+        MemesContract.Presenter presenter = new MemesPresenter(AuthRepository.getInstance(this), UserRepository.getInstance(), MemeRepository.getInstance(this), TagRepository.getInstance(), memesFragment);
         memesFragment.setPresenter(presenter);
     }
 

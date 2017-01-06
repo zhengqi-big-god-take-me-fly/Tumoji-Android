@@ -3,6 +3,7 @@ package com.tumoji.tumoji.data.meme.repository;
 import android.content.Context;
 
 import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.meme.store.RemoteMemeStore;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.MemeAPI;
@@ -55,6 +56,8 @@ public class MemeRepository implements IMemeRepository {
     // Debug: Use to delegate unimplemented method calls to mock repository
     private IMemeRepository mDelegate;
 
+    private RemoteMemeStore mRemote;
+
     public Token getUsingToken() {
         return usingToken;
     }
@@ -72,6 +75,7 @@ public class MemeRepository implements IMemeRepository {
 
     private MemeRepository(Context context) {
         mDelegate = MockMemeRepository.getInstance(context);
+        mRemote = new RemoteMemeStore();
     }
 
     @Override
@@ -105,9 +109,8 @@ public class MemeRepository implements IMemeRepository {
     }
 
     @Override
-    public Observable<MemeModel> uploadMeme(MemeModel memeModel, File memeFile) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+    public Observable<MemeModel> uploadMeme(String token, String memeTitle, File memeFile) {
+        return mRemote.uploadNewMeme(token, memeTitle, memeFile);
     }
 
     /**

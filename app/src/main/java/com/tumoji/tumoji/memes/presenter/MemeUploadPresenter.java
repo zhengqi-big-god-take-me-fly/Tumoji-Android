@@ -1,13 +1,14 @@
 package com.tumoji.tumoji.memes.presenter;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.ITagRepository;
 import com.tumoji.tumoji.memes.contract.MemeUploadContract;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -16,11 +17,13 @@ import java.util.List;
  */
 
 public class MemeUploadPresenter implements MemeUploadContract.Presenter {
+    private IAuthRepository mAuthRepository;
     private IMemeRepository mMemeRepository;
     private ITagRepository mTagRepository;
     private MemeUploadContract.View mView;
 
-    public MemeUploadPresenter(IMemeRepository memeRepository, ITagRepository tagRepository, MemeUploadContract.View view) {
+    public MemeUploadPresenter(IAuthRepository authRepository, IMemeRepository memeRepository, ITagRepository tagRepository, MemeUploadContract.View view) {
+        this.mAuthRepository = authRepository;
         this.mMemeRepository = memeRepository;
         this.mTagRepository = tagRepository;
         mView = view;
@@ -37,13 +40,21 @@ public class MemeUploadPresenter implements MemeUploadContract.Presenter {
     }
 
     @Override
-    public void requestUpload(Uri memePath, @NonNull String memeTitle, List<TagModel> tagModels) {
-        if (memePath == null) {
+    public void requestUpload(File memeFile, @NonNull String memeTitle, List<TagModel> tagModels) {
+        if (memeFile == null) {
             mView.failUploadWithNoMemeError();
         } else if (memeTitle.isEmpty()) {
             mView.failUploadWithNoTitleError();
         } else {
-            mView.finishUploadAndClose();
+            // Seq: Upload meme -> add tags
+            mMemeRepository.uploadMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeTitle, memeFile)
+                    .flatMap(memeModel -> mTagRepository.addTagsForMeme(memeModel.getMemeId(), tagModels))
+                    .subscribe(aVoid -> {
+                        mView.finishUploadAndClose();
+                    }, throwable -> {
+                        // TODO
+                        throw new UnsupportedOperationException("Method not implemented");
+                    });
         }
     }
 

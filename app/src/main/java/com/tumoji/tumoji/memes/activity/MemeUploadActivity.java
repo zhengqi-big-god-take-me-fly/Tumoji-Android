@@ -6,7 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.tumoji.tumoji.R;
-import com.tumoji.tumoji.data.meme.repository.MockMemeRepository;
+import com.tumoji.tumoji.data.auth.repository.AuthRepository;
+import com.tumoji.tumoji.data.meme.repository.MemeRepository;
 import com.tumoji.tumoji.data.tag.repository.TagRepository;
 import com.tumoji.tumoji.memes.adapter.SelectTagsRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeUploadContract;
@@ -37,7 +38,7 @@ public class MemeUploadActivity extends AppCompatActivity implements MemeUploadF
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
-        MemeUploadContract.Presenter presenter = new MemeUploadPresenter(MockMemeRepository.getInstance(this), TagRepository.getInstance(), fragment);
+        MemeUploadContract.Presenter presenter = new MemeUploadPresenter(AuthRepository.getInstance(this), MemeRepository.getInstance(this), TagRepository.getInstance(), fragment);
 
         fragment.setPresenter(presenter);
     }

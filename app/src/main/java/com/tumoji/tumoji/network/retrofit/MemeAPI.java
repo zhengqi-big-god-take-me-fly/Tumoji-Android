@@ -3,6 +3,7 @@ package com.tumoji.tumoji.network.retrofit;
 import com.tumoji.tumoji.data.auth.model.AuthModel;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
+import com.tumoji.tumoji.network.body.PostExpressionsReq;
 import com.tumoji.tumoji.utils.BooleanResponse;
 import com.tumoji.tumoji.utils.ErrorType;
 import com.tumoji.tumoji.utils.IntegerResponse;
@@ -19,6 +20,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -41,6 +43,9 @@ public interface MemeAPI {
     @Headers({"Content-Type: application/json" , "Accept: application/json"})
     @POST("/expressions")
     Observable<MemeModel> createMeme(@Body RequestBody body);
+
+    @POST("expressions")
+    Observable<MemeModel> createMeme(@Query("access_token") String token, @Body PostExpressionsReq body);
 
     @GET("/expressions/{id}")
     Observable<MemeModel> getMemeById(@Path("id") String id);

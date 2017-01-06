@@ -83,7 +83,7 @@ public class MockMemeRepository implements IMemeRepository {
     }
 
     @Override
-    public Observable<MemeModel> uploadMeme(MemeModel memeModel, File memeFile) {
+    public Observable<MemeModel> uploadMeme(String token, String memeTitle, File memeFile) {
         // TODO
         throw new UnsupportedOperationException("Method not implemented");
     }
