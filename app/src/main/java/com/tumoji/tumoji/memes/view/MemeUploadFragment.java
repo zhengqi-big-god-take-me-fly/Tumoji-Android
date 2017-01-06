@@ -226,7 +226,7 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
                 File memeFile = FileUtils.fromUri(getContext(), mImageUri);
                 String memeTitle = mTitleEdit.getText().toString();
                 List<TagModel> tagModels = getSelectedTags(mTagsList);
-                uploadMeme(memeFile, memeTitle, tagModels);
+                MemeUploadFragmentPermissionsDispatcher.uploadMemeWithCheck(this, memeFile, memeTitle, tagModels);
                 break;
             case R.id.edit_tags_button:
                 mSelectTagsFragment = SelectTagsFragment.newInstance();
