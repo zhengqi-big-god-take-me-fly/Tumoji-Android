@@ -41,4 +41,8 @@ public class RemoteMemeStore {
     public Observable<List<MemeModel>> getMemesOfTag(int offset, int count, TagModel tagModel, int order) {
         return mMemeApi.getMemesOfTag(tagModel.getTagName(), offset, count, order == IMemeRepository.ORDER_MOST_POPULAR ? "likes.length DESC" : "createdAt DESC").compose(ApplySchedulers.network());
     }
+
+    public Observable<MemeModel> getMemeById(String memeId) {
+        return mMemeApi.getMemeById(memeId).compose(ApplySchedulers.network());
+    }
 }

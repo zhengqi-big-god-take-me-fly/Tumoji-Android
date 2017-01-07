@@ -25,6 +25,7 @@ import com.tumoji.tumoji.account.view.SignInSignUpActivity;
 import com.tumoji.tumoji.common.SpacingItemDecoration;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.MemeRepository;
+import com.tumoji.tumoji.data.settings.repository.SettingsRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.TagRepository;
 import com.tumoji.tumoji.data.user.model.UserModel;
@@ -128,7 +129,7 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
 
     public void onMemeClick(MemeModel memeModel) {
         MemeDetailFragment detailFragment = MemeDetailFragment.newInstance(memeModel.getMemeId());
-        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MemeRepository.getInstance(getContext()), TagRepository.getInstance(), UserRepository.getInstance(), detailFragment);
+        MemeDetailContract.Presenter presenter = new MemeDetailPresenter(MemeRepository.getInstance(getContext()), TagRepository.getInstance(), UserRepository.getInstance(), SettingsRepository.getInstance(getContext()), detailFragment);
         detailFragment.setPresenter(presenter);
         detailFragment.show(getActivity().getSupportFragmentManager(), "MemeDetailFragment");
     }

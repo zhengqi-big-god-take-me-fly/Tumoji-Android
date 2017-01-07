@@ -59,7 +59,7 @@ public interface IMemeRepository {
      * @param memeId The ID of the meme
      * @return Observable which emits the MemeModel
      */
-    Observable<MemeModel> getMeme(String memeId);
+    Observable<MemeModel> getMeme(File parentDir, String memeId);
 
     /**
      * Download specific meme and save it to specific directory
@@ -144,7 +144,7 @@ public interface IMemeRepository {
     List<MemeModel> getCachedNewMemesList();
 
     /**
-     * @deprecated Use {@link #getMeme(String)} instead.
+     * @deprecated Use {@link #getMeme(File, String)} instead.
      * Get meme data from API server
      * @param memeId The meme ID of the meme to get
      * @param listener Callback

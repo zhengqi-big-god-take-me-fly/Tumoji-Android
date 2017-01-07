@@ -53,7 +53,7 @@ public interface MemeAPI {
     @POST("expressions")
     Observable<MemeModel> createMeme(@Query("access_token") String token, @Body PostExpressionsReq body);
 
-    @GET("/expressions/{id}")
+    @GET("expressions/{id}")
     Observable<MemeModel> getMemeById(@Path("id") String id);
 
     /**

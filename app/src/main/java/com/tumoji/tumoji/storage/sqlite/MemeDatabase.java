@@ -79,6 +79,16 @@ public class MemeDatabase {
         return tempModel;
     }
 
+    public String getMemeFileNameById(String memeId) {
+        if (readableMemeDatas == null) return null;
+        String filename = null;
+        Cursor cursor = readableMemeDatas.query(DBOpenHelper.MEME_TABLE, new String[]{ DBOpenHelper.MEME_DOWNLOAD_URL }, String.format("%s = ?", DBOpenHelper.MEME_ID), new String[]{ memeId }, null, null, null);
+        if (cursor.moveToFirst()) {
+            filename = cursor.getString(cursor.getColumnIndex(DBOpenHelper.MEME_DOWNLOAD_URL));
+        }
+        cursor.close();
+        return filename;
+    }
 
     /**
      * meme Existence Checking function
