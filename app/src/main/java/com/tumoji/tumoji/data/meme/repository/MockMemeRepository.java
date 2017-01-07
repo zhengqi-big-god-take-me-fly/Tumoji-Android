@@ -53,7 +53,7 @@ public class MockMemeRepository implements IMemeRepository {
     }
 
     @Override
-    public Observable<MemeModel> likeMeme(String token, String memeId, boolean like) {
+    public Observable<Void> likeMeme(String token, String memeId, boolean like) {
         // TODO
         throw new UnsupportedOperationException("Method not implemented");
     }

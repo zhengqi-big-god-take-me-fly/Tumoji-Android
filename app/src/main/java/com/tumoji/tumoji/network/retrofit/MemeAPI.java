@@ -5,7 +5,6 @@ import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.body.PostExpressionsReq;
 import com.tumoji.tumoji.utils.BooleanResponse;
-import com.tumoji.tumoji.utils.ErrorType;
 import com.tumoji.tumoji.utils.IntegerResponse;
 import com.tumoji.tumoji.utils.LikeRelation;
 
@@ -88,11 +87,11 @@ public interface MemeAPI {
      * @param token
      * @return
      */
-    @POST("/expressions/{id}/like")
-    Observable<LikeRelation> likeMemeByIdAndToken(@Path("id") String id , @Field("access_token") String token);
+    @POST("expressions/{id}/like")
+    Observable<LikeRelation> likeMemeByIdAndToken(@Path("id") String id, @Query("access_token") String token);
 
-    @DELETE("/expressions/{id}/like")
-    Observable<ErrorType> unlikeMemeByIdAndToken(@Path("id") String id , @Field("access_token") String token);
+    @DELETE("expressions/{id}/like")
+    Observable<Void> unlikeMemeByIdAndToken(@Path("id") String id, @Query("access_token") String token);
 
     @GET("/expressions/{id}/likes")
     Observable<List<AuthModel>> getLikersOfMemeById(@Path("id") String id);

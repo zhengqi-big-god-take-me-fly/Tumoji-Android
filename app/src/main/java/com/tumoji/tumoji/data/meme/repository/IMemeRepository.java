@@ -30,7 +30,7 @@ public interface IMemeRepository {
      * @param like like or un-like
      * @return Observable which emits updated meme data
      */
-    Observable<MemeModel> likeMeme(String token, String memeId, boolean like);
+    Observable<Void> likeMeme(String token, String memeId, boolean like);
 
     /**
      * Report specific meme with reason

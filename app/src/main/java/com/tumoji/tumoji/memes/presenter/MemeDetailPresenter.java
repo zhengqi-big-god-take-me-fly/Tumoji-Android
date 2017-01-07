@@ -1,6 +1,7 @@
 package com.tumoji.tumoji.memes.presenter;
 
 import com.tumoji.tumoji.common.OnGetResultListener;
+import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.settings.repository.ISettingsRepository;
@@ -20,9 +21,11 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
     private ITagRepository mTagRepository;
     private IUserRepository mUserRepository;
     private ISettingsRepository mSettingsRepository;
+    private IAuthRepository mAuthRepository;
     private MemeDetailContract.View mView;
 
-    public MemeDetailPresenter(IMemeRepository memeRepository, ITagRepository tagRepository, IUserRepository userRepository, ISettingsRepository settingsRepository, MemeDetailContract.View view) {
+    public MemeDetailPresenter(IAuthRepository authRepository, IMemeRepository memeRepository, ITagRepository tagRepository, IUserRepository userRepository, ISettingsRepository settingsRepository, MemeDetailContract.View view) {
+        this.mAuthRepository = authRepository;
         this.mMemeRepository = memeRepository;
         this.mTagRepository = tagRepository;
         this.mUserRepository = userRepository;
@@ -58,50 +61,34 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
 
     @Override
     public void likeMeme(MemeModel memeModel) {
-        mMemeRepository.likeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel memeModel) {
-                mView.refreshMemeDetail(memeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
+        if (mAuthRepository.isSignedIn()) {
+            mMemeRepository.likeMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeModel.getMemeId(), true).subscribe(aVoid -> {
+                mView.refreshMemeDetail(memeModel.withLiked(true));
+            }, throwable -> {
                 // TODO
                 throw new UnsupportedOperationException("Method not implemented");
-            }
-        });
+            });
+        } else {
+            mView.showUnSignedInError();
+        }
     }
 
     @Override
     public void unlikeMeme(MemeModel memeModel) {
-        mMemeRepository.unlikeMeme(memeModel, new IMemeRepository.OnLikeUnlikeMemeListener() {
-            @Override
-            public void onSuccess(MemeModel memeModel) {
-                mView.refreshMemeDetail(memeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
+        if (mAuthRepository.isSignedIn()) {
+            mMemeRepository.likeMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeModel.getMemeId(), false).subscribe(aVoid -> {
+                mView.refreshMemeDetail(memeModel.withLiked(false));
+            }, throwable -> {
                 // TODO
                 throw new UnsupportedOperationException("Method not implemented");
-            }
-        });
+            });
+        } else {
+            mView.showUnSignedInError();
+        }
     }
 
     @Override
     public void reportMeme(MemeModel memeModel, String reason) {
-        mMemeRepository.reportMeme(memeModel, reason, new IMemeRepository.OnReportMemeListener() {
-            @Override
-            public void onSuccess(MemeModel memeModel) {
-                mView.refreshMemeDetail(memeModel);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
-        });
     }
 
     @Override

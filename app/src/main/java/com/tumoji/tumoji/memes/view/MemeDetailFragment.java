@@ -134,7 +134,6 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
         // TODO: Other meme detail
         // Refresh meme image, title, likes, reports, downloaded
         mMemeModel = memeModel;
-//        Glide.with(getActivity()).load(memeModel.getImageUrl()).into(mMemeHdImage);
         Glide.with(getActivity()).load(memeModel.getMemeUri()).into(mMemeHdImage);
         refreshMemeName(memeModel.getTitle());
         refreshMemeLikeStatus(memeModel.isLiked(), memeModel.getLikeCount());
@@ -169,6 +168,11 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     @Override
     public void refreshMemeAuthor(UserModel userModel) {
         mRecyclerAdapter.refreshAuthor(userModel);
+    }
+
+    @Override
+    public void showUnSignedInError() {
+        Toast.makeText(getContext(), R.string.hey_why_not_signing_up_to_vote_it, Toast.LENGTH_SHORT).show();
     }
 
     @Override

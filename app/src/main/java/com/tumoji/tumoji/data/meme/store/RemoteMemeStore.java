@@ -45,4 +45,13 @@ public class RemoteMemeStore {
     public Observable<MemeModel> getMemeById(String memeId) {
         return mMemeApi.getMemeById(memeId).compose(ApplySchedulers.network());
     }
+
+    public Observable<Void> likeMeme(String token, String memeId, boolean like) {
+        if (like) {
+            return mMemeApi.likeMemeByIdAndToken(memeId, token).compose(ApplySchedulers.network())
+                    .map(likeRelation -> null);
+        } else {
+            return mMemeApi.unlikeMemeByIdAndToken(memeId, token).compose(ApplySchedulers.network());
+        }
+    }
 }

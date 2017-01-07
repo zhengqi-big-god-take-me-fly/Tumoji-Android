@@ -85,9 +85,9 @@ public class MemeRepository implements IMemeRepository {
     }
 
     @Override
-    public Observable<MemeModel> likeMeme(String token, String memeId, boolean like) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+    public Observable<Void> likeMeme(String token, String memeId, boolean like) {
+        // FIXME: Update local database
+        return mRemote.likeMeme(token, memeId, like);
     }
 
     @Override

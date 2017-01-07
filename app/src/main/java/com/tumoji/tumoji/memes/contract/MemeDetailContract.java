@@ -59,5 +59,7 @@ public interface MemeDetailContract {
         void refreshMemeReportStatus(boolean report, int count);
 
         void refreshMemeAuthor(UserModel userModel);
+
+        void showUnSignedInError();
     }
 }
