@@ -33,7 +33,7 @@ public interface MemeAPI {
     @GET("expressions")
     Observable<List<MemeModel>> getMemes(@Query("filter[offset]") int offset, @Query("filter[limit]") int limit, @Query("filter[order]") String order);
 
-    @GET("tag/{tag_name}/expressions")
+    @GET("tags/{tag_name}/expressions")
     Observable<List<MemeModel>> getMemesOfTag(@Path("tag_name") String tagName, @Query("filter[offset]") int offset, @Query("filter[limit]") int limit, @Query("filter[order]") String order);
 
     /**

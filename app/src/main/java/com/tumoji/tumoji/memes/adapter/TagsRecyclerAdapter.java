@@ -63,7 +63,7 @@ public class TagsRecyclerAdapter extends RecyclerView.Adapter<TagsRecyclerAdapte
         } else if (type == TYPE_SELECTED) {
             holder.titleText.setText(mSelectedTag.getTagName());
             holder.titleText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
-            holder.itemView.setBackgroundResource(R.drawable.background_chip_selected);
+            holder.titleText.setBackgroundResource(R.drawable.background_chip_selected);
             holder.itemView.setOnClickListener(view -> {
                 deselectTag();
             });
