@@ -174,5 +174,13 @@ public class MemeDatabase {
         return getAllLocalMemes();
     }
 
-
+    public boolean addDownloadedMeme(String memeId, String name) {
+        if (writableMemeDatas == null) return false;
+        ContentValues cv = new ContentValues();
+        cv.put(DBOpenHelper.MEME_ID, memeId);
+        cv.put(DBOpenHelper.MEME_DOWNLOAD_URL, name);
+        cv.put(DBOpenHelper.MEME_TITLE, memeId);
+        cv.put(DBOpenHelper.MEME_AUTHORID, "");
+        return writableMemeDatas.insert(DBOpenHelper.MEME_TABLE, null, cv) != -1;
+    }
 }

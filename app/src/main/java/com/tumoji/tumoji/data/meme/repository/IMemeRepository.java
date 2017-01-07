@@ -68,7 +68,7 @@ public interface IMemeRepository {
      * @param destDir The destination directory of the meme
      * @return Observable which emits the downloaded MemeModel
      */
-    Observable<MemeModel> downloadMeme(String memeId, File destDir);
+    Observable<Void> downloadMeme(String memeId, File destDir);
 
     /**
      * Upload new meme

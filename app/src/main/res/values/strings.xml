@@ -41,6 +41,7 @@
     <string name="done">Done</string>
     <string name="oops_this_feature_is_temporarily_unavailable">Oops! This feature is temporarily unavailable…</string>
     <string name="hey_why_not_signing_up_to_vote_it">Hey! Why not signing up to vote it?</string>
+    <string name="meme_image_saved_to">Meme image save to %1$s</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

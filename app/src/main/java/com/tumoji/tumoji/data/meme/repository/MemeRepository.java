@@ -113,9 +113,9 @@ public class MemeRepository implements IMemeRepository {
     }
 
     @Override
-    public Observable<MemeModel> downloadMeme(String memeId, File destDir) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+    public Observable<Void> downloadMeme(String memeId, File destDir) {
+        return mRemote.downloadMemeImage(memeId, destDir)
+                .map(file -> mLocal.addDownloadedMeme(memeId, file));
     }
 
     @Override

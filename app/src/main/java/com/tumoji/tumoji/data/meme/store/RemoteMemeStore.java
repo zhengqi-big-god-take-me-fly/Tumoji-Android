@@ -1,5 +1,8 @@
 package com.tumoji.tumoji.data.meme.store;
 
+import android.media.MediaScannerConnection;
+
+import com.tumoji.tumoji.TumojiApp;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
@@ -10,12 +13,18 @@ import com.tumoji.tumoji.network.retrofit.MemeAPI;
 import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Author: perqin
@@ -53,5 +62,41 @@ public class RemoteMemeStore {
         } else {
             return mMemeApi.unlikeMemeByIdAndToken(memeId, token).compose(ApplySchedulers.network());
         }
+    }
+
+    public Observable<File> downloadMemeImage(String memeId, File destDir) {
+        return getMemeById(memeId).flatMap(memeModel -> Observable.create(new Observable.OnSubscribe<File>() {
+            @Override
+            public void call(Subscriber<? super File> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    try {
+                        File file = new File(destDir, getFilenameFromUrl(memeModel.getImageUrl()));
+                        okhttp3.Response response = new OkHttpClient().newCall(new Request.Builder().url(memeModel.getImageUrl()).build()).execute();
+                        InputStream inputStream = response.body().byteStream();
+                        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                            byte[] buffer = new byte[4096];
+                            int read;
+                            while ((read = inputStream.read(buffer)) != -1) {
+                                fileOutputStream.write(buffer, 0, read);
+                            }
+                            fileOutputStream.flush();
+                            MediaScannerConnection.scanFile(TumojiApp.myContext, new String[]{ file.getAbsolutePath() }, null, null);
+                        }
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onNext(file);
+                            subscriber.onCompleted();
+                        }
+                    } catch (IOException e) {
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onError(e);
+                        }
+                    }
+                }
+            }
+        }).compose(ApplySchedulers.network()));
+    }
+
+    private String getFilenameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }

@@ -30,4 +30,9 @@ public class LocalMemeStore {
         }
         return memeModel;
     }
+
+    public Void addDownloadedMeme(String memeId, File file) {
+        mDb.addDownloadedMeme(memeId, file.getName());
+        return null;
+    }
 }

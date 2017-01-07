@@ -27,6 +27,7 @@ import com.tumoji.tumoji.data.user.model.UserModel;
 import com.tumoji.tumoji.memes.adapter.MemeDetailRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 
+import java.io.File;
 import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
@@ -173,6 +174,11 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     @Override
     public void showUnSignedInError() {
         Toast.makeText(getContext(), R.string.hey_why_not_signing_up_to_vote_it, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showImageSavedToNotice(File destDir) {
+        Toast.makeText(getContext(), getString(R.string.meme_image_saved_to, destDir.getAbsolutePath()), Toast.LENGTH_SHORT).show();
     }
 
     @Override

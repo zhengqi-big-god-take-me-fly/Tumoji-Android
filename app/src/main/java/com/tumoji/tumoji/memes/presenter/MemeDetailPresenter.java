@@ -1,6 +1,5 @@
 package com.tumoji.tumoji.memes.presenter;
 
-import com.tumoji.tumoji.common.OnGetResultListener;
 import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
@@ -93,17 +92,14 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
 
     @Override
     public void saveMeme(MemeModel mMemeModel) {
-        mMemeRepository.saveMeme(mMemeModel, new OnGetResultListener<MemeModel>() {
-            @Override
-            public void onSuccess(MemeModel result) {
-                mView.refreshMemeDetail(result);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        File destDir = new File(mSettingsRepository.getSettingString(ISettingsRepository.PK_SETTINGS_MEME_DIRECTORY));
+        mMemeRepository.downloadMeme(mMemeModel.getMemeId(), destDir)
+                .flatMap(aVoid -> mMemeRepository.getMeme(destDir, mMemeModel.getMemeId())).subscribe(memeModel -> {
+            mView.refreshMemeDetail(memeModel);
+            mView.showImageSavedToNotice(destDir);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 }

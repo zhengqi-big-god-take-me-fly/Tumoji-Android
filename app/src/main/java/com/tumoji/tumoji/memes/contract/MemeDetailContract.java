@@ -5,6 +5,7 @@ import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.user.model.UserModel;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -61,5 +62,7 @@ public interface MemeDetailContract {
         void refreshMemeAuthor(UserModel userModel);
 
         void showUnSignedInError();
+
+        void showImageSavedToNotice(File destDir);
     }
 }
