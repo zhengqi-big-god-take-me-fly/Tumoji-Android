@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
@@ -152,6 +153,11 @@ public class ProfileFragment extends Fragment implements ProfileContract.View, V
     @Override
     public void setPresenter(ProfileContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(getContext(), getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -31,40 +31,26 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void init() {
-        // Show cached content
-//        mView.refreshTagsList(mTagRepository.getCachedTagsList());
-        // Refresh latest content
-//        mTagRepository.getTagsList(new ITagRepository.OnGetTagsListListener() {
-//            @Override
-//            public void onSuccess(List<TagModel> tagModels) {
-//                mView.refreshTagsList(tagModels);
-//            }
-//
-//            @Override
-//            public void onFailure(int error, String msg) {
-//                // TODO: Handle error
-//            }
-//        });
         mTagRepository.getTagsList().subscribe(tagModels -> {
             if (tagModels.size() > 8) {
                 tagModels = tagModels.subList(0, 8);
             }
             mView.refreshTagsList(tagModels);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
         mMemeRepository.getMemesList(0, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_MOST_POPULAR).subscribe(memeModels -> {
             mView.refreshPopularMemesList(memeModels, 0);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
         mMemeRepository.getMemesList(0, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_LATEST).subscribe(memeModels -> {
             mView.refreshNewMemesList(memeModels, 0);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 
@@ -76,15 +62,15 @@ public class MemesPresenter implements MemesContract.Presenter {
             mUserRepository.getUser(userId).subscribe(userModel -> {
                 mView.refreshUserInfo(userModel);
             }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
+                throwable.printStackTrace();
+                mView.showUnexpectedError(throwable.getMessage());
             });
             // Get latest profile
             mUserRepository.updateUser(userId).subscribe(userModel -> {
                 mView.refreshUserInfo(userModel);
             }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
+                throwable.printStackTrace();
+                mView.showUnexpectedError(throwable.getMessage());
             });
         } else {
             mView.refreshUserInfo(null);

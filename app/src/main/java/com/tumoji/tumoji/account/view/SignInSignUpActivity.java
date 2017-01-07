@@ -225,6 +225,11 @@ public class SignInSignUpActivity extends AppCompatActivity implements SignInSig
     }
 
     @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(this, getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClickNext(String username) {
         mPresenter.nextAfterSignInSignUp(username);
     }

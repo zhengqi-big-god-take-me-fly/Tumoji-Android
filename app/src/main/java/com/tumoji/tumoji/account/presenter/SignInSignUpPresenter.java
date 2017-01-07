@@ -45,8 +45,8 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
                     mView.pushSignInProgress(usernameOrEmail);
                 }
             }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
+                throwable.printStackTrace();
+                mView.showUnexpectedError(throwable.getMessage());
             });
         }
     }
@@ -59,9 +59,8 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
             mAuthRepository.signIn(mUsernameOrEmail, mIsUsername, password).subscribe(o -> {
                 mView.finishSignIn();
             }, throwable -> {
-                // TODO
                 throwable.printStackTrace();
-                throw new UnsupportedOperationException("Method not implemented");
+                mView.showUnexpectedError(throwable.getMessage());
             });
         }
     }
@@ -82,8 +81,8 @@ public class SignInSignUpPresenter implements SignInSignUpContract.Presenter {
                     .subscribe(authModel -> {
                         mView.finishSignUp();
                     }, throwable -> {
-                        // TODO
-                        throw new UnsupportedOperationException("Method not implemented");
+                        throwable.printStackTrace();
+                        mView.showUnexpectedError(throwable.getMessage());
                     });
         }
     }

@@ -217,6 +217,11 @@ public class MemeUploadFragment extends Fragment implements MemeUploadContract.V
     }
 
     @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(getContext(), getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.meme_layout:

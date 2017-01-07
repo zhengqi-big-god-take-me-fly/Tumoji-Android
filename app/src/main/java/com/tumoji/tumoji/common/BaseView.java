@@ -6,5 +6,7 @@ package com.tumoji.tumoji.common;
  */
 
 public interface BaseView<T> {
-    public void setPresenter(T presenter);
+    void setPresenter(T presenter);
+
+    void showUnexpectedError(String message);
 }

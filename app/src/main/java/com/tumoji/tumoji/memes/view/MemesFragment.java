@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tumoji.tumoji.R;
@@ -101,8 +102,8 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     public void onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_settings) {
-            // TODO
-//            startActivity(new Intent(getContext(), SettingsActivity.class));
+            // TODO: Add Settings feature
+            Toast.makeText(getContext(), R.string.oops_this_feature_is_temporarily_unavailable, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -189,6 +190,11 @@ public class MemesFragment extends Fragment implements MemesContract.View, View.
     @Override
     public void setPresenter(MemesContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(getContext(), getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
     }
 
     @Override

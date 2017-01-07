@@ -34,8 +34,8 @@ public class MemeUploadPresenter implements MemeUploadContract.Presenter {
         mTagRepository.getTagsList().subscribe(tagModels -> {
             mView.refreshTagsList(tagModels);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 
@@ -53,8 +53,8 @@ public class MemeUploadPresenter implements MemeUploadContract.Presenter {
                     .subscribe(aVoid -> {
                         mView.finishUploadAndClose();
                     }, throwable -> {
-                        // TODO
-                        throw new UnsupportedOperationException("Method not implemented");
+                        throwable.printStackTrace();
+                        mView.showUnexpectedError(throwable.getMessage());
                     });
         }
     }

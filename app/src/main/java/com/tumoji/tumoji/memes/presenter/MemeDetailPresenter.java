@@ -39,22 +39,22 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
         mMemeRepository.getMeme(parentDir, memeId).subscribe(memeModel -> {
             mView.refreshMemeDetail(memeModel);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
         // Refresh author
         mUserRepository.getMemeAuthor(memeId).subscribe(userModel -> {
             mView.refreshMemeAuthor(userModel);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
         // Refresh tags
         mTagRepository.getTagsListOfMeme(memeId).subscribe(tagModels -> {
             mView.refreshMemeTags(tagModels);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 
@@ -64,8 +64,8 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
             mMemeRepository.likeMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeModel.getMemeId(), true).subscribe(aVoid -> {
                 mView.refreshMemeDetail(memeModel.withLiked(true));
             }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
+                throwable.printStackTrace();
+                mView.showUnexpectedError(throwable.getMessage());
             });
         } else {
             mView.showUnSignedInError();
@@ -78,8 +78,8 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
             mMemeRepository.likeMeme(mAuthRepository.getLocalAuth().getAccessToken(), memeModel.getMemeId(), false).subscribe(aVoid -> {
                 mView.refreshMemeDetail(memeModel.withLiked(false));
             }, throwable -> {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
+                throwable.printStackTrace();
+                mView.showUnexpectedError(throwable.getMessage());
             });
         } else {
             mView.showUnSignedInError();
@@ -98,8 +98,8 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
             mView.refreshMemeDetail(memeModel);
             mView.showImageSavedToNotice(destDir);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 }

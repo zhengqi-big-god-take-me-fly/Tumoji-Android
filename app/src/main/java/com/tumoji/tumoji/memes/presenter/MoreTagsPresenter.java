@@ -23,8 +23,8 @@ public class MoreTagsPresenter implements MoreTagsContract.Presenter {
         mTagRepository.getTagsList().subscribe(tagModels -> {
             mView.finishLoading(tagModels);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 }

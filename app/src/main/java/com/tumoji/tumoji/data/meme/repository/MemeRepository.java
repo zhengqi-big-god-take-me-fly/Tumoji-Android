@@ -250,8 +250,6 @@ public class MemeRepository implements IMemeRepository {
     @Override
     public void getMeme(String memeId, OnGetResultListener<MemeModel> listener) {
         if (mDelegate != null) { mDelegate.getMeme(memeId, listener); return; }
-//        // TODO: Implement getMeme
-//        throw new UnsupportedOperationException("Method not implemented");
         memeApi.getMemeById(memeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -267,8 +265,6 @@ public class MemeRepository implements IMemeRepository {
     @Override
     public MemeModel getCachedMeme(String memeId) {
         if (mDelegate != null) return mDelegate.getCachedMeme(memeId);
-//        // TODO: Implement getCachedMeme
-//        throw new UnsupportedOperationException("Method not implemented");
         return memeDatabase.getMemeByName(memeId);
     }
 

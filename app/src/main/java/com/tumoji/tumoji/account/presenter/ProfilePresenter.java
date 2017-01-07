@@ -32,16 +32,15 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mUserRepository.getUser(userId).subscribe(userModel -> {
             mView.refreshProfile(userModel);
         }, throwable -> {
-            // TODO
             throwable.printStackTrace();
-            throw new UnsupportedOperationException("Method not implemented");
+            mView.showUnexpectedError(throwable.getMessage());
         });
         // Get latest profile
         mUserRepository.updateUser(userId).subscribe(userModel -> {
             mView.refreshProfile(userModel);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 
@@ -51,8 +50,8 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mUserRepository.changeUserAvatar(authModel.getAccessToken(), authModel.getUserId(), file).subscribe(userModel -> {
             mView.refreshProfile(userModel);
         }, throwable -> {
-            // TODO
-            throw new UnsupportedOperationException("Method not implemented");
+            throwable.printStackTrace();
+            mView.showUnexpectedError(throwable.getMessage());
         });
     }
 
@@ -61,8 +60,8 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mAuthRepository.signOut().subscribe(aVoid -> {
             mView.closeProfilePage();
         }, throwable -> {
-            // NOTE: Never throw any error, as local auth will be removed under any condition.
             Log.e("SIGN_OUT", throwable.getMessage());
+            // NOTE: Never throw any error, as local auth will be removed under any condition.
 //            throw new UnsupportedOperationException("Method not implemented");
         });
     }

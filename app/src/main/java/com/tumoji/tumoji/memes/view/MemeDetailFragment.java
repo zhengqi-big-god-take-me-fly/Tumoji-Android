@@ -187,6 +187,11 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     }
 
     @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(getContext(), getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.save_button:

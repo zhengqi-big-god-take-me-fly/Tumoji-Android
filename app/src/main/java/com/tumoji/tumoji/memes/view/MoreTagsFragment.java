@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.tag.model.TagModel;
@@ -121,6 +122,11 @@ public class MoreTagsFragment extends BottomSheetDialogFragment implements MoreT
     @Override
     public void setPresenter(MoreTagsContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showUnexpectedError(String message) {
+        Toast.makeText(getContext(), getString(R.string.unexpected_error, message), Toast.LENGTH_SHORT).show();
     }
 
     @Override
