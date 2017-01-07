@@ -1,14 +1,11 @@
 package com.tumoji.tumoji.memes.presenter;
 
 import com.tumoji.tumoji.data.auth.repository.IAuthRepository;
-import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.tag.repository.ITagRepository;
 import com.tumoji.tumoji.data.user.repository.IUserRepository;
 import com.tumoji.tumoji.memes.contract.MemesContract;
-
-import java.util.List;
 
 /**
  * Author   : perqin
@@ -16,6 +13,8 @@ import java.util.List;
  */
 
 public class MemesPresenter implements MemesContract.Presenter {
+    private static final int PAGE_MEME_COUNT = 30;
+
     private IAuthRepository mAuthRepository;
     private IUserRepository mUserRepository;
     private IMemeRepository mMemeRepository;
@@ -55,29 +54,17 @@ public class MemesPresenter implements MemesContract.Presenter {
             // TODO
             throw new UnsupportedOperationException("Method not implemented");
         });
-        mMemeRepository.getPopularMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshPopularMemesList(memeModels, 0);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        mMemeRepository.getMemesList(0, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_MOST_POPULAR).subscribe(memeModels -> {
+            mView.refreshPopularMemesList(memeModels, 0);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
-        mMemeRepository.getNewMemesList(0, null, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshNewMemesList(memeModels, 0);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO
-                throw new UnsupportedOperationException("Method not implemented");
-            }
+        mMemeRepository.getMemesList(0, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_LATEST).subscribe(memeModels -> {
+            mView.refreshNewMemesList(memeModels, 0);
+        }, throwable -> {
+            // TODO
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 
@@ -105,62 +92,30 @@ public class MemesPresenter implements MemesContract.Presenter {
     }
 
     @Override
-    public void updatePopularMemesList(final int offset) {
-        mMemeRepository.getPopularMemesList(offset, null, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshPopularMemesList(memeModels, offset);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
+    public void updatePopularMemesList(int offset) {
+        mMemeRepository.getMemesList(offset, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_MOST_POPULAR).subscribe(memeModels -> {
+            mView.refreshPopularMemesList(memeModels, offset);
         });
     }
 
     @Override
-    public void updatePopularMemesListOfTag(final int offset, TagModel tagModel) {
-        mMemeRepository.getPopularMemesList(offset, tagModel, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshPopularMemesList(memeModels, offset);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
+    public void updatePopularMemesListOfTag(int offset, TagModel tagModel) {
+        mMemeRepository.getMemesList(offset, PAGE_MEME_COUNT, tagModel, IMemeRepository.ORDER_MOST_POPULAR).subscribe(memeModels -> {
+            mView.refreshPopularMemesList(memeModels, offset);
         });
     }
 
     @Override
-    public void updateNewMemesList(final int offset) {
-        mMemeRepository.getNewMemesList(offset, null, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshNewMemesList(memeModels, offset);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
+    public void updateNewMemesList(int offset) {
+        mMemeRepository.getMemesList(offset, PAGE_MEME_COUNT, null, IMemeRepository.ORDER_LATEST).subscribe(memeModels -> {
+            mView.refreshNewMemesList(memeModels, offset);
         });
     }
 
     @Override
-    public void updateNewMemesListOfTag(final int offset, TagModel tagModel) {
-        mMemeRepository.getNewMemesList(offset, tagModel, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshNewMemesList(memeModels, offset);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Implement .onFailure
-            }
+    public void updateNewMemesListOfTag(int offset, TagModel tagModel) {
+        mMemeRepository.getMemesList(offset, PAGE_MEME_COUNT, tagModel, IMemeRepository.ORDER_LATEST).subscribe(memeModels -> {
+            mView.refreshNewMemesList(memeModels, offset);
         });
     }
 
@@ -184,29 +139,12 @@ public class MemesPresenter implements MemesContract.Presenter {
 
     @Override
     public void changeTag(TagModel tagModel) {
-        mMemeRepository.getPopularMemesList(0, tagModel, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshPopularMemesList(memeModels, 0);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Handle error
-                throw new UnsupportedOperationException("Method not implemented");
-            }
-        });
-        mMemeRepository.getNewMemesList(0, tagModel, new IMemeRepository.OnGetMemesListListener() {
-            @Override
-            public void onSuccess(List<MemeModel> memeModels) {
-                mView.refreshNewMemesList(memeModels, 0);
-            }
-
-            @Override
-            public void onFailure(int error, String msg) {
-                // TODO: Handle error
-                throw new UnsupportedOperationException("Method not implemented");
-            }
-        });
+        if (tagModel == null) {
+            updatePopularMemesList(0);
+            updateNewMemesList(0);
+        } else {
+            updatePopularMemesListOfTag(0, tagModel);
+            updateNewMemesListOfTag(0, tagModel);
+        }
     }
 }

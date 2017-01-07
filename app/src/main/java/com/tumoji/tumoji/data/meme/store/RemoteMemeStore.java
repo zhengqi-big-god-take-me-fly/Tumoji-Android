@@ -1,6 +1,8 @@
 package com.tumoji.tumoji.data.meme.store;
 
 import com.tumoji.tumoji.data.meme.model.MemeModel;
+import com.tumoji.tumoji.data.meme.repository.IMemeRepository;
+import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.network.body.PostExpressionsReq;
 import com.tumoji.tumoji.network.retrofit.APIFactory;
 import com.tumoji.tumoji.network.retrofit.ImageApi;
@@ -8,6 +10,7 @@ import com.tumoji.tumoji.network.retrofit.MemeAPI;
 import com.tumoji.tumoji.utils.ApplySchedulers;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -29,5 +32,13 @@ public class RemoteMemeStore {
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
         return mImageApi.uploadImage(token, part).compose(ApplySchedulers.network())
                 .flatMap(uploadImageRes -> mMemeApi.createMeme(token, new PostExpressionsReq(title, uploadImageRes.getUrl())).compose(ApplySchedulers.network()));
+    }
+
+    public Observable<List<MemeModel>> getMemes(int offset, int count, int order) {
+        return mMemeApi.getMemes(offset, count, order == IMemeRepository.ORDER_MOST_POPULAR ? "likes.length DESC" : "createdAt DESC").compose(ApplySchedulers.network());
+    }
+
+    public Observable<List<MemeModel>> getMemesOfTag(int offset, int count, TagModel tagModel, int order) {
+        return mMemeApi.getMemesOfTag(tagModel.getTagName(), offset, count, order == IMemeRepository.ORDER_MOST_POPULAR ? "likes.length DESC" : "createdAt DESC").compose(ApplySchedulers.network());
     }
 }

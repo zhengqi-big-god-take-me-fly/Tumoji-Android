@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  * Author: souler
  * Date  : 16-12-14
  *
- * NOTE:
+ * NOTE by perqin:
  * Now we have 4 models commonly used over the app: User, Account, Meme, Tag. Account extends User
  * with some extra fields (accessToken, etc.).
  * User and Tag are recommended to be cached in the database. Since Account extends User, we only
@@ -36,6 +36,9 @@ import rx.schedulers.Schedulers;
  * meme ID, title, uploader, image size and local filename. These fields don't change frequently and
  * should be accessible offline. The latter requires new boolean field to tell whether this meme is
  * downloaded. I've already updated the MemeModel.
+ *
+ * NOTE by perqin on 17/01/07:
+ * Tags are not cached to database now, as it seems too complex to cache them.
  */
 public class MemeRepository implements IMemeRepository {
     // Meme singleton
@@ -92,8 +95,12 @@ public class MemeRepository implements IMemeRepository {
 
     @Override
     public Observable<List<MemeModel>> getMemesList(int offset, int count, TagModel tagModel, int order) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+        // Seq: get memes list from server -> response
+        if (tagModel == null) {
+            return mRemote.getMemes(offset, count, order);
+        } else {
+            return mRemote.getMemesOfTag(offset, count, tagModel, order);
+        }
     }
 
     @Override
