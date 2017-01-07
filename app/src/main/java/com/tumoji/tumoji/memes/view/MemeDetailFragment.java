@@ -8,11 +8,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.tumoji.tumoji.R;
 import com.tumoji.tumoji.data.meme.model.MemeModel;
 import com.tumoji.tumoji.data.tag.model.TagModel;
 import com.tumoji.tumoji.data.user.model.UserModel;
+import com.tumoji.tumoji.memes.adapter.MemeDetailRecyclerAdapter;
 import com.tumoji.tumoji.memes.contract.MemeDetailContract;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     private static final String ARG_MEME_ID = "MEME_ID";
 
     private MemeDetailContract.Presenter mPresenter;
+    private MemeDetailRecyclerAdapter mRecyclerAdapter;
     private String mMemeId;
     private MemeModel mMemeModel;
     private BottomSheetBehavior mBottomSheetBehavior;
@@ -54,7 +57,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
     private ImageView mMemeHdImage;
     private TextView mMemeNameText;
     private RecyclerView mUploaderAndTagsRecyclerView;
-    private ImageButton mSaveButton;
+    private FloatingActionButton mSaveButton;
     private RelativeLayout mLikeButtonLayout;
     private ImageView mLikeIconImage;
     private TextView mLikeTitleText;
@@ -82,6 +85,8 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
         if (getArguments() != null) {
             mMemeId = getArguments().getString(ARG_MEME_ID);
         }
+
+        mRecyclerAdapter = new MemeDetailRecyclerAdapter();
     }
 
     @Override
@@ -94,7 +99,9 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
         mMemeHdImage = (ImageView) view.findViewById(R.id.meme_hd_image);
         mMemeNameText = (TextView) view.findViewById(R.id.meme_name_text);
         mUploaderAndTagsRecyclerView = (RecyclerView) view.findViewById(R.id.uploader_and_tags_recycler_view);
-        mSaveButton = (ImageButton) view.findViewById(R.id.save_button);
+        mUploaderAndTagsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mUploaderAndTagsRecyclerView.setAdapter(mRecyclerAdapter);
+        mSaveButton = (FloatingActionButton) view.findViewById(R.id.save_button);
         mSaveButton.setOnClickListener(this);
         mLikeButtonLayout = (RelativeLayout) view.findViewById(R.id.like_button_layout);
         mLikeButtonLayout.setOnClickListener(this);
@@ -142,7 +149,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
 
     @Override
     public void refreshMemeTags(List<TagModel> tagModels) {
-        throw new UnsupportedOperationException("Method not implemented");
+        mRecyclerAdapter.refreshTags(tagModels);
     }
 
     @Override
@@ -161,8 +168,7 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
 
     @Override
     public void refreshMemeAuthor(UserModel userModel) {
-        // TODO
-        throw new UnsupportedOperationException("Method not implemented");
+        mRecyclerAdapter.refreshAuthor(userModel);
     }
 
     @Override
@@ -184,11 +190,13 @@ public class MemeDetailFragment extends BottomSheetDialogFragment implements Mem
                 }
                 break;
             case R.id.report_button_layout:
-                if (mMemeModel.isReported()) {
-                    Toast.makeText(getContext(), R.string.you_have_already_reported_this_meme, Toast.LENGTH_SHORT).show();
-                } else {
-                    mPresenter.reportMeme(mMemeModel, "");
-                }
+                // TODO: Report feature
+//                if (mMemeModel.isReported()) {
+//                    Toast.makeText(getContext(), R.string.you_have_already_reported_this_meme, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    mPresenter.reportMeme(mMemeModel, "");
+//                }
+                Toast.makeText(getContext(), R.string.oops_this_feature_is_temporarily_unavailable, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

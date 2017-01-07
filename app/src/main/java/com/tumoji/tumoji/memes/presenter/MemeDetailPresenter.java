@@ -45,14 +45,14 @@ public class MemeDetailPresenter implements MemeDetailContract.Presenter {
             mView.refreshMemeAuthor(userModel);
         }, throwable -> {
             // TODO
-            // throw new UnsupportedOperationException("Method not implemented");
+            throw new UnsupportedOperationException("Method not implemented");
         });
         // Refresh tags
         mTagRepository.getTagsListOfMeme(memeId).subscribe(tagModels -> {
             mView.refreshMemeTags(tagModels);
         }, throwable -> {
             // TODO
-            // throw new UnsupportedOperationException("Method not implemented");
+            throw new UnsupportedOperationException("Method not implemented");
         });
     }
 
