@@ -32,7 +32,7 @@ public class RetrofitAPI {
 //    public static final String TAG_BASE_URL = "http://tumoji.perqin.com/api/tags";
 //    public static final String ACCOUNT_BASE_URL = "http://tumoji.perqin.com/api/users";
 //
-    public static final String API_SERVER_BASE_URL = "http://tumoji.perqin.com/api/";
+    public static final String API_SERVER_BASE_URL = "https://tumoji.perqin.com/api/";
 
     /**
      * Getters
